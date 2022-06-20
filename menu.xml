@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu>
+  <menuitem label="Vendas">
+    <icon>fas:cart-arrow-down fa-fw #FFFFFF</icon>
+    <menu>
+      <menuitem label="Pagamentos">
+        <icon>far:circle fa-fw </icon>
+        <action>SalePaymentList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Itens vendidos">
+        <icon>far:circle fa-fw </icon>
+        <action>SaleItemList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Vendas">
+        <icon>far:circle fa-fw </icon>
+        <action>SaleList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Fechamentos de Caixa">
+        <icon>far:circle fa-fw </icon>
+        <action>ClosureList#method=onShow</action>
+      </menuitem>
+    </menu>
+  </menuitem>
+  <menuitem label="Estoque">
+    <icon>fas:boxes fa-fw #FFFFFF</icon>
+    <menu>
+      <menuitem label="Products">
+        <icon>far:circle fa-fw </icon>
+        <action>ProductList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Fornecedores">
+        <icon>far:circle fa-fw </icon>
+        <action>ProviderList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Cest e Ncm">
+        <icon>far:circle fa-fw </icon>
+        <action>CestNcmList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Depositos">
+        <icon>far:circle fa-fw </icon>
+        <action>DepositList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Marcas">
+        <icon>far:circle fa-fw </icon>
+        <action>BrandList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Estoque do Produto">
+        <icon>far:circle fa-fw </icon>
+        <action>ProductStorageList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Price lists">
+        <icon>far:circle fa-fw </icon>
+        <action>PriceListList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Data de Validade ">
+        <icon>far:circle fa-fw </icon>
+        <action>ProductValidateDateList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Categoria de Produto">
+        <icon>far:circle fa-fw </icon>
+        <action>CategoryList#method=onShow</action>
+      </menuitem>
+    </menu>
+  </menuitem>
+  <menuitem label="Sistema">
+    <icon>fas:wrench fa-fw #FFFFFF</icon>
+    <menu>
+      <menuitem label="Grupo de Lojas">
+        <icon>far:circle fa-fw </icon>
+        <action>GroupStoreList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Caixas">
+        <icon>far:circle fa-fw </icon>
+        <action>CashierList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Métodos de Pagamento">
+        <icon>far:circle fa-fw </icon>
+        <action>PaymentMethodList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Registro do Caixa">
+        <icon>far:circle fa-fw </icon>
+        <action>CashierLogList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Lojas">
+        <icon>far:circle fa-fw </icon>
+        <action>StoreList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Transferências de usuários">
+        <icon>far:circle fa-fw </icon>
+        <action>UserStoreTransferList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Usuario">
+        <icon>far:circle fa-fw </icon>
+        <action>UserList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Conta de Sangria de Caixa">
+        <icon>far:circle fa-fw </icon>
+        <action>WithdrawalAccountList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Sangrias de Caixa">
+        <icon>far:circle fa-fw </icon>
+        <action>WithdrawalList#method=onShow</action>
+      </menuitem>
+    </menu>
+  </menuitem>
+  <menuitem label="Clientes">
+    <icon>fas:users fa-fw #FFFFFF</icon>
+    <menu>
+      <menuitem label="Clientes">
+        <icon>far:circle fa-fw </icon>
+        <action>CustomerList#method=onShow</action>
+      </menuitem>
+      <menuitem label="lojas Parceiras">
+        <icon>far:circle fa-fw </icon>
+        <action>StorePartinerList#method=onShow</action>
+      </menuitem>
+    </menu>
+  </menuitem>
+  <menuitem label="Api">
+    <icon>fab:cloudsmith fa-fw #FFFFFF</icon>
+    <menu>  
+</menu>
+  </menuitem>
+  <menuitem label="_t{Administration}">
+    <icon>fas:home fa-fw</icon>
+    <menu>
+      <menuitem label="Dashboard">
+        <icon>fas:tachometer-alt fa-fw</icon>
+        <action>SystemAdministrationDashboard</action>
+      </menuitem>
+      <menuitem label="_t{Programs}">
+        <icon>far:file-code fa-fw</icon>
+        <action>SystemProgramList</action>
+      </menuitem>
+      <menuitem label="_t{Groups}">
+        <icon>fas:users fa-fw</icon>
+        <action>SystemGroupList</action>
+      </menuitem>
+      <menuitem label="_t{Units}">
+        <icon>fas:university fa-fw</icon>
+        <action>SystemUnitList</action>
+      </menuitem>
+      <menuitem label="_t{Users}">
+        <icon>fas:user fa-fw</icon>
+        <action>SystemUserList</action>
+      </menuitem>
+      <menuitem label="_t{Database explorer}">
+        <icon>fas:database fa-fw</icon>
+        <action>SystemDatabaseExplorer</action>
+      </menuitem>
+      <menuitem label="_t{SQL Panel}">
+        <icon>fas:table fa-fw</icon>
+        <action>SystemSQLPanel</action>
+      </menuitem>
+      <menuitem label="_t{Menu editor}">
+        <icon>far:edit fa-fw</icon>
+        <action>SystemMenuEditor</action>
+      </menuitem>
+      <menuitem label="_t{Files diff}">
+        <icon>fas:file-medical-alt fa-fw</icon>
+        <action>SystemFilesDiff</action>
+      </menuitem>
+      <menuitem label="PHP Info">
+        <icon>fas:info-circle fa-fw</icon>
+        <action>SystemPHPInfoView</action>
+      </menuitem>
+      <menuitem label="System Information">
+        <icon>fas:desktop fa-fw</icon>
+        <action>SystemInformationView</action>
+      </menuitem>
+      <menuitem label="_t{Preferences}">
+        <icon>fas:cog fa-fw</icon>
+        <action>SystemPreferenceForm#method=onEdit</action>
+      </menuitem>
+    </menu>
+  </menuitem>
+  <menuitem label="_t{Documents}">
+    <icon>far:file-alt fa-fw</icon>
+    <menu>
+      <menuitem label="_t{Send document}">
+        <icon>fas:cloud-upload-alt fa-fw</icon>
+        <action>SystemDocumentUploadForm</action>
+      </menuitem>
+      <menuitem label="_t{My documents}">
+        <icon>fas:archive fa-fw</icon>
+        <action>SystemDocumentList</action>
+      </menuitem>
+      <menuitem label="_t{Shared with me}">
+        <icon>fas:share-alt fa-fw</icon>
+        <action>SystemSharedDocumentList</action>
+      </menuitem>
+      <menuitem label="_t{Categories}">
+        <icon>fas:th fa-fw</icon>
+        <action>SystemDocumentCategoryFormList</action>
+      </menuitem>
+    </menu>
+  </menuitem>
+  <menuitem label="Logs">
+    <icon>fas:desktop fa-fw</icon>
+    <menu>
+      <menuitem label="Dashboard">
+        <icon>fas:tachometer-alt fa-fw</icon>
+        <action>SystemLogDashboard</action>
+      </menuitem>
+      <menuitem label="_t{Access Log}">
+        <icon>fas:key fa-fw</icon>
+        <action>SystemAccessLogList</action>
+      </menuitem>
+      <menuitem label="_t{Change Log}">
+        <icon>fas:film fa-fw</icon>
+        <action>SystemChangeLogView</action>
+      </menuitem>
+      <menuitem label="_t{SQL Log}">
+        <icon>fas:database fa-fw</icon>
+        <action>SystemSqlLogList</action>
+      </menuitem>
+      <menuitem label="_t{Request Log}">
+        <icon>fas:globe fa-fw</icon>
+        <action>SystemRequestLogList</action>
+      </menuitem>
+      <menuitem label="_t{PHP Log}">
+        <icon>fas:exclamation-triangle fa-fw</icon>
+        <action>SystemPHPErrorLogView</action>
+      </menuitem>
+      <menuitem label="Session dump">
+        <icon>fas:code fa-fw</icon>
+        <action>SystemSessionDumpView</action>
+      </menuitem>
+    </menu>
+  </menuitem>
+  <menuitem label="Logout">
+    <icon>fas:sign-out-alt fa-fw</icon>
+    <action>LoginForm#method=onLogout#static=1</action>
+  </menuitem>
+</menu>

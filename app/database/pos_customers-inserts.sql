@@ -1,0 +1,1 @@
+INSERT INTO store_partiner (id,name,cnpj) VALUES (1,'FORNECEDOR EXEMPLO','0000000000000'); 
