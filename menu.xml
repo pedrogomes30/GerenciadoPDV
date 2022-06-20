@@ -19,6 +19,10 @@
         <icon>far:circle fa-fw </icon>
         <action>ClosureList#method=onShow</action>
       </menuitem>
+      <menuitem label="Caixa">
+        <icon>far:circle fa-fw </icon>
+        <action>CashierControlVue#method=onShow</action>
+      </menuitem>
     </menu>
   </menuitem>
   <menuitem label="Estoque">

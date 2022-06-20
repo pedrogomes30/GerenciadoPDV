@@ -1,7 +1,7 @@
 CREATE TABLE cashier( 
       `id`  INT  AUTO_INCREMENT    NOT NULL  , 
       `name` varchar  (20)   NOT NULL  , 
-      `cashier_type` ENUM   NOT NULL    DEFAULT false, 
+      `cashier_type` int   NOT NULL    DEFAULT 1, 
       `user_authenticated` int   , 
       `store` int   NOT NULL  , 
  PRIMARY KEY (id)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci; 

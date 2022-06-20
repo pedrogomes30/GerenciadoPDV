@@ -1,7 +1,7 @@
 CREATE TABLE cashier( 
       id  SERIAL    NOT NULL  , 
       name varchar  (20)   NOT NULL  , 
-      cashier_type ENUM   NOT NULL    DEFAULT false, 
+      cashier_type integer   NOT NULL    DEFAULT 1, 
       user_authenticated integer   , 
       store integer   NOT NULL  , 
  PRIMARY KEY (id)) ; 
