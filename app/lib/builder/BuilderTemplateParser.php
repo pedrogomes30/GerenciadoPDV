@@ -21,6 +21,9 @@ class BuilderTemplateParser
         {
             $content = str_replace('<!--[IFADMIN]-->',  '<!--',  $content);
             $content = str_replace('<!--[/IFADMIN]-->', '-->',   $content);
+            
+            $content = str_replace('<!--[IFADMIN-LEFT-MENU]-->',  '<!--',  $content);
+            $content = str_replace('<!--[/IFADMIN-LEFT-MENU]-->', '-->',   $content);
         }
         
         if (!isset($ini['permission']['user_register']) OR $ini['permission']['user_register'] !== '1')
@@ -59,6 +62,7 @@ class BuilderTemplateParser
         elseif (!isset($ini['general']['left_menu']) || $ini['general']['left_menu'] == '0')
         {
             $content = str_replace(['<!--[IF-LEFT-MENU]-->', '<!--[/IF-LEFT-MENU]-->'], ['<!--', '-->'], $content);
+            $content = str_replace(['<!--[IFADMIN-LEFT-MENU]-->', '<!--[/IFADMIN-LEFT-MENU]-->'], ['<!--', '-->'], $content);
         }
         elseif(isset($ini['general']['left_menu']) && $ini['general']['left_menu'] == '1')
         {
