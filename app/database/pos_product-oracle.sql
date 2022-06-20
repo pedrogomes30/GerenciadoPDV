@@ -54,7 +54,7 @@ CREATE TABLE product(
       description varchar  (60)    NOT NULL , 
       sku varchar  (20)    NOT NULL , 
       unity varchar  (2)    DEFAULT 'UN'  NOT NULL , 
-      type number(10)    DEFAULT 'new'  NOT NULL , 
+      type number(10)    DEFAULT 1  NOT NULL , 
       status varchar  (15)    DEFAULT 'Ok'  NOT NULL , 
       description_variation varchar  (50)   , 
       reference varchar  (30)   , 

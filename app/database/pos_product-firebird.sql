@@ -54,7 +54,7 @@ CREATE TABLE product(
       description varchar  (60)    NOT NULL , 
       sku varchar  (20)    NOT NULL , 
       unity varchar  (2)    DEFAULT 'UN'  NOT NULL , 
-      type integer    DEFAULT 'new'  NOT NULL , 
+      type integer    DEFAULT 1  NOT NULL , 
       status varchar  (15)    DEFAULT 'Ok'  NOT NULL , 
       description_variation varchar  (50)   , 
       reference varchar  (30)   , 
@@ -134,11 +134,11 @@ ALTER TABLE product ADD CONSTRAINT fk_product_provider FOREIGN KEY (provider) re
 ALTER TABLE product ADD CONSTRAINT fk_product_ncm_cest FOREIGN KEY (cest_ncm) references cest_ncm(id); 
 ALTER TABLE product_storage ADD CONSTRAINT fk_product_storage_deposit FOREIGN KEY (deposit) references deposit(id); 
 ALTER TABLE product_storage ADD CONSTRAINT fk_product_storage_product FOREIGN KEY (product) references product(id); 
-ALTER TABLE product_transfer ADD CONSTRAINT product_transfer_62b09fc96cb7d FOREIGN KEY (deposit_origin) references deposit(id); 
+ALTER TABLE product_transfer ADD CONSTRAINT product_transfer_62b0a185e3623 FOREIGN KEY (deposit_origin) references deposit(id); 
 ALTER TABLE product_transfer ADD CONSTRAINT fk_product_transfer_product FOREIGN KEY (product) references product(id); 
-ALTER TABLE product_transfer ADD CONSTRAINT product_transfer_62b09fc96cba5 FOREIGN KEY (deposit_destiny) references deposit(id); 
-ALTER TABLE product_transfer ADD CONSTRAINT product_transfer_62b09fc96cbb9 FOREIGN KEY (product_storage_origin) references product_storage(id); 
-ALTER TABLE product_transfer ADD CONSTRAINT product_transfer_62b09fc96cbcb FOREIGN KEY (product_storage_destiny) references product_storage(id); 
-ALTER TABLE product_validate_date ADD CONSTRAINT product_validate_date_62b09fc96cd24 FOREIGN KEY (product) references product(id); 
+ALTER TABLE product_transfer ADD CONSTRAINT product_transfer_62b0a185e3647 FOREIGN KEY (deposit_destiny) references deposit(id); 
+ALTER TABLE product_transfer ADD CONSTRAINT product_transfer_62b0a185e3657 FOREIGN KEY (product_storage_origin) references product_storage(id); 
+ALTER TABLE product_transfer ADD CONSTRAINT product_transfer_62b0a185e3667 FOREIGN KEY (product_storage_destiny) references product_storage(id); 
+ALTER TABLE product_validate_date ADD CONSTRAINT product_validate_date_62b0a185e3763 FOREIGN KEY (product) references product(id); 
 
   
