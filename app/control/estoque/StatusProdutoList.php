@@ -1,6 +1,6 @@
 <?php
 
-class PriceListList extends TPage
+class StatusProdutoList extends TPage
 {
     private $form; // form
     private $datagrid; // listing
@@ -8,9 +8,9 @@ class PriceListList extends TPage
     private $loaded;
     private $filter_criteria;
     private static $database = 'pos_product';
-    private static $activeRecord = 'PriceList';
+    private static $activeRecord = 'StatusProduto';
     private static $primaryKey = 'id';
-    private static $formName = 'form_PriceListList';
+    private static $formName = 'form_StatusProdutoList';
     private $showMethods = ['onReload', 'onSearch', 'onRefresh', 'onClearFilters'];
     private $limit = 20;
 
@@ -31,25 +31,20 @@ class PriceListList extends TPage
         $this->form = new BootstrapFormBuilder(self::$formName);
 
         // define the form title
-        $this->form->setFormTitle("Listagem de price lists");
+        $this->form->setFormTitle("Listagem de status produtos");
         $this->limit = 20;
 
         $id = new TEntry('id');
-        $name = new TEntry('name');
-        $store = new TDBCombo('store', 'pos_system', 'Store', 'id', '{social_name}','social_name asc'  );
+        $status = new TEntry('status');
 
 
-        $name->setMaxLength(30);
-        $store->enableSearch();
+        $status->setMaxLength(30);
         $id->setSize(100);
-        $name->setSize('100%');
-        $store->setSize('100%');
+        $status->setSize('100%');
 
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Name:", null, '14px', null, '100%'),$name]);
+
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Status:", null, '14px', null, '100%'),$status]);
         $row1->layout = ['col-sm-6','col-sm-6'];
-
-        $row2 = $this->form->addFields([new TLabel("Store:", null, '14px', null, '100%'),$store],[]);
-        $row2->layout = ['col-sm-6','col-sm-6'];
 
         // keep the form filled during navigation with session data
         $this->form->setData( TSession::getValue(__CLASS__.'_filter_data') );
@@ -58,7 +53,7 @@ class PriceListList extends TPage
         $this->btn_onsearch = $btn_onsearch;
         $btn_onsearch->addStyleClass('btn-primary'); 
 
-        $btn_onshow = $this->form->addAction("Cadastrar", new TAction(['PriceListForm', 'onShow']), 'fas:plus #69aa46');
+        $btn_onshow = $this->form->addAction("Cadastrar", new TAction(['StatusProdutoForm', 'onShow']), 'fas:plus #69aa46');
         $this->btn_onshow = $btn_onshow;
 
         // creates a Datagrid
@@ -75,18 +70,16 @@ class PriceListList extends TPage
         $this->datagrid->setHeight(320);
 
         $column_id = new TDataGridColumn('id', "Id", 'center' , '70px');
-        $column_name = new TDataGridColumn('name', "Name", 'left');
-        $column_fk_store_social_name = new TDataGridColumn('fk_store->social_name', "Store", 'left');
+        $column_status = new TDataGridColumn('status', "Status", 'left');
 
         $order_id = new TAction(array($this, 'onReload'));
         $order_id->setParameter('order', 'id');
         $column_id->setAction($order_id);
 
         $this->datagrid->addColumn($column_id);
-        $this->datagrid->addColumn($column_name);
-        $this->datagrid->addColumn($column_fk_store_social_name);
+        $this->datagrid->addColumn($column_status);
 
-        $action_onEdit = new TDataGridAction(array('PriceListForm', 'onEdit'));
+        $action_onEdit = new TDataGridAction(array('StatusProdutoForm', 'onEdit'));
         $action_onEdit->setUseButton(false);
         $action_onEdit->setButtonClass('btn btn-default btn-sm');
         $action_onEdit->setLabel("Editar");
@@ -95,7 +88,7 @@ class PriceListList extends TPage
 
         $this->datagrid->addAction($action_onEdit);
 
-        $action_onDelete = new TDataGridAction(array('PriceListList', 'onDelete'));
+        $action_onDelete = new TDataGridAction(array('StatusProdutoList', 'onDelete'));
         $action_onDelete->setUseButton(false);
         $action_onDelete->setButtonClass('btn btn-default btn-sm');
         $action_onDelete->setLabel("Excluir");
@@ -141,10 +134,10 @@ class PriceListList extends TPage
         $dropdown_button_exportar = new TDropDown("Exportar", 'fas:file-export #2d3436');
         $dropdown_button_exportar->setPullSide('right');
         $dropdown_button_exportar->setButtonClass('btn btn-default waves-effect dropdown-toggle');
-        $dropdown_button_exportar->addPostAction( "CSV", new TAction(['PriceListList', 'onExportCsv'],['static' => 1]), 'datagrid_'.self::$formName, 'fas:file-csv #00b894' );
-        $dropdown_button_exportar->addPostAction( "XLS", new TAction(['PriceListList', 'onExportXls'],['static' => 1]), 'datagrid_'.self::$formName, 'fas:file-excel #4CAF50' );
-        $dropdown_button_exportar->addPostAction( "PDF", new TAction(['PriceListList', 'onExportPdf'],['static' => 1]), 'datagrid_'.self::$formName, 'far:file-pdf #e74c3c' );
-        $dropdown_button_exportar->addPostAction( "XML", new TAction(['PriceListList', 'onExportXml'],['static' => 1]), 'datagrid_'.self::$formName, 'far:file-code #95a5a6' );
+        $dropdown_button_exportar->addPostAction( "CSV", new TAction(['StatusProdutoList', 'onExportCsv'],['static' => 1]), 'datagrid_'.self::$formName, 'fas:file-csv #00b894' );
+        $dropdown_button_exportar->addPostAction( "XLS", new TAction(['StatusProdutoList', 'onExportXls'],['static' => 1]), 'datagrid_'.self::$formName, 'fas:file-excel #4CAF50' );
+        $dropdown_button_exportar->addPostAction( "PDF", new TAction(['StatusProdutoList', 'onExportPdf'],['static' => 1]), 'datagrid_'.self::$formName, 'far:file-pdf #e74c3c' );
+        $dropdown_button_exportar->addPostAction( "XML", new TAction(['StatusProdutoList', 'onExportXml'],['static' => 1]), 'datagrid_'.self::$formName, 'far:file-code #95a5a6' );
 
         $head_right_actions->add($dropdown_button_exportar);
 
@@ -153,7 +146,7 @@ class PriceListList extends TPage
         $container->style = 'width: 100%';
         if(empty($param['target_container']))
         {
-            $container->add(TBreadCrumb::create(["Estoque","Listas de preços"]));
+            $container->add(TBreadCrumb::create(["Estoque","Status produtos"]));
         }
         $container->add($this->form);
         $container->add($panel);
@@ -174,7 +167,7 @@ class PriceListList extends TPage
                 TTransaction::open(self::$database);
 
                 // instantiates object
-                $object = new PriceList($key, FALSE); 
+                $object = new StatusProduto($key, FALSE); 
 
                 // deletes the object from the database
                 $object->delete();
@@ -480,16 +473,10 @@ class PriceListList extends TPage
             $filters[] = new TFilter('id', '=', $data->id);// create the filter 
         }
 
-        if (isset($data->name) AND ( (is_scalar($data->name) AND $data->name !== '') OR (is_array($data->name) AND (!empty($data->name)) )) )
+        if (isset($data->status) AND ( (is_scalar($data->status) AND $data->status !== '') OR (is_array($data->status) AND (!empty($data->status)) )) )
         {
 
-            $filters[] = new TFilter('name', 'like', "%{$data->name}%");// create the filter 
-        }
-
-        if (isset($data->store) AND ( (is_scalar($data->store) AND $data->store !== '') OR (is_array($data->store) AND (!empty($data->store)) )) )
-        {
-
-            $filters[] = new TFilter('store', '=', $data->store);// create the filter 
+            $filters[] = new TFilter('status', 'like', "%{$data->status}%");// create the filter 
         }
 
         // fill the form with data again
@@ -512,7 +499,7 @@ class PriceListList extends TPage
             // open a transaction with database 'pos_product'
             TTransaction::open(self::$database);
 
-            // creates a repository for PriceList
+            // creates a repository for StatusProduto
             $repository = new TRepository(self::$activeRecord);
 
             $criteria = clone $this->filter_criteria;

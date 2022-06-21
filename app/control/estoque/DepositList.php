@@ -31,7 +31,7 @@ class DepositList extends TPage
         $this->form = new BootstrapFormBuilder(self::$formName);
 
         // define the form title
-        $this->form->setFormTitle("Listagem de depositos");
+        $this->form->setFormTitle("Listagem de deposits");
         $this->limit = 20;
 
         $id = new TEntry('id');

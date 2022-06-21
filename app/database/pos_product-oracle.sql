@@ -56,6 +56,7 @@ CREATE TABLE product(
       unity varchar  (2)    DEFAULT 'UN'  NOT NULL , 
       type number(10)    DEFAULT 1  NOT NULL , 
       status varchar  (15)    DEFAULT 'Ok'  NOT NULL , 
+      dt_created timestamp(0)    NOT NULL , 
       description_variation varchar  (50)   , 
       reference varchar  (30)   , 
       barcode varchar  (20)   , 

@@ -25,7 +25,7 @@ class CashierForm extends TPage
         // creates the form
         $this->form = new BootstrapFormBuilder(self::$formName);
         // define the form title
-        $this->form->setFormTitle("Cadastro de Caixa");
+        $this->form->setFormTitle("Cadastro de cashier");
 
 
         $id = new TEntry('id');
@@ -40,7 +40,7 @@ class CashierForm extends TPage
 
         $id->setEditable(false);
         $name->setMaxLength(20);
-        $cashier_type->setValue('false');
+        $cashier_type->setValue('1');
         $store->enableSearch();
         $user_authenticated->enableSearch();
 
@@ -76,7 +76,7 @@ class CashierForm extends TPage
         $container->class = 'form-container';
         if(empty($param['target_container']))
         {
-            $container->add(TBreadCrumb::create(["Sistema","Cadastro de Caixa"]));
+            $container->add(TBreadCrumb::create(["Sistema","Cadastro de cashier"]));
         }
         $container->add($this->form);
 

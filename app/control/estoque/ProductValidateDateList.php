@@ -31,7 +31,7 @@ class ProductValidateDateList extends TPage
         $this->form = new BootstrapFormBuilder(self::$formName);
 
         // define the form title
-        $this->form->setFormTitle("Listagem de data de validade ");
+        $this->form->setFormTitle("Listagem de product validate dates");
         $this->limit = 20;
 
         $id = new TEntry('id');
@@ -160,7 +160,7 @@ class ProductValidateDateList extends TPage
         $container->style = 'width: 100%';
         if(empty($param['target_container']))
         {
-            $container->add(TBreadCrumb::create(["Estoque","Data de Validade "]));
+            $container->add(TBreadCrumb::create(["Estoque","Datas de validade"]));
         }
         $container->add($this->form);
         $container->add($panel);

@@ -25,7 +25,7 @@ class StoreForm extends TPage
         // creates the form
         $this->form = new BootstrapFormBuilder(self::$formName);
         // define the form title
-        $this->form->setFormTitle("Cadastro de loja");
+        $this->form->setFormTitle("Cadastro de store");
 
 
         $id = new TEntry('id');
@@ -36,7 +36,7 @@ class StoreForm extends TPage
         $fantasy_name = new TEntry('fantasy_name');
         $obs = new TEntry('obs');
         $state_inscription = new TEntry('state_inscription');
-        $minicipal_inscription = new TEntry('minicipal_inscription');
+        $municipal_inscription = new TEntry('municipal_inscription');
         $icms = new TEntry('icms');
         $tax_regime = new TEntry('tax_regime');
         $invoice_type = new TEntry('invoice_type');
@@ -50,7 +50,7 @@ class StoreForm extends TPage
         $homologation_invoice_serie = new TEntry('homologation_invoice_serie');
         $homologation_invoice_sequence = new TEntry('homologation_invoice_sequence');
         $certificate_password = new TEntry('certificate_password');
-        $store_group = new TDBCombo('store_group', 'pos_system', 'GroupStore', 'id', '{name}','name asc'  );
+        $store_group = new TDBCombo('store_group', 'pos_system', 'StoreGroup', 'id', '{name}','name asc'  );
 
         $social_name->addValidation("Social name", new TRequiredValidator()); 
         $abbreviation->addValidation("Abbreviation", new TRequiredValidator()); 
@@ -74,7 +74,7 @@ class StoreForm extends TPage
         $invoice_provider_id->setMaxLength(50);
         $homologation_csc_id->setMaxLength(50);
         $certificate_password->setMaxLength(50);
-        $minicipal_inscription->setMaxLength(30);
+        $municipal_inscription->setMaxLength(30);
         $production_csc_number->setMaxLength(50);
         $homologation_csc_number->setMaxLength(50);
 
@@ -94,7 +94,7 @@ class StoreForm extends TPage
         $invoice_provider_id->setSize('100%');
         $homologation_csc_id->setSize('100%');
         $certificate_password->setSize('100%');
-        $minicipal_inscription->setSize('100%');
+        $municipal_inscription->setSize('100%');
         $production_csc_number->setSize('100%');
         $homologation_csc_number->setSize('100%');
         $production_invoice_serie->setSize('100%');
@@ -117,7 +117,7 @@ class StoreForm extends TPage
         $row4 = $this->form->addFields([new TLabel("Obs:", null, '14px', null, '100%'),$obs],[new TLabel("State inscription:", null, '14px', null, '100%'),$state_inscription]);
         $row4->layout = ['col-sm-6','col-sm-6'];
 
-        $row5 = $this->form->addFields([new TLabel("Minicipal inscription:", null, '14px', null, '100%'),$minicipal_inscription],[new TLabel("Icms:", null, '14px', null, '100%'),$icms]);
+        $row5 = $this->form->addFields([new TLabel("Minicipal inscription:", null, '14px', null, '100%'),$municipal_inscription],[new TLabel("Icms:", null, '14px', null, '100%'),$icms]);
         $row5->layout = ['col-sm-6','col-sm-6'];
 
         $row6 = $this->form->addFields([new TLabel("Tax regime:", null, '14px', null, '100%'),$tax_regime],[new TLabel("Invoice type:", '#ff0000', '14px', null, '100%'),$invoice_type]);
@@ -158,7 +158,7 @@ class StoreForm extends TPage
         $container->class = 'form-container';
         if(empty($param['target_container']))
         {
-            $container->add(TBreadCrumb::create(["Sistema","Cadastro de loja"]));
+            $container->add(TBreadCrumb::create(["Sistema","Cadastro de Lojas"]));
         }
         $container->add($this->form);
 

@@ -31,37 +31,32 @@ class UserList extends TPage
         $this->form = new BootstrapFormBuilder(self::$formName);
 
         // define the form title
-        $this->form->setFormTitle("Listagem de usuario");
+        $this->form->setFormTitle("Listagem de users");
         $this->limit = 20;
 
         $id = new TEntry('id');
-        $obs = new TEntry('obs');
-        $is_manager = new TRadioGroup('is_manager');
-        $store = new TDBCombo('store', 'pos_system', 'Store', 'id', '{social_name}','social_name asc'  );
+        $origin_store = new TDBCombo('origin_store', 'pos_system', 'Store', 'id', '{social_name}','social_name asc'  );
+        $current_store = new TDBCombo('current_store', 'pos_system', 'Store', 'id', '{social_name}','social_name asc'  );
+        $profession = new TDBCombo('profession', 'pos_system', 'Profession', 'id', '{id}','id asc'  );
         $system_user = new TDBCombo('system_user', 'permission', 'SystemUsers', 'id', '{name}','name asc'  );
 
 
-        $obs->setMaxLength(200);
-        $is_manager->addItems(["1"=>"Sim","2"=>"Não"]);
-        $is_manager->setLayout('vertical');
-        $is_manager->setBooleanMode();
-        $store->enableSearch();
+        $profession->enableSearch();
         $system_user->enableSearch();
+        $origin_store->enableSearch();
+        $current_store->enableSearch();
 
         $id->setSize(100);
-        $obs->setSize('100%');
-        $store->setSize('100%');
-        $is_manager->setSize(80);
+        $profession->setSize('100%');
         $system_user->setSize('100%');
+        $origin_store->setSize('100%');
+        $current_store->setSize('100%');
 
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Observação:", null, '14px', null, '100%'),$obs]);
-        $row1->layout = ['col-sm-6','col-sm-6'];
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Loja cadastrado:", null, '14px', null, '100%'),$origin_store],[new TLabel("Loja atual:", null, '14px', null, '100%'),$current_store],[new TLabel("Profissão", null, '14px', null, '100%'),$profession]);
+        $row1->layout = [' col-sm-6 col-lg-2',' col-sm-6 col-lg-4',' col-sm-6 col-lg-3',' col-sm-6 col-lg-3'];
 
-        $row2 = $this->form->addFields([new TLabel("Is manager:", null, '14px', null, '100%'),$is_manager],[new TLabel("Store:", null, '14px', null, '100%'),$store]);
-        $row2->layout = ['col-sm-6','col-sm-6'];
-
-        $row3 = $this->form->addFields([new TLabel("System user:", null, '14px', null, '100%'),$system_user],[]);
-        $row3->layout = ['col-sm-6','col-sm-6'];
+        $row2 = $this->form->addFields([new TLabel("Usuário:", null, '14px', null, '100%'),$system_user]);
+        $row2->layout = [' col-sm-6 col-lg-12'];
 
         // keep the form filled during navigation with session data
         $this->form->setData( TSession::getValue(__CLASS__.'_filter_data') );
@@ -87,20 +82,22 @@ class UserList extends TPage
         $this->datagrid->setHeight(320);
 
         $column_id = new TDataGridColumn('id', "Id", 'center' , '70px');
-        $column_obs = new TDataGridColumn('obs', "Observação", 'left');
-        $column_is_manager = new TDataGridColumn('is_manager', "Is manager", 'left');
-        $column_fk_store_social_name = new TDataGridColumn('fk_store->social_name', "Store", 'left');
-        $column_fk_system_user_name = new TDataGridColumn('fk_system_user->name', "System user", 'left');
+        $column_fk_system_user_name = new TDataGridColumn('fk_system_user->name', "Nome", 'left');
+        $column_fk_origin_store_social_name = new TDataGridColumn('fk_origin_store->social_name', "Loja origem", 'left');
+        $column_fk_current_store_social_name = new TDataGridColumn('fk_current_store->social_name', "Loja Atual", 'left');
+        $column_fk_profession_description = new TDataGridColumn('fk_profession->description', "Profissão", 'left');
+        $column_profile_img = new TDataGridColumn('profile_img', "Imagem perfil", 'left');
 
         $order_id = new TAction(array($this, 'onReload'));
         $order_id->setParameter('order', 'id');
         $column_id->setAction($order_id);
 
         $this->datagrid->addColumn($column_id);
-        $this->datagrid->addColumn($column_obs);
-        $this->datagrid->addColumn($column_is_manager);
-        $this->datagrid->addColumn($column_fk_store_social_name);
         $this->datagrid->addColumn($column_fk_system_user_name);
+        $this->datagrid->addColumn($column_fk_origin_store_social_name);
+        $this->datagrid->addColumn($column_fk_current_store_social_name);
+        $this->datagrid->addColumn($column_fk_profession_description);
+        $this->datagrid->addColumn($column_profile_img);
 
         $action_onEdit = new TDataGridAction(array('UserForm', 'onEdit'));
         $action_onEdit->setUseButton(false);
@@ -154,7 +151,7 @@ class UserList extends TPage
 
         $panel->getBody()->insert(0, $headerActions);
 
-        $dropdown_button_exportar = new TDropDown("Exportar", 'fas:file-export #2d3436');
+        $dropdown_button_exportar = new TDropDown("Exportar", 'fas:file-export #FFFFFF');
         $dropdown_button_exportar->setPullSide('right');
         $dropdown_button_exportar->setButtonClass('btn btn-default waves-effect dropdown-toggle');
         $dropdown_button_exportar->addPostAction( "CSV", new TAction(['UserList', 'onExportCsv'],['static' => 1]), 'datagrid_'.self::$formName, 'fas:file-csv #00b894' );
@@ -169,7 +166,7 @@ class UserList extends TPage
         $container->style = 'width: 100%';
         if(empty($param['target_container']))
         {
-            $container->add(TBreadCrumb::create(["Sistema","Usuario"]));
+            $container->add(TBreadCrumb::create(["Sistema","Usuários"]));
         }
         $container->add($this->form);
         $container->add($panel);
@@ -496,22 +493,22 @@ class UserList extends TPage
             $filters[] = new TFilter('id', '=', $data->id);// create the filter 
         }
 
-        if (isset($data->obs) AND ( (is_scalar($data->obs) AND $data->obs !== '') OR (is_array($data->obs) AND (!empty($data->obs)) )) )
+        if (isset($data->origin_store) AND ( (is_scalar($data->origin_store) AND $data->origin_store !== '') OR (is_array($data->origin_store) AND (!empty($data->origin_store)) )) )
         {
 
-            $filters[] = new TFilter('obs', 'like', "%{$data->obs}%");// create the filter 
+            $filters[] = new TFilter('origin_store', '=', $data->origin_store);// create the filter 
         }
 
-        if (isset($data->is_manager) AND ( (is_scalar($data->is_manager) AND $data->is_manager !== '') OR (is_array($data->is_manager) AND (!empty($data->is_manager)) )) )
+        if (isset($data->current_store) AND ( (is_scalar($data->current_store) AND $data->current_store !== '') OR (is_array($data->current_store) AND (!empty($data->current_store)) )) )
         {
 
-            $filters[] = new TFilter('is_manager', '=', $data->is_manager);// create the filter 
+            $filters[] = new TFilter('current_store', '=', $data->current_store);// create the filter 
         }
 
-        if (isset($data->store) AND ( (is_scalar($data->store) AND $data->store !== '') OR (is_array($data->store) AND (!empty($data->store)) )) )
+        if (isset($data->profession) AND ( (is_scalar($data->profession) AND $data->profession !== '') OR (is_array($data->profession) AND (!empty($data->profession)) )) )
         {
 
-            $filters[] = new TFilter('store', '=', $data->store);// create the filter 
+            $filters[] = new TFilter('profession', '=', $data->profession);// create the filter 
         }
 
         if (isset($data->system_user) AND ( (is_scalar($data->system_user) AND $data->system_user !== '') OR (is_array($data->system_user) AND (!empty($data->system_user)) )) )

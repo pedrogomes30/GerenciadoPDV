@@ -65,7 +65,7 @@ abstract class BuilderMenu
             $itemHtml = new TElement('li');
 
             $link = new TElement('a');
-            $link->add(TElement::tag('i', '', ['class' => $item['icon']]));
+            $link->add(!empty($item['icon']) ? new TImage($item['icon']) : '');
             $link->add(TElement::tag('span', $item['label']));
 
             if (! empty($item['action']))
@@ -169,20 +169,6 @@ abstract class BuilderMenu
                     {
                         $action = "index.php?class={$action}";
                     }
-                }
-            }
-
-            if ($icon)
-            {
-                $icParts  = explode(':', $icon);
-
-                if (count($icParts) > 1)
-                {
-                    $icon = $icParts[0] . ' fa-' . ($icParts[1]??'');
-                }
-                else
-                {
-                    $icon = null;
                 }
             }
 

@@ -31,14 +31,15 @@ class ProviderList extends TPage
         $this->form = new BootstrapFormBuilder(self::$formName);
 
         // define the form title
-        $this->form->setFormTitle("Listagem de fornecedores");
+        $this->form->setFormTitle("Listagem de providers");
         $this->limit = 20;
 
         $id = new TEntry('id');
         $social_name = new TEntry('social_name');
-        $cnpj = new TEntry('cnpj');
         $fantasy_name = new TEntry('fantasy_name');
+        $cnpj = new TEntry('cnpj');
 
+        $cnpj->addValidation("verifique o cnpj", new TCNPJValidator(), []); 
 
         $cnpj->setMaxLength(20);
         $social_name->setMaxLength(100);
@@ -50,11 +51,8 @@ class ProviderList extends TPage
         $fantasy_name->setSize('100%');
 
 
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Social name:", null, '14px', null, '100%'),$social_name]);
-        $row1->layout = ['col-sm-6','col-sm-6'];
-
-        $row2 = $this->form->addFields([new TLabel("Cnpj:", null, '14px', null, '100%'),$cnpj],[new TLabel("Fantasy name:", null, '14px', null, '100%'),$fantasy_name]);
-        $row2->layout = ['col-sm-6','col-sm-6'];
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Razão Social:", null, '14px', null, '100%'),$social_name],[new TLabel("nome Fantasia:", null, '14px', null, '100%'),$fantasy_name],[new TLabel("CNPJ:", null, '14px', null, '100%'),$cnpj]);
+        $row1->layout = [' col-sm-6 col-lg-2',' col-sm-6 col-lg-3',' col-sm-6 col-lg-3',' col-sm-6 col-lg-4'];
 
         // keep the form filled during navigation with session data
         $this->form->setData( TSession::getValue(__CLASS__.'_filter_data') );
@@ -80,9 +78,9 @@ class ProviderList extends TPage
         $this->datagrid->setHeight(320);
 
         $column_id = new TDataGridColumn('id', "Id", 'center' , '70px');
-        $column_social_name = new TDataGridColumn('social_name', "Social name", 'left');
-        $column_cnpj = new TDataGridColumn('cnpj', "Cnpj", 'left');
-        $column_fantasy_name = new TDataGridColumn('fantasy_name', "Fantasy name", 'left');
+        $column_social_name = new TDataGridColumn('social_name', "Razão Social", 'left');
+        $column_fantasy_name = new TDataGridColumn('fantasy_name', "Nome fantasia", 'left');
+        $column_cnpj = new TDataGridColumn('cnpj', "CNPJ", 'left');
 
         $order_id = new TAction(array($this, 'onReload'));
         $order_id->setParameter('order', 'id');
@@ -90,8 +88,8 @@ class ProviderList extends TPage
 
         $this->datagrid->addColumn($column_id);
         $this->datagrid->addColumn($column_social_name);
-        $this->datagrid->addColumn($column_cnpj);
         $this->datagrid->addColumn($column_fantasy_name);
+        $this->datagrid->addColumn($column_cnpj);
 
         $action_onEdit = new TDataGridAction(array('ProviderForm', 'onEdit'));
         $action_onEdit->setUseButton(false);
@@ -145,7 +143,7 @@ class ProviderList extends TPage
 
         $panel->getBody()->insert(0, $headerActions);
 
-        $dropdown_button_exportar = new TDropDown("Exportar", 'fas:file-export #2d3436');
+        $dropdown_button_exportar = new TDropDown("Exportar", 'fas:file-export #FFFFFF');
         $dropdown_button_exportar->setPullSide('right');
         $dropdown_button_exportar->setButtonClass('btn btn-default waves-effect dropdown-toggle');
         $dropdown_button_exportar->addPostAction( "CSV", new TAction(['ProviderList', 'onExportCsv'],['static' => 1]), 'datagrid_'.self::$formName, 'fas:file-csv #00b894' );
@@ -493,16 +491,16 @@ class ProviderList extends TPage
             $filters[] = new TFilter('social_name', 'like', "%{$data->social_name}%");// create the filter 
         }
 
-        if (isset($data->cnpj) AND ( (is_scalar($data->cnpj) AND $data->cnpj !== '') OR (is_array($data->cnpj) AND (!empty($data->cnpj)) )) )
-        {
-
-            $filters[] = new TFilter('cnpj', 'like', "%{$data->cnpj}%");// create the filter 
-        }
-
         if (isset($data->fantasy_name) AND ( (is_scalar($data->fantasy_name) AND $data->fantasy_name !== '') OR (is_array($data->fantasy_name) AND (!empty($data->fantasy_name)) )) )
         {
 
             $filters[] = new TFilter('fantasy_name', 'like', "%{$data->fantasy_name}%");// create the filter 
+        }
+
+        if (isset($data->cnpj) AND ( (is_scalar($data->cnpj) AND $data->cnpj !== '') OR (is_array($data->cnpj) AND (!empty($data->cnpj)) )) )
+        {
+
+            $filters[] = new TFilter('cnpj', 'like', "%{$data->cnpj}%");// create the filter 
         }
 
         // fill the form with data again

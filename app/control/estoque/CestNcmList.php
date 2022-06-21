@@ -31,12 +31,12 @@ class CestNcmList extends TPage
         $this->form = new BootstrapFormBuilder(self::$formName);
 
         // define the form title
-        $this->form->setFormTitle("Listagem de cest e ncm");
+        $this->form->setFormTitle("Listagem de cest ncms");
         $this->limit = 20;
 
         $id = new TEntry('id');
-        $cest = new TDBCombo('cest', 'pos_product', 'Cest', 'id', '{id}','id asc'  );
-        $ncm = new TDBCombo('ncm', 'pos_product', 'Ncm', 'id', '{id}','id asc'  );
+        $cest = new TDBCombo('cest', 'pos_product', 'Cest', 'id', '{number} - {description} ','id asc'  );
+        $ncm = new TDBCombo('ncm', 'pos_product', 'Ncm', 'id', '{number}  - {description} ','id asc'  );
 
 
         $ncm->enableSearch();
@@ -46,11 +46,8 @@ class CestNcmList extends TPage
         $ncm->setSize('100%');
         $cest->setSize('100%');
 
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Cest:", null, '14px', null, '100%'),$cest]);
-        $row1->layout = ['col-sm-6','col-sm-6'];
-
-        $row2 = $this->form->addFields([new TLabel("Ncm:", null, '14px', null, '100%'),$ncm],[]);
-        $row2->layout = ['col-sm-6','col-sm-6'];
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Cest:", null, '14px', null, '100%'),$cest],[new TLabel("Ncm:", null, '14px', null, '100%'),$ncm]);
+        $row1->layout = [' col-sm-6 col-lg-2',' col-sm-6 col-lg-5',' col-sm-6 col-lg-5'];
 
         // keep the form filled during navigation with session data
         $this->form->setData( TSession::getValue(__CLASS__.'_filter_data') );
@@ -76,16 +73,16 @@ class CestNcmList extends TPage
         $this->datagrid->setHeight(320);
 
         $column_id = new TDataGridColumn('id', "Id", 'center' , '70px');
-        $column_cest = new TDataGridColumn('cest', "Cest", 'left');
-        $column_ncm = new TDataGridColumn('ncm', "Ncm", 'left');
+        $column_fk_cest_number_fk_cest_description = new TDataGridColumn('{fk_cest->number} -  {fk_cest->description}', "Cest", 'left');
+        $column_fk_ncm_number_fk_ncm_description = new TDataGridColumn('{fk_ncm->number}  - {fk_ncm->description}', "Ncm", 'left');
 
         $order_id = new TAction(array($this, 'onReload'));
         $order_id->setParameter('order', 'id');
         $column_id->setAction($order_id);
 
         $this->datagrid->addColumn($column_id);
-        $this->datagrid->addColumn($column_cest);
-        $this->datagrid->addColumn($column_ncm);
+        $this->datagrid->addColumn($column_fk_cest_number_fk_cest_description);
+        $this->datagrid->addColumn($column_fk_ncm_number_fk_ncm_description);
 
         $action_onEdit = new TDataGridAction(array('CestNcmForm', 'onEdit'));
         $action_onEdit->setUseButton(false);
@@ -154,7 +151,7 @@ class CestNcmList extends TPage
         $container->style = 'width: 100%';
         if(empty($param['target_container']))
         {
-            $container->add(TBreadCrumb::create(["Estoque","Cest e Ncm"]));
+            $container->add(TBreadCrumb::create(["Estoque","Cest ncms"]));
         }
         $container->add($this->form);
         $container->add($panel);

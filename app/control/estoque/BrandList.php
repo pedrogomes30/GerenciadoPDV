@@ -31,7 +31,7 @@ class BrandList extends TPage
         $this->form = new BootstrapFormBuilder(self::$formName);
 
         // define the form title
-        $this->form->setFormTitle("Listagem de marcas");
+        $this->form->setFormTitle("Listagem de brands");
         $this->limit = 20;
 
         $id = new TEntry('id');

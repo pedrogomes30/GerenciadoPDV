@@ -25,7 +25,7 @@ class DepositForm extends TPage
         // creates the form
         $this->form = new BootstrapFormBuilder(self::$formName);
         // define the form title
-        $this->form->setFormTitle("Cadastro de depósitos");
+        $this->form->setFormTitle("Cadastro de deposit");
 
 
         $id = new TEntry('id');
@@ -64,7 +64,7 @@ class DepositForm extends TPage
         $container->class = 'form-container';
         if(empty($param['target_container']))
         {
-            $container->add(TBreadCrumb::create(["Estoque","Cadastro de depósitos"]));
+            $container->add(TBreadCrumb::create(["Estoque","Cadastro de deposit"]));
         }
         $container->add($this->form);
 

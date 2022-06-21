@@ -34,13 +34,30 @@ class ProductList extends TPage
         $this->form->setFormTitle("Listagem de products");
         $this->limit = 20;
 
-        $family_id = new TEntry('family_id');
+        $id = new TEntry('id');
+        $barcode = new TEntry('barcode');
+        $sku = new TEntry('sku');
+        $description = new TEntry('description');
+        $description_variation = new TEntry('description_variation');
+        $is_variation = new TCombo('is_variation');
+
+        $id->addValidation("preencher com números!", new TNumericValidator(), []); 
+        $barcode->addValidation("preencher com números!", new TNumericValidator(), []); 
+        $sku->addValidation("preencher com números!", new TNumericValidator(), []); 
+
+        $is_variation->addItems(["1"=>"Sim","2"=>"Não"]);
+        $is_variation->enableSearch();
+        $is_variation->setBooleanMode();
+        $id->setSize('100%');
+        $sku->setSize('100%');
+        $barcode->setSize('100%');
+        $description->setSize('100%');
+        $is_variation->setSize('100%');
+        $description_variation->setSize('100%');
 
 
-        $family_id->setSize('100%');
-
-        $row1 = $this->form->addFields([new TLabel("Family id:", null, '14px', null, '100%'),$family_id],[]);
-        $row1->layout = ['col-sm-6','col-sm-6'];
+        $row1 = $this->form->addFields([new TLabel("id:", null, '14px', null, '100%'),$id],[new TLabel("Cód. Barras:", null, '14px', null, '100%'),$barcode],[new TLabel("Sku:", null, '14px', null, '100%'),$sku],[new TLabel("Descrição:", null, '14px', null, '100%'),$description],[new TLabel("Descrição variação:", null, '14px', null, '100%'),$description_variation],[new TLabel("Mestre/ variavel", null, '14px', null, '100%'),$is_variation]);
+        $row1->layout = [' col-sm-6 col-lg-2','col-sm-2','col-sm-2','col-sm-2','col-sm-2','col-sm-2'];
 
         // keep the form filled during navigation with session data
         $this->form->setData( TSession::getValue(__CLASS__.'_filter_data') );
@@ -48,9 +65,6 @@ class ProductList extends TPage
         $btn_onsearch = $this->form->addAction("Buscar", new TAction([$this, 'onSearch']), 'fas:search #ffffff');
         $this->btn_onsearch = $btn_onsearch;
         $btn_onsearch->addStyleClass('btn-primary'); 
-
-        $btn_onshow = $this->form->addAction("Cadastrar", new TAction(['ProductForm', 'onShow']), 'fas:plus #69aa46');
-        $this->btn_onshow = $btn_onshow;
 
         // creates a Datagrid
         $this->datagrid = new TDataGrid;
@@ -66,60 +80,29 @@ class ProductList extends TPage
         $this->datagrid->setHeight(320);
 
         $column_id = new TDataGridColumn('id', "Id", 'center' , '70px');
-        $column_description = new TDataGridColumn('description', "Nome", 'left');
-        $column_sku = new TDataGridColumn('sku', "Sku", 'left');
-        $column_unity = new TDataGridColumn('unity', "Unidade de medida", 'left');
-        $column_type = new TDataGridColumn('type', "Type", 'left');
-        $column_status = new TDataGridColumn('status', "Status", 'left');
-        $column_description_variation = new TDataGridColumn('description_variation', "Description variation", 'left');
-        $column_reference = new TDataGridColumn('reference', "codigo do fornecedor daquele produto", 'left');
-        $column_barcode = new TDataGridColumn('barcode', "Código de barras", 'left');
-        $column_family_id = new TDataGridColumn('family_id', "Family id", 'left');
-        $column_obs = new TDataGridColumn('obs', "Observação", 'left');
-        $column_website = new TDataGridColumn('website', "Website", 'left');
-        $column_origin = new TDataGridColumn('origin', "Origin", 'left');
-        $column_tribute_situation = new TDataGridColumn('tribute_situation', "Tribute situation", 'left');
-        $column_cest = new TDataGridColumn('cest', "Cest", 'left');
-        $column_ncm = new TDataGridColumn('ncm', "Ncm", 'left');
-        $column_is_variation = new TDataGridColumn('is_variation', "Is variation", 'left');
-        $column_cest_ncm = new TDataGridColumn('cest_ncm', "Cest ncm", 'left');
-        $column_fk_provider_social_name = new TDataGridColumn('fk_provider->social_name', "Provider", 'left');
-        $column_fk_brand_name = new TDataGridColumn('fk_brand->name', "Brand", 'left');
-        $column_fk_category_name = new TDataGridColumn('fk_category->name', "Tipo do produto", 'left');
+        $column_description_description_variation_reference = new TDataGridColumn('{description}  {description_variation}  {reference}', "Descrição:", 'left');
+        $column_sku_barcode = new TDataGridColumn('{sku}  {barcode}', "Cód. Barras / Sku", 'left');
+        $column_fk_provider_fantasy_name_fk_brand_name = new TDataGridColumn('{fk_provider->fantasy_name}  {fk_brand->name}', "Fornecedor / Marca", 'left');
+        $column_fk_category_name = new TDataGridColumn('fk_category->name', "Categoria", 'left');
 
         $order_id = new TAction(array($this, 'onReload'));
         $order_id->setParameter('order', 'id');
         $column_id->setAction($order_id);
 
         $this->datagrid->addColumn($column_id);
-        $this->datagrid->addColumn($column_description);
-        $this->datagrid->addColumn($column_sku);
-        $this->datagrid->addColumn($column_unity);
-        $this->datagrid->addColumn($column_type);
-        $this->datagrid->addColumn($column_status);
-        $this->datagrid->addColumn($column_description_variation);
-        $this->datagrid->addColumn($column_reference);
-        $this->datagrid->addColumn($column_barcode);
-        $this->datagrid->addColumn($column_family_id);
-        $this->datagrid->addColumn($column_obs);
-        $this->datagrid->addColumn($column_website);
-        $this->datagrid->addColumn($column_origin);
-        $this->datagrid->addColumn($column_tribute_situation);
-        $this->datagrid->addColumn($column_cest);
-        $this->datagrid->addColumn($column_ncm);
-        $this->datagrid->addColumn($column_is_variation);
-        $this->datagrid->addColumn($column_cest_ncm);
-        $this->datagrid->addColumn($column_fk_provider_social_name);
-        $this->datagrid->addColumn($column_fk_brand_name);
+        $this->datagrid->addColumn($column_description_description_variation_reference);
+        $this->datagrid->addColumn($column_sku_barcode);
+        $this->datagrid->addColumn($column_fk_provider_fantasy_name_fk_brand_name);
         $this->datagrid->addColumn($column_fk_category_name);
 
         $action_onEdit = new TDataGridAction(array('ProductForm', 'onEdit'));
         $action_onEdit->setUseButton(false);
         $action_onEdit->setButtonClass('btn btn-default btn-sm');
-        $action_onEdit->setLabel("Editar");
-        $action_onEdit->setImage('far:edit #478fca');
+        $action_onEdit->setLabel("");
+        $action_onEdit->setImage('fas:edit #2196F3');
         $action_onEdit->setField(self::$primaryKey);
 
+        $action_onEdit->setParameter('id', '{id}');
         $this->datagrid->addAction($action_onEdit);
 
         $action_onDelete = new TDataGridAction(array('ProductList', 'onDelete'));
@@ -165,7 +148,7 @@ class ProductList extends TPage
 
         $panel->getBody()->insert(0, $headerActions);
 
-        $dropdown_button_exportar = new TDropDown("Exportar", 'fas:file-export #2d3436');
+        $dropdown_button_exportar = new TDropDown("Exportar", 'fas:file-export #FFFFFF');
         $dropdown_button_exportar->setPullSide('right');
         $dropdown_button_exportar->setButtonClass('btn btn-default waves-effect dropdown-toggle');
         $dropdown_button_exportar->addPostAction( "CSV", new TAction(['ProductList', 'onExportCsv'],['static' => 1]), 'datagrid_'.self::$formName, 'fas:file-csv #00b894' );
@@ -180,7 +163,7 @@ class ProductList extends TPage
         $container->style = 'width: 100%';
         if(empty($param['target_container']))
         {
-            $container->add(TBreadCrumb::create(["Estoque","Products"]));
+            $container->add(TBreadCrumb::create(["Estoque","Produtos"]));
         }
         $container->add($this->form);
         $container->add($panel);
@@ -501,10 +484,40 @@ class ProductList extends TPage
         TSession::setValue(__CLASS__.'_filter_data', NULL);
         TSession::setValue(__CLASS__.'_filters', NULL);
 
-        if (isset($data->family_id) AND ( (is_scalar($data->family_id) AND $data->family_id !== '') OR (is_array($data->family_id) AND (!empty($data->family_id)) )) )
+        if (isset($data->id) AND ( (is_scalar($data->id) AND $data->id !== '') OR (is_array($data->id) AND (!empty($data->id)) )) )
         {
 
-            $filters[] = new TFilter('family_id', '=', $data->family_id);// create the filter 
+            $filters[] = new TFilter('id', '=', $data->id);// create the filter 
+        }
+
+        if (isset($data->barcode) AND ( (is_scalar($data->barcode) AND $data->barcode !== '') OR (is_array($data->barcode) AND (!empty($data->barcode)) )) )
+        {
+
+            $filters[] = new TFilter('barcode', '=', $data->barcode);// create the filter 
+        }
+
+        if (isset($data->sku) AND ( (is_scalar($data->sku) AND $data->sku !== '') OR (is_array($data->sku) AND (!empty($data->sku)) )) )
+        {
+
+            $filters[] = new TFilter('sku', '=', $data->sku);// create the filter 
+        }
+
+        if (isset($data->description) AND ( (is_scalar($data->description) AND $data->description !== '') OR (is_array($data->description) AND (!empty($data->description)) )) )
+        {
+
+            $filters[] = new TFilter('description', 'like', "%{$data->description}%");// create the filter 
+        }
+
+        if (isset($data->description_variation) AND ( (is_scalar($data->description_variation) AND $data->description_variation !== '') OR (is_array($data->description_variation) AND (!empty($data->description_variation)) )) )
+        {
+
+            $filters[] = new TFilter('description_variation', 'like', "%{$data->description_variation}%");// create the filter 
+        }
+
+        if (isset($data->is_variation) AND ( (is_scalar($data->is_variation) AND $data->is_variation !== '') OR (is_array($data->is_variation) AND (!empty($data->is_variation)) )) )
+        {
+
+            $filters[] = new TFilter('is_variation', '=', $data->is_variation);// create the filter 
         }
 
         // fill the form with data again

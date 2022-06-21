@@ -269,7 +269,7 @@ window.BuilderTemplate = ( function() {
         }
         
         BuilderTemplate.initLeftMenu();
-        BuilderTemplate.processTheme(options.mobile);
+        BuilderTemplate.processTheme(options);
         BuilderTemplate.processFastDrop();
 
         if(options.public_layout == false)
@@ -329,8 +329,8 @@ window.BuilderTemplate = ( function() {
         
         if(theme)
         {
-            
             BuilderTemplate.defineTheme(theme);
+            __adianti_load_page('engine.php?class=BuilderConfigForm&method=setTheme&static=1&theme='+theme);
         }
     }
 
@@ -339,17 +339,21 @@ window.BuilderTemplate = ( function() {
         $('.change-theme').removeClass('checked');
         $('[theme-style]').attr('href', 'app/templates/theme-builder/themes/' + theme + '.css');
         $('[theme=' + theme + ']').addClass('checked');
-        $('.logo-name').html(theme);
     }
 
-    const processTheme = function(mobile) {
+    const processTheme = function(options) {
         //Drop do menu
        $(".change-theme").click(function() 
        {
            BuilderTemplate.changeStyle(this);
        });
 
-       if (! mobile)
+       if (options.theme)
+       {
+            BuilderTemplate.defineTheme(options.theme);
+       }
+
+       if (! options.mobile)
        {
            if ( $('.builder-list-themes .fast-drop-open a').length <= 1)
            {

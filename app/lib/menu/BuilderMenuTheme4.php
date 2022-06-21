@@ -12,8 +12,8 @@ class BuilderMenuTheme4 extends BuilderMenu
             $itemHtml = TElement::tag('li', '', ['class' => "x"]);
 
             $link = new TElement('a');
-            $link->{'class'} = 'menu-toggle waves-effect waves-block';
-            $link->add(TElement::tag('i', '', ['class' => $item['icon']]));
+            $link->{'class'} = 'waves-effect waves-block';
+            $link->add(!empty($item['icon']) ? new TImage($item['icon']) : '');
             $link->add(TElement::tag('span', $item['label']));
 
             if (! empty($item['action']))
@@ -33,6 +33,7 @@ class BuilderMenuTheme4 extends BuilderMenu
                 $itemsMenu =  $this->getItemMenu($item['menu'], ($level + 1));
                 $menus = TElement::tag('ul', $itemsMenu, ['class' => "ml-menu level-{$level}"]);
                 $itemHtml->add($menus);
+                $link->{'class'} .= ' menu-toggle ';
             }
 
             $items[] = $itemHtml->getContents();
@@ -75,7 +76,7 @@ class BuilderMenuTheme4 extends BuilderMenu
             {
                 $separator = new TElement('li');
                 $separator->{'class'} = 'separador';
-                $separator->add(TElement::tag('i', '', ['class' => $item['icon']]));
+                $separator->add(!empty($item['icon']) ? new TImage($item['icon']) : '');
                 $separator->add($item['label']);
 
                 if (! empty($item['action']))
@@ -91,7 +92,7 @@ class BuilderMenuTheme4 extends BuilderMenu
             {
                 $a = new TElement('a');
                 $a->{'class'} = 'waves-effect waves-block';
-                $a->add(TElement::tag('i', '', ['class' => $item['icon']]));
+                $a->add(!empty($item['icon']) ? new TImage($item['icon']) : '');
                 $a->{'href'} = $item['action'];
                 $a->add($item['label']);
     
@@ -129,7 +130,7 @@ class BuilderMenuTheme4 extends BuilderMenu
                     $a = new TElement('a');
                     $a->{'class'} = 'dropdown-toggle';
                     $a->{'data-toggle'} = "dropdown";
-                    $a->add(TElement::tag('i', '', ['class' => ($item['icon'] ?? 'fas fa-circle')]));
+                    $a->add(new TImage($item['icon'] ?? 'fas:circle'));
                     $a->{'title'} = $item['label'];
                     $a->{'titside'} = "left";
 
@@ -155,7 +156,7 @@ class BuilderMenuTheme4 extends BuilderMenu
                 else
                 {
                     $a = new TElement('a');
-                    $a->add(TElement::tag('i', '', ['class' => ($item['icon'] ?? 'fas fa-circle')]));
+                    $a->add(new TImage($item['icon'] ?? 'fas:circle'));
                     $a->{'title'} = $item['label'];
                     $a->{'titside'} = "left";
 

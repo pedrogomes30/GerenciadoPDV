@@ -1,13 +1,13 @@
 <?php
 
-class ProviderForm extends TPage
+class ProfessionForm extends TPage
 {
     protected $form;
     private $formFields = [];
-    private static $database = 'pos_product';
-    private static $activeRecord = 'Provider';
+    private static $database = 'pos_system';
+    private static $activeRecord = 'Profession';
     private static $primaryKey = 'id';
-    private static $formName = 'form_ProviderForm';
+    private static $formName = 'form_ProfessionForm';
 
     /**
      * Form constructor
@@ -25,41 +25,34 @@ class ProviderForm extends TPage
         // creates the form
         $this->form = new BootstrapFormBuilder(self::$formName);
         // define the form title
-        $this->form->setFormTitle("Cadastro de provider");
+        $this->form->setFormTitle("Cadastro Nova Profissão");
 
 
         $id = new TEntry('id');
-        $social_name = new TEntry('social_name');
-        $fantasy_name = new TEntry('fantasy_name');
-        $cnpj = new TEntry('cnpj');
+        $description = new TEntry('description');
+        $is_manager = new TRadioGroup('is_manager');
 
-        $social_name->addValidation("Social name", new TRequiredValidator()); 
-        $cnpj->addValidation("Cnpj", new TRequiredValidator()); 
-        $cnpj->addValidation("Verifique o Cnpj", new TCNPJValidator(), []); 
+        $description->addValidation("Description", new TRequiredValidator()); 
+        $is_manager->addValidation("Is manager", new TRequiredValidator()); 
 
         $id->setEditable(false);
-        $cnpj->setMaxLength(20);
-        $social_name->setMaxLength(100);
-        $fantasy_name->setMaxLength(50);
-
+        $description->setMaxLength(60);
+        $is_manager->addItems(["1"=>"Sim","2"=>"Não"]);
+        $is_manager->setLayout('horizontal');
+        $is_manager->setBooleanMode();
         $id->setSize(100);
-        $cnpj->setSize('100%');
-        $social_name->setSize('100%');
-        $fantasy_name->setSize('100%');
+        $is_manager->setSize(80);
+        $description->setSize('100%');
 
-
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Razão Social:", null, '14px', null, '100%'),$social_name],[new TLabel("Nome Fantasia:", null, '14px', null, '100%'),$fantasy_name],[new TLabel("CNPJ:", null, '14px', null, '100%'),$cnpj]);
-        $row1->layout = [' col-sm-6 col-lg-2',' col-sm-6 col-lg-4',' col-sm-6 col-lg-3',' col-sm-6 col-lg-3'];
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Descrição:", null, '14px', null, '100%'),$description],[new TLabel("Nivel de gerência ?", null, '14px', null, '100%'),$is_manager]);
+        $row1->layout = [' col-sm-6 col-lg-2',' col-sm-6 col-lg-5',' col-sm-6 col-lg-3'];
 
         // create the form actions
         $btn_onsave = $this->form->addAction("Salvar", new TAction([$this, 'onSave']), 'fas:save #ffffff');
         $this->btn_onsave = $btn_onsave;
         $btn_onsave->addStyleClass('btn-primary'); 
 
-        $btn_onclear = $this->form->addAction("Limpar formulário", new TAction([$this, 'onClear']), 'fas:eraser #dd5a43');
-        $this->btn_onclear = $btn_onclear;
-
-        $btn_onshow = $this->form->addAction("Voltar", new TAction(['ProviderList', 'onShow']), 'fas:arrow-left #000000');
+        $btn_onshow = $this->form->addAction("Voltar", new TAction(['ProfessionList', 'onShow']), 'fas:arrow-left #000000');
         $this->btn_onshow = $btn_onshow;
 
         parent::setTargetContainer('adianti_right_panel');
@@ -87,7 +80,7 @@ class ProviderForm extends TPage
 
             $this->form->validate(); // validate form data
 
-            $object = new Provider(); // create an empty object 
+            $object = new Profession(); // create an empty object 
 
             $data = $this->form->getData(); // get form data as array
             $object->fromArray( (array) $data); // load the object with data
@@ -108,7 +101,7 @@ class ProviderForm extends TPage
             TTransaction::close(); // close the transaction
 
             TToast::show('success', "Registro salvo", 'topRight', 'far:check-circle');
-            TApplication::loadPage('ProviderList', 'onShow', $loadPageParam); 
+            TApplication::loadPage('ProfessionList', 'onShow', $loadPageParam); 
 
                         TScript::create("Template.closeRightPanel();"); 
         }
@@ -131,7 +124,7 @@ class ProviderForm extends TPage
                 $key = $param['key'];  // get the parameter $key
                 TTransaction::open(self::$database); // open a transaction
 
-                $object = new Provider($key); // instantiates the Active Record 
+                $object = new Profession($key); // instantiates the Active Record 
 
                 $this->form->setData($object); // fill the form 
 

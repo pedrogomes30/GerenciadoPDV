@@ -14,22 +14,23 @@ CREATE TABLE cashier_log(
       cashier_id int   NOT NULL  , 
  PRIMARY KEY (id)) ; 
 
-CREATE TABLE group_store( 
-      id  INT IDENTITY    NOT NULL  , 
-      name varchar  (50)   NOT NULL  , 
-      default_theme json   , 
- PRIMARY KEY (id)) ; 
-
-CREATE TABLE method_payment_store( 
-      id  INT IDENTITY    NOT NULL  , 
-      method_id int   NOT NULL  , 
-      store_id int   NOT NULL  , 
- PRIMARY KEY (id)) ; 
-
 CREATE TABLE payment_method( 
       id  INT IDENTITY    NOT NULL  , 
       method varchar  (50)   NOT NULL  , 
+      alias varchar  (50)   NOT NULL  , 
       issue bit   NOT NULL    DEFAULT false, 
+ PRIMARY KEY (id)) ; 
+
+CREATE TABLE payment_method_store( 
+      id  INT IDENTITY    NOT NULL  , 
+      method int   NOT NULL  , 
+      store int   NOT NULL  , 
+ PRIMARY KEY (id)) ; 
+
+CREATE TABLE profession( 
+      id  INT IDENTITY    NOT NULL  , 
+      description varchar  (60)   NOT NULL  , 
+      is_manager bit   NOT NULL    DEFAULT '0', 
  PRIMARY KEY (id)) ; 
 
 CREATE TABLE store( 
@@ -41,7 +42,7 @@ CREATE TABLE store(
       fantasy_name varchar  (100)   , 
       obs varchar  (200)   , 
       state_inscription varchar  (30)   , 
-      minicipal_inscription varchar  (30)   , 
+      municipal_inscription varchar  (30)   , 
       icms varchar  (30)   , 
       tax_regime varchar  (5)   , 
       invoice_type int   NOT NULL    DEFAULT 1, 
@@ -58,11 +59,19 @@ CREATE TABLE store(
       store_group int   NOT NULL  , 
  PRIMARY KEY (id)) ; 
 
+CREATE TABLE store_group( 
+      id  INT IDENTITY    NOT NULL  , 
+      name varchar  (50)   NOT NULL  , 
+      default_theme json   , 
+ PRIMARY KEY (id)) ; 
+
 CREATE TABLE user( 
       id  INT IDENTITY    NOT NULL  , 
       obs varchar  (200)   , 
-      is_manager bit   NOT NULL    DEFAULT false, 
-      store int   , 
+      profile_img varchar  (255)   , 
+      origin_store int     DEFAULT 1, 
+      current_store int   NOT NULL  , 
+      profession int   NOT NULL  , 
       system_user int   NOT NULL  , 
  PRIMARY KEY (id)) ; 
 
@@ -78,6 +87,7 @@ CREATE TABLE user_store_transfer(
  
  ALTER TABLE cashier ADD UNIQUE (user_authenticated);
  ALTER TABLE payment_method ADD UNIQUE (method);
+ ALTER TABLE payment_method ADD UNIQUE (alias);
  ALTER TABLE store ADD UNIQUE (abbreviation);
  ALTER TABLE store ADD UNIQUE (cnpj);
  ALTER TABLE store ADD UNIQUE (fantasy_name);
@@ -87,10 +97,12 @@ CREATE TABLE user_store_transfer(
 ALTER TABLE cashier ADD CONSTRAINT fk_cashier_person FOREIGN KEY (user_authenticated) references user(id); 
 ALTER TABLE cashier_log ADD CONSTRAINT fk_cashier_log_cashier FOREIGN KEY (cashier_id) references cashier(id); 
 ALTER TABLE cashier_log ADD CONSTRAINT fk_cashier_log_user FOREIGN KEY (user) references user(id); 
-ALTER TABLE method_payment_store ADD CONSTRAINT fk_method_payment_store_method FOREIGN KEY (method_id) references payment_method(id); 
-ALTER TABLE method_payment_store ADD CONSTRAINT fk_method_payment_store_store FOREIGN KEY (store_id) references store(id); 
-ALTER TABLE store ADD CONSTRAINT fk_store_group_store FOREIGN KEY (store_group) references group_store(id); 
-ALTER TABLE user ADD CONSTRAINT fk_person_store FOREIGN KEY (store) references store(id); 
+ALTER TABLE payment_method_store ADD CONSTRAINT fk_method_payment_store_method FOREIGN KEY (method) references payment_method(id); 
+ALTER TABLE payment_method_store ADD CONSTRAINT fk_method_payment_store_store FOREIGN KEY (store) references store(id); 
+ALTER TABLE store ADD CONSTRAINT fk_store_group_store FOREIGN KEY (store_group) references store_group(id); 
+ALTER TABLE user ADD CONSTRAINT fk_user_profession FOREIGN KEY (profession) references profession(id); 
+ALTER TABLE user ADD CONSTRAINT fk_user_store_origin FOREIGN KEY (origin_store) references store(id); 
+ALTER TABLE user ADD CONSTRAINT fk_person_current_store FOREIGN KEY (current_store) references store(id); 
 ALTER TABLE user_store_transfer ADD CONSTRAINT fk_user_store_transfer_user FOREIGN KEY (user) references user(id); 
 ALTER TABLE user_store_transfer ADD CONSTRAINT fk_user_store_transfer_destiny FOREIGN KEY (store_destiny) references store(id); 
 ALTER TABLE user_store_transfer ADD CONSTRAINT fk_user_store_transfer_origin FOREIGN KEY (store_origin) references store(id); 

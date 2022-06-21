@@ -25,7 +25,7 @@ class BrandForm extends TPage
         // creates the form
         $this->form = new BootstrapFormBuilder(self::$formName);
         // define the form title
-        $this->form->setFormTitle("Cadastro de marcas");
+        $this->form->setFormTitle("Cadastro de brand");
 
 
         $id = new TEntry('id');
@@ -64,7 +64,7 @@ class BrandForm extends TPage
         $container->class = 'form-container';
         if(empty($param['target_container']))
         {
-            $container->add(TBreadCrumb::create(["Estoque","Cadastro de marcas"]));
+            $container->add(TBreadCrumb::create(["Estoque","Cadastro de brand"]));
         }
         $container->add($this->form);
 

@@ -31,27 +31,23 @@ class PaymentMethodList extends TPage
         $this->form = new BootstrapFormBuilder(self::$formName);
 
         // define the form title
-        $this->form->setFormTitle("Listagem de métodos de pagamento");
+        $this->form->setFormTitle("Listagem de payment methods");
         $this->limit = 20;
 
         $id = new TEntry('id');
         $method = new TEntry('method');
-        $issue = new TRadioGroup('issue');
+        $alias = new TEntry('alias');
 
 
+        $alias->setMaxLength(50);
         $method->setMaxLength(50);
-        $issue->addItems(["1"=>"Sim","2"=>"Não"]);
-        $issue->setLayout('vertical');
-        $issue->setBooleanMode();
+
         $id->setSize(100);
-        $issue->setSize(80);
+        $alias->setSize('100%');
         $method->setSize('100%');
 
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Method:", null, '14px', null, '100%'),$method]);
-        $row1->layout = ['col-sm-6','col-sm-6'];
-
-        $row2 = $this->form->addFields([new TLabel("Issue:", null, '14px', null, '100%'),$issue],[]);
-        $row2->layout = ['col-sm-6','col-sm-6'];
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Método de pagamento:", null, '14px', null, '100%'),$method],[new TLabel("Apelido:", null, '14px', null, '100%'),$alias]);
+        $row1->layout = [' col-sm-6 col-lg-2',' col-sm-6 col-lg-5',' col-sm-6 col-lg-5'];
 
         // keep the form filled during navigation with session data
         $this->form->setData( TSession::getValue(__CLASS__.'_filter_data') );
@@ -77,8 +73,8 @@ class PaymentMethodList extends TPage
         $this->datagrid->setHeight(320);
 
         $column_id = new TDataGridColumn('id', "Id", 'center' , '70px');
-        $column_method = new TDataGridColumn('method', "Method", 'left');
-        $column_issue = new TDataGridColumn('issue', "Issue", 'left');
+        $column_method = new TDataGridColumn('method', "Método:", 'left');
+        $column_alias = new TDataGridColumn('alias', "Apelido", 'left');
 
         $order_id = new TAction(array($this, 'onReload'));
         $order_id->setParameter('order', 'id');
@@ -86,7 +82,7 @@ class PaymentMethodList extends TPage
 
         $this->datagrid->addColumn($column_id);
         $this->datagrid->addColumn($column_method);
-        $this->datagrid->addColumn($column_issue);
+        $this->datagrid->addColumn($column_alias);
 
         $action_onEdit = new TDataGridAction(array('PaymentMethodForm', 'onEdit'));
         $action_onEdit->setUseButton(false);
@@ -140,7 +136,7 @@ class PaymentMethodList extends TPage
 
         $panel->getBody()->insert(0, $headerActions);
 
-        $dropdown_button_exportar = new TDropDown("Exportar", 'fas:file-export #2d3436');
+        $dropdown_button_exportar = new TDropDown("Exportar", 'fas:file-export #FFFFFF');
         $dropdown_button_exportar->setPullSide('right');
         $dropdown_button_exportar->setButtonClass('btn btn-default waves-effect dropdown-toggle');
         $dropdown_button_exportar->addPostAction( "CSV", new TAction(['PaymentMethodList', 'onExportCsv'],['static' => 1]), 'datagrid_'.self::$formName, 'fas:file-csv #00b894' );
@@ -155,7 +151,7 @@ class PaymentMethodList extends TPage
         $container->style = 'width: 100%';
         if(empty($param['target_container']))
         {
-            $container->add(TBreadCrumb::create(["Sistema","Métodos de Pagamento"]));
+            $container->add(TBreadCrumb::create(["Sistema","Métodos de pagamentos"]));
         }
         $container->add($this->form);
         $container->add($panel);
@@ -488,10 +484,10 @@ class PaymentMethodList extends TPage
             $filters[] = new TFilter('method', 'like', "%{$data->method}%");// create the filter 
         }
 
-        if (isset($data->issue) AND ( (is_scalar($data->issue) AND $data->issue !== '') OR (is_array($data->issue) AND (!empty($data->issue)) )) )
+        if (isset($data->alias) AND ( (is_scalar($data->alias) AND $data->alias !== '') OR (is_array($data->alias) AND (!empty($data->alias)) )) )
         {
 
-            $filters[] = new TFilter('issue', '=', $data->issue);// create the filter 
+            $filters[] = new TFilter('alias', 'like', "%{$data->alias}%");// create the filter 
         }
 
         // fill the form with data again

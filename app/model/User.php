@@ -6,8 +6,10 @@ class User extends TRecord
     const PRIMARYKEY = 'id';
     const IDPOLICY   =  'serial'; // {max, serial}
 
-    private $fk_store;
     private $fk_system_user;
+    private $fk_profession;
+    private $fk_origin_store;
+    private $fk_current_store;
 
     /**
      * Constructor method
@@ -16,38 +18,14 @@ class User extends TRecord
     {
         parent::__construct($id, $callObjectLoad);
         parent::addAttribute('obs');
-        parent::addAttribute('is_manager');
-        parent::addAttribute('store');
+        parent::addAttribute('profile_img');
+        parent::addAttribute('origin_store');
+        parent::addAttribute('current_store');
+        parent::addAttribute('profession');
         parent::addAttribute('system_user');
     
     }
 
-    /**
-     * Method set_store
-     * Sample of usage: $var->store = $object;
-     * @param $object Instance of Store
-     */
-    public function set_fk_store(Store $object)
-    {
-        $this->fk_store = $object;
-        $this->store = $object->id;
-    }
-
-    /**
-     * Method get_fk_store
-     * Sample of usage: $var->fk_store->attribute;
-     * @returns Store instance
-     */
-    public function get_fk_store()
-    {
-    
-        // loads the associated object
-        if (empty($this->fk_store))
-            $this->fk_store = new Store($this->store);
-    
-        // returns the associated object
-        return $this->fk_store;
-    }
     /**
      * Method set_system_users
      * Sample of usage: $var->system_users = $object;
@@ -73,6 +51,84 @@ class User extends TRecord
         TTransaction::close();
         // returns the associated object
         return $this->fk_system_user;
+    }
+    /**
+     * Method set_profession
+     * Sample of usage: $var->profession = $object;
+     * @param $object Instance of Profession
+     */
+    public function set_fk_profession(Profession $object)
+    {
+        $this->fk_profession = $object;
+        $this->profession = $object->id;
+    }
+
+    /**
+     * Method get_fk_profession
+     * Sample of usage: $var->fk_profession->attribute;
+     * @returns Profession instance
+     */
+    public function get_fk_profession()
+    {
+    
+        // loads the associated object
+        if (empty($this->fk_profession))
+            $this->fk_profession = new Profession($this->profession);
+    
+        // returns the associated object
+        return $this->fk_profession;
+    }
+    /**
+     * Method set_store
+     * Sample of usage: $var->store = $object;
+     * @param $object Instance of Store
+     */
+    public function set_fk_origin_store(Store $object)
+    {
+        $this->fk_origin_store = $object;
+        $this->origin_store = $object->id;
+    }
+
+    /**
+     * Method get_fk_origin_store
+     * Sample of usage: $var->fk_origin_store->attribute;
+     * @returns Store instance
+     */
+    public function get_fk_origin_store()
+    {
+    
+        // loads the associated object
+        if (empty($this->fk_origin_store))
+            $this->fk_origin_store = new Store($this->origin_store);
+    
+        // returns the associated object
+        return $this->fk_origin_store;
+    }
+    /**
+     * Method set_store
+     * Sample of usage: $var->store = $object;
+     * @param $object Instance of Store
+     */
+    public function set_fk_current_store(Store $object)
+    {
+        $this->fk_current_store = $object;
+        $this->current_store = $object->id;
+    }
+
+    /**
+     * Method get_fk_current_store
+     * Sample of usage: $var->fk_current_store->attribute;
+     * @returns Store instance
+     */
+    public function get_fk_current_store()
+    {
+    
+        // loads the associated object
+        if (empty($this->fk_current_store))
+            $this->fk_current_store = new Store($this->current_store);
+    
+        // returns the associated object
+        return $this->fk_current_store;
     }
 
     /**

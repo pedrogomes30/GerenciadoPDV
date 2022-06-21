@@ -31,7 +31,7 @@ class BuilderMenuThemeBuilder extends BuilderMenu
             }
 
             $link = new TElement('a');
-            $link->add(TElement::tag('i', '', ['class' => ($item['icon'] ?? 'fas fa-circle')]));
+            $link->add(new TImage($item['icon'] ?? 'fas:circle'));
             $link->add($item['label']);
 
             if (! empty($item['action']))
@@ -89,7 +89,7 @@ class BuilderMenuThemeBuilder extends BuilderMenu
         {
             $link = new TElement('a');
             $link->{'class'} = ' ';
-            $link->add(TElement::tag('i', '', ['class' => ($item['icon'] ?? 'fas fa-circle')]));
+            $link->add(new TImage($item['icon'] ?? 'fas:circle'));
             $link->add($item['label']);
 
             if (! empty($item['action']))
@@ -151,8 +151,7 @@ class BuilderMenuThemeBuilder extends BuilderMenu
             {
                 foreach($this->top_items as $key => $module)
                 {
-                    $icon = new TElement('i');
-                    $icon->{'class'} = $module['icon'] ?? 'fas fa-circle';
+                    $icon = new TImage($module['icon'] ?? 'fas:circle');
 
                     $link = new TElement('a');
                     $link->{'class'} = 'button-circle-label ';
@@ -197,7 +196,7 @@ class BuilderMenuThemeBuilder extends BuilderMenu
             {
                 $separator = new TElement('div');
                 $separator->{'class'} = 'separador';
-                $separator->add(TElement::tag('i', '', ['class' => $item['icon']]));
+                $separator->add(!empty($item['icon']) ? new TImage($item['icon']) : '');
                 $separator->add($item['label']);
 
                 if (! empty($item['action']))
@@ -212,7 +211,7 @@ class BuilderMenuThemeBuilder extends BuilderMenu
             else
             {
                 $a = new TElement('a');
-                $a->add(TElement::tag('i', '', ['class' => $item['icon']]));
+                $a->add(!empty($item['icon']) ? new TImage($item['icon']) : '');
                 $a->{'href'} = $item['action'];
                 $a->add($item['label']);
     
@@ -249,7 +248,7 @@ class BuilderMenuThemeBuilder extends BuilderMenu
 
                     $a = new TElement('a');
                     $a->{'class'} = 'button-circle';
-                    $a->add(TElement::tag('i', '', ['class' => ($item['icon'] ?? 'fas fa-circle')]));
+                    $a->add(new TImage($item['icon'] ?? 'fas:circle'));
                     $a->{'title'} = $item['label'];
                     $a->{'titside'} = "left";
                     
@@ -273,7 +272,7 @@ class BuilderMenuThemeBuilder extends BuilderMenu
                 {
                     $a = new TElement('a');
                     $a->{'class'} = 'button-circle';
-                    $a->add(TElement::tag('i', '', ['class' => ($item['icon'] ?? 'fas fa-circle')]));
+                    $a->add(new TImage($item['icon'] ?? 'fas:circle'));
                     $a->{'title'} = $item['label'];
                     $a->{'titside'} = "left";
 
@@ -310,9 +309,6 @@ class BuilderMenuThemeBuilder extends BuilderMenu
         {
             foreach($this->items as $key => $module)
             {
-                $icon = new TElement('i');
-                $icon->{'class'} = $module['icon'] ?? 'fas fa-circle';
-
                 $link = new TElement('a');
                 $link->{'class'} = 'button-circle ' . ($key == 0 ? 'checked' : '');
                 $link->{'title'} = $module['label'];
@@ -328,7 +324,7 @@ class BuilderMenuThemeBuilder extends BuilderMenu
                     $link->{'href'} = '#';
                 }
 
-                $link->add($icon);
+                $link->add(new TImage($module['icon'] ?? 'fas:circle'));
 
                 $modulesMenu .= $link->getContents();
             }

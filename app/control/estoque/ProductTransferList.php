@@ -1,16 +1,16 @@
 <?php
 
-class CashierLogList extends TPage
+class ProductTransferList extends TPage
 {
     private $form; // form
     private $datagrid; // listing
     private $pageNavigation;
     private $loaded;
     private $filter_criteria;
-    private static $database = 'pos_system';
-    private static $activeRecord = 'CashierLog';
+    private static $database = 'pos_product';
+    private static $activeRecord = 'ProductTransfer';
     private static $primaryKey = 'id';
-    private static $formName = 'form_CashierLogList';
+    private static $formName = 'form_ProductTransferList';
     private $showMethods = ['onReload', 'onSearch', 'onRefresh', 'onClearFilters'];
     private $limit = 20;
 
@@ -31,44 +31,45 @@ class CashierLogList extends TPage
         $this->form = new BootstrapFormBuilder(self::$formName);
 
         // define the form title
-        $this->form->setFormTitle("Listagem de cashier logs");
+        $this->form->setFormTitle("Listagem de product transfers");
         $this->limit = 20;
 
         $id = new TEntry('id');
-        $dt_login = new TDateTime('dt_login');
-        $dt_login_to = new TDateTime('dt_login_to');
-        $dt_logout = new TDateTime('dt_logout');
-        $dt_logout_to = new TDateTime('dt_logout_to');
-        $cashier_id = new TDBCombo('cashier_id', 'pos_system', 'Cashier', 'id', '{fk_store->fantasy_name}  -  {name} ','id asc'  );
-        $user = new TDBCombo('user', 'pos_system', 'User', 'id', '{fk_system_user->name} ','id asc'  );
+        $protocol = new TEntry('protocol');
+        $transfer_type = new TEntry('transfer_type');
+        $user = new TEntry('user');
+        $product = new TDBCombo('product', 'pos_product', 'Product', 'id', '{description}','description asc'  );
+        $deposit_origin = new TDBCombo('deposit_origin', 'pos_product', 'Deposit', 'id', '{name}','name asc'  );
+        $deposit_destiny = new TDBCombo('deposit_destiny', 'pos_product', 'Deposit', 'id', '{name}','name asc'  );
+        $product_storage_origin = new TDBCombo('product_storage_origin', 'pos_product', 'ProductStorage', 'id', '{id}','id asc'  );
+        $product_storage_destiny = new TDBCombo('product_storage_destiny', 'pos_product', 'ProductStorage', 'id', '{id}','id asc'  );
 
 
-        $user->enableSearch();
-        $cashier_id->enableSearch();
-
-        $dt_login->setMask('dd/mm/yyyy hh:ii');
-        $dt_logout->setMask('dd/mm/yyyy hh:ii');
-        $dt_login_to->setMask('dd/mm/yyyy hh:ii');
-        $dt_logout_to->setMask('dd/mm/yyyy hh:ii');
-
-        $dt_login->setDatabaseMask('yyyy-mm-dd hh:ii');
-        $dt_logout->setDatabaseMask('yyyy-mm-dd hh:ii');
-        $dt_login_to->setDatabaseMask('yyyy-mm-dd hh:ii');
-        $dt_logout_to->setDatabaseMask('yyyy-mm-dd hh:ii');
+        $transfer_type->setMaxLength(20);
+        $product->enableSearch();
+        $deposit_origin->enableSearch();
+        $deposit_destiny->enableSearch();
+        $product_storage_origin->enableSearch();
+        $product_storage_destiny->enableSearch();
 
         $id->setSize(100);
         $user->setSize('100%');
-        $dt_login->setSize('100%');
-        $dt_logout->setSize('100%');
-        $cashier_id->setSize('100%');
-        $dt_login_to->setSize('100%');
-        $dt_logout_to->setSize('100%');
+        $product->setSize('100%');
+        $protocol->setSize('100%');
+        $transfer_type->setSize('100%');
+        $deposit_origin->setSize('100%');
+        $deposit_destiny->setSize('100%');
+        $product_storage_origin->setSize('100%');
+        $product_storage_destiny->setSize('100%');
 
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("data login (de):", null, '14px', null, '100%'),$dt_login],[new TLabel("data Login (até):", null, '14px', null, '100%'),$dt_login_to],[new TLabel("data logout (de):", null, '14px', null, '100%'),$dt_logout],[new TLabel("data logout (até):", null, '14px', null, '100%'),$dt_logout_to]);
-        $row1->layout = [' col-sm-6 col-lg-4',' col-sm-6 col-lg-2',' col-sm-2 col-lg-2',' col-sm-6 col-lg-2','col-sm-2'];
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Protocolo:", null, '14px', null, '100%'),$protocol],[new TLabel("Tipo Transferencia:", null, '14px', null, '100%'),$transfer_type],[new TLabel("Usuario:", null, '14px', null, '100%'),$user],[new TLabel("Produto:", null, '14px', null, '100%'),$product]);
+        $row1->layout = [' col-sm-6 col-lg-2',' col-sm-6 col-lg-2',' col-sm-6 col-lg-2',' col-sm-6 col-lg-3',' col-sm-6 col-lg-3'];
 
-        $row2 = $this->form->addFields([new TLabel("Caixa", null, '14px', null, '100%'),$cashier_id],[new TLabel("Usuário:", null, '14px', null, '100%'),$user]);
+        $row2 = $this->form->addFields([new TLabel("Depósito origem:", null, '14px', null, '100%'),$deposit_origin],[new TLabel("Depósito destino:", null, '14px', null, '100%'),$deposit_destiny]);
         $row2->layout = ['col-sm-6','col-sm-6'];
+
+        $row3 = $this->form->addFields([new TLabel("Estoque origem:", null, '14px', null, '100%'),$product_storage_origin],[new TLabel("Estoque destino:", null, '14px', null, '100%'),$product_storage_destiny]);
+        $row3->layout = ['col-sm-6','col-sm-6'];
 
         // keep the form filled during navigation with session data
         $this->form->setData( TSession::getValue(__CLASS__.'_filter_data') );
@@ -76,6 +77,9 @@ class CashierLogList extends TPage
         $btn_onsearch = $this->form->addAction("Buscar", new TAction([$this, 'onSearch']), 'fas:search #ffffff');
         $this->btn_onsearch = $btn_onsearch;
         $btn_onsearch->addStyleClass('btn-primary'); 
+
+        $btn_onshow = $this->form->addAction("Cadastrar", new TAction(['ProductTransferForm', 'onShow']), 'fas:plus #69aa46');
+        $this->btn_onshow = $btn_onshow;
 
         // creates a Datagrid
         $this->datagrid = new TDataGrid;
@@ -91,54 +95,37 @@ class CashierLogList extends TPage
         $this->datagrid->setHeight(320);
 
         $column_id = new TDataGridColumn('id', "Id", 'center' , '70px');
-        $column_dt_login_transformed = new TDataGridColumn('dt_login', "data login", 'left');
-        $column_dt_logout_transformed = new TDataGridColumn('dt_logout', "data logout", 'left');
-        $column_fk_user_fk_system_user_name = new TDataGridColumn('fk_user->fk_system_user->name', "Usuário", 'left');
-        $column_cashier_name = new TDataGridColumn('cashier->name', "Caixa", 'left');
-
-        $column_dt_login_transformed->setTransformer(function($value, $object, $row)
-        {
-            if(!empty(trim($value)))
-            {
-                try
-                {
-                    $date = new DateTime($value);
-                    return $date->format('d/m/Y H:i');
-                }
-                catch (Exception $e)
-                {
-                    return $value;
-                }
-            }
-        });
-
-        $column_dt_logout_transformed->setTransformer(function($value, $object, $row)
-        {
-            if(!empty(trim($value)))
-            {
-                try
-                {
-                    $date = new DateTime($value);
-                    return $date->format('d/m/Y H:i');
-                }
-                catch (Exception $e)
-                {
-                    return $value;
-                }
-            }
-        });        
+        $column_protocol = new TDataGridColumn('protocol', "Protocolo", 'left');
+        $column_fk_deposit_origin_name = new TDataGridColumn('fk_deposit_origin->name', "Depósito origem", 'left');
+        $column_fk_deposit_destiny_name = new TDataGridColumn('fk_deposit_destiny->name', "Deposito destino", 'left');
+        $column_fk_product_description = new TDataGridColumn('fk_product->description', "Produto", 'left');
+        $column_quantity = new TDataGridColumn('quantity', "Quantidade", 'left');
+        $column_user = new TDataGridColumn('user', "Usuário", 'left');
+        $column_transfer_type = new TDataGridColumn('transfer_type', "Tipo de Transferência", 'left');
 
         $order_id = new TAction(array($this, 'onReload'));
         $order_id->setParameter('order', 'id');
         $column_id->setAction($order_id);
 
         $this->datagrid->addColumn($column_id);
-        $this->datagrid->addColumn($column_dt_login_transformed);
-        $this->datagrid->addColumn($column_dt_logout_transformed);
-        $this->datagrid->addColumn($column_fk_user_fk_system_user_name);
-        $this->datagrid->addColumn($column_cashier_name);
+        $this->datagrid->addColumn($column_protocol);
+        $this->datagrid->addColumn($column_fk_deposit_origin_name);
+        $this->datagrid->addColumn($column_fk_deposit_destiny_name);
+        $this->datagrid->addColumn($column_fk_product_description);
+        $this->datagrid->addColumn($column_quantity);
+        $this->datagrid->addColumn($column_user);
+        $this->datagrid->addColumn($column_transfer_type);
 
-        $action_onDelete = new TDataGridAction(array('CashierLogList', 'onDelete'));
+        $action_onEdit = new TDataGridAction(array('ProductTransferForm', 'onEdit'));
+        $action_onEdit->setUseButton(false);
+        $action_onEdit->setButtonClass('btn btn-default btn-sm');
+        $action_onEdit->setLabel("Editar");
+        $action_onEdit->setImage('far:edit #478fca');
+        $action_onEdit->setField(self::$primaryKey);
+
+        $this->datagrid->addAction($action_onEdit);
+
+        $action_onDelete = new TDataGridAction(array('ProductTransferList', 'onDelete'));
         $action_onDelete->setUseButton(false);
         $action_onDelete->setButtonClass('btn btn-default btn-sm');
         $action_onDelete->setLabel("Excluir");
@@ -181,13 +168,13 @@ class CashierLogList extends TPage
 
         $panel->getBody()->insert(0, $headerActions);
 
-        $dropdown_button_exportar = new TDropDown("Exportar", 'fas:file-export #FFFFFF');
+        $dropdown_button_exportar = new TDropDown("Exportar", 'fas:file-export #2d3436');
         $dropdown_button_exportar->setPullSide('right');
         $dropdown_button_exportar->setButtonClass('btn btn-default waves-effect dropdown-toggle');
-        $dropdown_button_exportar->addPostAction( "CSV", new TAction(['CashierLogList', 'onExportCsv'],['static' => 1]), 'datagrid_'.self::$formName, 'fas:file-csv #00b894' );
-        $dropdown_button_exportar->addPostAction( "XLS", new TAction(['CashierLogList', 'onExportXls'],['static' => 1]), 'datagrid_'.self::$formName, 'fas:file-excel #4CAF50' );
-        $dropdown_button_exportar->addPostAction( "PDF", new TAction(['CashierLogList', 'onExportPdf'],['static' => 1]), 'datagrid_'.self::$formName, 'far:file-pdf #e74c3c' );
-        $dropdown_button_exportar->addPostAction( "XML", new TAction(['CashierLogList', 'onExportXml'],['static' => 1]), 'datagrid_'.self::$formName, 'far:file-code #95a5a6' );
+        $dropdown_button_exportar->addPostAction( "CSV", new TAction(['ProductTransferList', 'onExportCsv'],['static' => 1]), 'datagrid_'.self::$formName, 'fas:file-csv #00b894' );
+        $dropdown_button_exportar->addPostAction( "XLS", new TAction(['ProductTransferList', 'onExportXls'],['static' => 1]), 'datagrid_'.self::$formName, 'fas:file-excel #4CAF50' );
+        $dropdown_button_exportar->addPostAction( "PDF", new TAction(['ProductTransferList', 'onExportPdf'],['static' => 1]), 'datagrid_'.self::$formName, 'far:file-pdf #e74c3c' );
+        $dropdown_button_exportar->addPostAction( "XML", new TAction(['ProductTransferList', 'onExportXml'],['static' => 1]), 'datagrid_'.self::$formName, 'far:file-code #95a5a6' );
 
         $head_right_actions->add($dropdown_button_exportar);
 
@@ -196,7 +183,7 @@ class CashierLogList extends TPage
         $container->style = 'width: 100%';
         if(empty($param['target_container']))
         {
-            $container->add(TBreadCrumb::create(["Sistema","Registros de caixa"]));
+            $container->add(TBreadCrumb::create(["Estoque","Transferências de produtos"]));
         }
         $container->add($this->form);
         $container->add($panel);
@@ -217,7 +204,7 @@ class CashierLogList extends TPage
                 TTransaction::open(self::$database);
 
                 // instantiates object
-                $object = new CashierLog($key, FALSE); 
+                $object = new ProductTransfer($key, FALSE); 
 
                 // deletes the object from the database
                 $object->delete();
@@ -523,40 +510,52 @@ class CashierLogList extends TPage
             $filters[] = new TFilter('id', '=', $data->id);// create the filter 
         }
 
-        if (isset($data->dt_login) AND ( (is_scalar($data->dt_login) AND $data->dt_login !== '') OR (is_array($data->dt_login) AND (!empty($data->dt_login)) )) )
+        if (isset($data->protocol) AND ( (is_scalar($data->protocol) AND $data->protocol !== '') OR (is_array($data->protocol) AND (!empty($data->protocol)) )) )
         {
 
-            $filters[] = new TFilter('dt_login', '=', $data->dt_login);// create the filter 
+            $filters[] = new TFilter('protocol', '=', $data->protocol);// create the filter 
         }
 
-        if (isset($data->dt_login_to) AND ( (is_scalar($data->dt_login_to) AND $data->dt_login_to !== '') OR (is_array($data->dt_login_to) AND (!empty($data->dt_login_to)) )) )
+        if (isset($data->transfer_type) AND ( (is_scalar($data->transfer_type) AND $data->transfer_type !== '') OR (is_array($data->transfer_type) AND (!empty($data->transfer_type)) )) )
         {
 
-            $filters[] = new TFilter('dt_login', '<=', $data->dt_login_to);// create the filter 
-        }
-
-        if (isset($data->dt_logout) AND ( (is_scalar($data->dt_logout) AND $data->dt_logout !== '') OR (is_array($data->dt_logout) AND (!empty($data->dt_logout)) )) )
-        {
-
-            $filters[] = new TFilter('dt_logout', '=', $data->dt_logout);// create the filter 
-        }
-
-        if (isset($data->dt_logout_to) AND ( (is_scalar($data->dt_logout_to) AND $data->dt_logout_to !== '') OR (is_array($data->dt_logout_to) AND (!empty($data->dt_logout_to)) )) )
-        {
-
-            $filters[] = new TFilter('dt_logout', '<=', $data->dt_logout_to);// create the filter 
-        }
-
-        if (isset($data->cashier_id) AND ( (is_scalar($data->cashier_id) AND $data->cashier_id !== '') OR (is_array($data->cashier_id) AND (!empty($data->cashier_id)) )) )
-        {
-
-            $filters[] = new TFilter('cashier_id', '=', $data->cashier_id);// create the filter 
+            $filters[] = new TFilter('transfer_type', 'like', "%{$data->transfer_type}%");// create the filter 
         }
 
         if (isset($data->user) AND ( (is_scalar($data->user) AND $data->user !== '') OR (is_array($data->user) AND (!empty($data->user)) )) )
         {
 
             $filters[] = new TFilter('user', '=', $data->user);// create the filter 
+        }
+
+        if (isset($data->product) AND ( (is_scalar($data->product) AND $data->product !== '') OR (is_array($data->product) AND (!empty($data->product)) )) )
+        {
+
+            $filters[] = new TFilter('product', '=', $data->product);// create the filter 
+        }
+
+        if (isset($data->deposit_origin) AND ( (is_scalar($data->deposit_origin) AND $data->deposit_origin !== '') OR (is_array($data->deposit_origin) AND (!empty($data->deposit_origin)) )) )
+        {
+
+            $filters[] = new TFilter('deposit_origin', '=', $data->deposit_origin);// create the filter 
+        }
+
+        if (isset($data->deposit_destiny) AND ( (is_scalar($data->deposit_destiny) AND $data->deposit_destiny !== '') OR (is_array($data->deposit_destiny) AND (!empty($data->deposit_destiny)) )) )
+        {
+
+            $filters[] = new TFilter('deposit_destiny', '=', $data->deposit_destiny);// create the filter 
+        }
+
+        if (isset($data->product_storage_origin) AND ( (is_scalar($data->product_storage_origin) AND $data->product_storage_origin !== '') OR (is_array($data->product_storage_origin) AND (!empty($data->product_storage_origin)) )) )
+        {
+
+            $filters[] = new TFilter('product_storage_origin', '=', $data->product_storage_origin);// create the filter 
+        }
+
+        if (isset($data->product_storage_destiny) AND ( (is_scalar($data->product_storage_destiny) AND $data->product_storage_destiny !== '') OR (is_array($data->product_storage_destiny) AND (!empty($data->product_storage_destiny)) )) )
+        {
+
+            $filters[] = new TFilter('product_storage_destiny', '=', $data->product_storage_destiny);// create the filter 
         }
 
         // fill the form with data again
@@ -576,10 +575,10 @@ class CashierLogList extends TPage
     {
         try
         {
-            // open a transaction with database 'pos_system'
+            // open a transaction with database 'pos_product'
             TTransaction::open(self::$database);
 
-            // creates a repository for CashierLog
+            // creates a repository for ProductTransfer
             $repository = new TRepository(self::$activeRecord);
 
             $criteria = clone $this->filter_criteria;

@@ -24,6 +24,7 @@ class Product extends TRecord
         parent::addAttribute('unity');
         parent::addAttribute('type');
         parent::addAttribute('status');
+        parent::addAttribute('dt_created');
         parent::addAttribute('description_variation');
         parent::addAttribute('reference');
         parent::addAttribute('barcode');

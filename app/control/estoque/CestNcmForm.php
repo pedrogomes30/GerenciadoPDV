@@ -25,12 +25,12 @@ class CestNcmForm extends TPage
         // creates the form
         $this->form = new BootstrapFormBuilder(self::$formName);
         // define the form title
-        $this->form->setFormTitle("Cadastro de Cest e Ncm");
+        $this->form->setFormTitle("Cadastro de cest  e ncm");
 
 
         $id = new TEntry('id');
-        $cest = new TDBCombo('cest', 'pos_product', 'Cest', 'id', '{id}','id asc'  );
-        $ncm = new TDBCombo('ncm', 'pos_product', 'Ncm', 'id', '{id}','id asc'  );
+        $cest = new TDBCombo('cest', 'pos_product', 'Cest', 'id', '{number}  {description} ','id asc'  );
+        $ncm = new TDBCombo('ncm', 'pos_product', 'Ncm', 'id', '{number} {description} ','id asc'  );
 
         $cest->addValidation("Cest", new TRequiredValidator()); 
         $ncm->addValidation("Ncm", new TRequiredValidator()); 
@@ -43,11 +43,8 @@ class CestNcmForm extends TPage
         $ncm->setSize('100%');
         $cest->setSize('100%');
 
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Cest:", '#ff0000', '14px', null, '100%'),$cest]);
-        $row1->layout = ['col-sm-6','col-sm-6'];
-
-        $row2 = $this->form->addFields([new TLabel("Ncm:", '#ff0000', '14px', null, '100%'),$ncm],[]);
-        $row2->layout = ['col-sm-6','col-sm-6'];
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Cest:", null, '14px', null, '100%'),$cest],[new TLabel("Ncm:", null, '14px', null, '100%'),$ncm]);
+        $row1->layout = [' col-sm-6 col-lg-2',' col-sm-6 col-lg-5',' col-sm-6 col-lg-5'];
 
         // create the form actions
         $btn_onsave = $this->form->addAction("Salvar", new TAction([$this, 'onSave']), 'fas:save #ffffff');
@@ -60,17 +57,18 @@ class CestNcmForm extends TPage
         $btn_onshow = $this->form->addAction("Voltar", new TAction(['CestNcmList', 'onShow']), 'fas:arrow-left #000000');
         $this->btn_onshow = $btn_onshow;
 
-        // vertical box container
-        $container = new TVBox;
-        $container->style = 'width: 100%';
-        $container->class = 'form-container';
-        if(empty($param['target_container']))
-        {
-            $container->add(TBreadCrumb::create(["Estoque","Cadastro de Cest e Ncm"]));
-        }
-        $container->add($this->form);
+        parent::setTargetContainer('adianti_right_panel');
 
-        parent::add($container);
+        $btnClose = new TButton('closeCurtain');
+        $btnClose->class = 'btn btn-sm btn-default';
+        $btnClose->style = 'margin-right:10px;';
+        $btnClose->onClick = "Template.closeRightPanel();";
+        $btnClose->setLabel("Fechar");
+        $btnClose->setImage('fas:times');
+
+        $this->form->addHeaderWidget($btnClose);
+
+        parent::add($this->form);
 
     }
 
@@ -107,6 +105,7 @@ class CestNcmForm extends TPage
             TToast::show('success', "Registro salvo", 'topRight', 'far:check-circle');
             TApplication::loadPage('CestNcmList', 'onShow', $loadPageParam); 
 
+                        TScript::create("Template.closeRightPanel();"); 
         }
         catch (Exception $e) // in case of exception
         {

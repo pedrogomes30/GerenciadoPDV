@@ -12,7 +12,7 @@ class BuilderMenuTheme3 extends BuilderMenu
             $itemHtml = TElement::tag('li', '', ['class' => "treeview"]);
 
             $link = new TElement('a');
-            $link->add(TElement::tag('i', '', ['class' => $item['icon']]));
+            $link->add(!empty($item['icon']) ? new TImage($item['icon']) : '');
             $link->add(TElement::tag('span', $item['label']));
 
             if (! empty($item['action']))
@@ -60,7 +60,7 @@ class BuilderMenuTheme3 extends BuilderMenu
             {
                 $separator = new TElement('li');
                 $separator->{'class'} = 'separador';
-                $separator->add(TElement::tag('i', '', ['class' => $item['icon']]));
+                $separator->add(!empty($item['icon']) ? new TImage($item['icon']) : '');
                 $separator->add($item['label']);
 
                 if (! empty($item['action']))
@@ -75,7 +75,7 @@ class BuilderMenuTheme3 extends BuilderMenu
             else
             {
                 $a = new TElement('a');
-                $a->add(TElement::tag('i', '', ['class' => $item['icon']]));
+                $a->add(!empty($item['icon']) ? new TImage($item['icon']) : '');
                 $a->add($item['label']);
     
                 if (! empty($item['action']))
@@ -112,7 +112,7 @@ class BuilderMenuTheme3 extends BuilderMenu
                     $a = new TElement('a');
                     $a->{'class'} = 'dropdown-toggle';
                     $a->{'data-toggle'} = "dropdown";
-                    $a->add(TElement::tag('i', '', ['class' => ($item['icon'] ?? 'fas fa-circle')]));
+                    $a->add(new TImage($item['icon'] ?? 'fas:circle'));
                     $a->{'title'} = $item['label'];
                     $a->{'titside'} = "left";
                     
@@ -138,7 +138,7 @@ class BuilderMenuTheme3 extends BuilderMenu
                 else
                 {
                     $a = new TElement('a');
-                    $a->add(TElement::tag('i', '', ['class' => ($item['icon'] ?? 'fas fa-circle')]));
+                    $a->add(new TImage($item['icon'] ?? 'fas:circle'));
                     $a->{'title'} = $item['label'];
                     $a->{'titside'} = "left";
 

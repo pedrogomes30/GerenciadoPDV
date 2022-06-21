@@ -25,31 +25,34 @@ class PaymentMethodForm extends TPage
         // creates the form
         $this->form = new BootstrapFormBuilder(self::$formName);
         // define the form title
-        $this->form->setFormTitle("Cadastro de Método de Pagamento");
+        $this->form->setFormTitle("Cadastro de método de pagamento");
 
 
         $id = new TEntry('id');
         $method = new TEntry('method');
+        $alias = new TEntry('alias');
         $issue = new TRadioGroup('issue');
 
         $method->addValidation("Method", new TRequiredValidator()); 
+        $alias->addValidation("Alias", new TRequiredValidator()); 
         $issue->addValidation("Issue", new TRequiredValidator()); 
 
         $id->setEditable(false);
-        $method->setMaxLength(50);
         $issue->addItems(["1"=>"Sim","2"=>"Não"]);
-        $issue->setLayout('vertical');
+        $issue->setLayout('horizontal');
         $issue->setValue('false');
         $issue->setBooleanMode();
+        $alias->setMaxLength(50);
+        $method->setMaxLength(50);
+
         $id->setSize(100);
         $issue->setSize(80);
+        $alias->setSize('100%');
         $method->setSize('100%');
 
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Method:", '#ff0000', '14px', null, '100%'),$method]);
-        $row1->layout = ['col-sm-6','col-sm-6'];
 
-        $row2 = $this->form->addFields([new TLabel("Issue:", '#ff0000', '14px', null, '100%'),$issue],[]);
-        $row2->layout = ['col-sm-6','col-sm-6'];
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Método:", null, '14px', null, '100%'),$method],[new TLabel("Apelido:", null, '14px', null, '100%'),$alias],[new TLabel("Emissão:", null, '14px', null, '100%'),$issue]);
+        $row1->layout = [' col-sm-6 col-lg-2',' col-sm-6 col-lg-4',' col-sm-6 col-lg-4',' col-sm-6 col-lg-2'];
 
         // create the form actions
         $btn_onsave = $this->form->addAction("Salvar", new TAction([$this, 'onSave']), 'fas:save #ffffff');
@@ -62,17 +65,18 @@ class PaymentMethodForm extends TPage
         $btn_onshow = $this->form->addAction("Voltar", new TAction(['PaymentMethodList', 'onShow']), 'fas:arrow-left #000000');
         $this->btn_onshow = $btn_onshow;
 
-        // vertical box container
-        $container = new TVBox;
-        $container->style = 'width: 100%';
-        $container->class = 'form-container';
-        if(empty($param['target_container']))
-        {
-            $container->add(TBreadCrumb::create(["Sistema","Cadastro de Método de Pagamento"]));
-        }
-        $container->add($this->form);
+        parent::setTargetContainer('adianti_right_panel');
 
-        parent::add($container);
+        $btnClose = new TButton('closeCurtain');
+        $btnClose->class = 'btn btn-sm btn-default';
+        $btnClose->style = 'margin-right:10px;';
+        $btnClose->onClick = "Template.closeRightPanel();";
+        $btnClose->setLabel("Fechar");
+        $btnClose->setImage('fas:times');
+
+        $this->form->addHeaderWidget($btnClose);
+
+        parent::add($this->form);
 
     }
 
@@ -109,6 +113,7 @@ class PaymentMethodForm extends TPage
             TToast::show('success', "Registro salvo", 'topRight', 'far:check-circle');
             TApplication::loadPage('PaymentMethodList', 'onShow', $loadPageParam); 
 
+                        TScript::create("Template.closeRightPanel();"); 
         }
         catch (Exception $e) // in case of exception
         {

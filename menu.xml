@@ -3,66 +3,58 @@
   <menuitem label="Vendas">
     <icon>fas:cart-arrow-down fa-fw #FFFFFF</icon>
     <menu>
-      <menuitem label="Pagamentos">
-        <icon>far:circle fa-fw </icon>
-        <action>SalePaymentList#method=onShow</action>
-      </menuitem>
-      <menuitem label="Itens vendidos">
-        <icon>far:circle fa-fw </icon>
-        <action>SaleItemList#method=onShow</action>
-      </menuitem>
-      <menuitem label="Vendas">
-        <icon>far:circle fa-fw </icon>
-        <action>SaleList#method=onShow</action>
-      </menuitem>
       <menuitem label="Fechamentos de Caixa">
-        <icon>far:circle fa-fw </icon>
+        <icon>fas:cart-arrow-down fa-fw </icon>
         <action>ClosureList#method=onShow</action>
-      </menuitem>
-      <menuitem label="Caixa">
-        <icon>far:circle fa-fw </icon>
-        <action>CashierControlVue#method=onShow</action>
       </menuitem>
     </menu>
   </menuitem>
   <menuitem label="Estoque">
     <icon>fas:boxes fa-fw #FFFFFF</icon>
     <menu>
-      <menuitem label="Products">
-        <icon>far:circle fa-fw </icon>
-        <action>ProductList#method=onShow</action>
+      <menuitem label="Status produtos">
+        <icon>fas:signal fa-fw </icon>
+        <action>StatusProdutoList#method=onShow</action>
       </menuitem>
-      <menuitem label="Fornecedores">
-        <icon>far:circle fa-fw </icon>
-        <action>ProviderList#method=onShow</action>
+      <menuitem label="Categorias Produto">
+        <icon>far:list-alt fa-fw </icon>
+        <action>CategoryList#method=onShow</action>
       </menuitem>
-      <menuitem label="Cest e Ncm">
-        <icon>far:circle fa-fw </icon>
-        <action>CestNcmList#method=onShow</action>
+      <menuitem label="Tipo cadastros">
+        <icon>fas:filter fa-fw </icon>
+        <action>TipoCadastroList#method=onShow</action>
       </menuitem>
-      <menuitem label="Depositos">
-        <icon>far:circle fa-fw </icon>
-        <action>DepositList#method=onShow</action>
-      </menuitem>
-      <menuitem label="Marcas">
-        <icon>far:circle fa-fw </icon>
-        <action>BrandList#method=onShow</action>
-      </menuitem>
-      <menuitem label="Estoque do Produto">
-        <icon>far:circle fa-fw </icon>
-        <action>ProductStorageList#method=onShow</action>
-      </menuitem>
-      <menuitem label="Price lists">
-        <icon>far:circle fa-fw </icon>
+      <menuitem label="Listas de preços">
+        <icon>fas:dollar-sign fa-fw </icon>
         <action>PriceListList#method=onShow</action>
       </menuitem>
-      <menuitem label="Data de Validade ">
-        <icon>far:circle fa-fw </icon>
-        <action>ProductValidateDateList#method=onShow</action>
+      <menuitem label="Depositos">
+        <icon>fas:warehouse fa-fw </icon>
+        <action>DepositList#method=onShow</action>
       </menuitem>
-      <menuitem label="Categoria de Produto">
-        <icon>far:circle fa-fw </icon>
-        <action>CategoryList#method=onShow</action>
+      <menuitem label="Fornecedores">
+        <icon>fas:truck fa-fw </icon>
+        <action>ProviderList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Marcas">
+        <icon>far:copyright fa-fw </icon>
+        <action>BrandList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Cest ncms">
+        <icon>fas:coins fa-fw </icon>
+        <action>CestNcmList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Produtos">
+        <icon>fas:boxes fa-fw </icon>
+        <action>ProductList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Transferências de produtos">
+        <icon>fas:exchange-alt fa-fw </icon>
+        <action>ProductTransferList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Datas de validade">
+        <icon>far:calendar-alt fa-fw </icon>
+        <action>ProductValidateDateList#method=onShow</action>
       </menuitem>
     </menu>
   </menuitem>
@@ -70,55 +62,39 @@
     <icon>fas:wrench fa-fw #FFFFFF</icon>
     <menu>
       <menuitem label="Grupo de Lojas">
-        <icon>far:circle fa-fw </icon>
-        <action>GroupStoreList#method=onShow</action>
-      </menuitem>
-      <menuitem label="Caixas">
-        <icon>far:circle fa-fw </icon>
-        <action>CashierList#method=onShow</action>
-      </menuitem>
-      <menuitem label="Métodos de Pagamento">
-        <icon>far:circle fa-fw </icon>
-        <action>PaymentMethodList#method=onShow</action>
-      </menuitem>
-      <menuitem label="Registro do Caixa">
-        <icon>far:circle fa-fw </icon>
-        <action>CashierLogList#method=onShow</action>
+        <icon>fab:houzz fa-fw </icon>
+        <action>StoreGroupList#method=onShow</action>
       </menuitem>
       <menuitem label="Lojas">
-        <icon>far:circle fa-fw </icon>
+        <icon>fas:home fa-fw </icon>
         <action>StoreList#method=onShow</action>
       </menuitem>
-      <menuitem label="Transferências de usuários">
-        <icon>far:circle fa-fw </icon>
-        <action>UserStoreTransferList#method=onShow</action>
+      <menuitem label="Caixas">
+        <icon>fas:shopping-cart fa-fw </icon>
+        <action>CashierList#method=onShow</action>
       </menuitem>
-      <menuitem label="Usuario">
-        <icon>far:circle fa-fw </icon>
+      <menuitem label="Profissão">
+        <icon>fas:user-md fa-fw </icon>
+        <action>ProfessionList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Usuários">
+        <icon>fas:users fa-fw </icon>
         <action>UserList#method=onShow</action>
       </menuitem>
-      <menuitem label="Conta de Sangria de Caixa">
-        <icon>far:circle fa-fw </icon>
-        <action>WithdrawalAccountList#method=onShow</action>
+      <menuitem label="Registros de caixa">
+        <icon>fas:exclamation-triangle fa-fw </icon>
+        <action>CashierLogList#method=onShow</action>
       </menuitem>
-      <menuitem label="Sangrias de Caixa">
-        <icon>far:circle fa-fw </icon>
-        <action>WithdrawalList#method=onShow</action>
+      <menuitem label="Métodos de pagamentos">
+        <icon>far:money-bill-alt fa-fw </icon>
+        <action>PaymentMethodList#method=onShow</action>
       </menuitem>
     </menu>
   </menuitem>
   <menuitem label="Clientes">
     <icon>fas:users fa-fw #FFFFFF</icon>
-    <menu>
-      <menuitem label="Clientes">
-        <icon>far:circle fa-fw </icon>
-        <action>CustomerList#method=onShow</action>
-      </menuitem>
-      <menuitem label="lojas Parceiras">
-        <icon>far:circle fa-fw </icon>
-        <action>StorePartinerList#method=onShow</action>
-      </menuitem>
-    </menu>
+    <menu>  
+</menu>
   </menuitem>
   <menuitem label="Api">
     <icon>fab:cloudsmith fa-fw #FFFFFF</icon>

@@ -31,34 +31,28 @@ class CashierList extends TPage
         $this->form = new BootstrapFormBuilder(self::$formName);
 
         // define the form title
-        $this->form->setFormTitle("Listagem de caixas");
+        $this->form->setFormTitle("Listagem de cashiers");
         $this->limit = 20;
 
         $id = new TEntry('id');
         $name = new TEntry('name');
-        $cashier_type = new TEntry('cashier_type');
-        $user_authenticated = new TDBCombo('user_authenticated', 'pos_system', 'User', 'id', '{id}','id asc'  );
         $store = new TDBCombo('store', 'pos_system', 'Store', 'id', '{social_name}','social_name asc'  );
+        $cashier_type = new TCombo('cashier_type');
 
 
         $name->setMaxLength(20);
+        $cashier_type->addItems(["1"=>"Desktop","2"=>"Mobile"]);
         $store->enableSearch();
-        $user_authenticated->enableSearch();
+        $cashier_type->enableSearch();
 
         $id->setSize(100);
         $name->setSize('100%');
         $store->setSize('100%');
         $cashier_type->setSize('100%');
-        $user_authenticated->setSize('100%');
 
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Name:", null, '14px', null, '100%'),$name]);
-        $row1->layout = ['col-sm-6','col-sm-6'];
 
-        $row2 = $this->form->addFields([new TLabel("android / pos desktop:", null, '14px', null, '100%'),$cashier_type],[new TLabel("User authenticated:", null, '14px', null, '100%'),$user_authenticated]);
-        $row2->layout = ['col-sm-6','col-sm-6'];
-
-        $row3 = $this->form->addFields([new TLabel("Store:", null, '14px', null, '100%'),$store],[]);
-        $row3->layout = ['col-sm-6','col-sm-6'];
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Nome:", null, '14px', null, '100%'),$name],[new TLabel("Store:", null, '14px', null, '100%'),$store],[new TLabel("android / pos desktop:", null, '14px', null, '100%'),$cashier_type]);
+        $row1->layout = [' col-sm-6 col-lg-2',' col-sm-6 col-lg-3',' col-sm-6 col-lg-4',' col-sm-6 col-lg-3'];
 
         // keep the form filled during navigation with session data
         $this->form->setData( TSession::getValue(__CLASS__.'_filter_data') );
@@ -84,10 +78,9 @@ class CashierList extends TPage
         $this->datagrid->setHeight(320);
 
         $column_id = new TDataGridColumn('id', "Id", 'center' , '70px');
-        $column_name = new TDataGridColumn('name', "Name", 'left');
-        $column_cashier_type = new TDataGridColumn('cashier_type', "android / pos desktop", 'left');
-        $column_user_authenticated = new TDataGridColumn('user_authenticated', "User authenticated", 'left');
-        $column_fk_store_social_name = new TDataGridColumn('fk_store->social_name', "Store", 'left');
+        $column_name = new TDataGridColumn('name', "Nome", 'left');
+        $column_cashier_type = new TDataGridColumn('cashier_type', "Mobile / Desktop", 'left');
+        $column_fk_store_social_name = new TDataGridColumn('fk_store->social_name', "Loja", 'left');
 
         $order_id = new TAction(array($this, 'onReload'));
         $order_id->setParameter('order', 'id');
@@ -96,7 +89,6 @@ class CashierList extends TPage
         $this->datagrid->addColumn($column_id);
         $this->datagrid->addColumn($column_name);
         $this->datagrid->addColumn($column_cashier_type);
-        $this->datagrid->addColumn($column_user_authenticated);
         $this->datagrid->addColumn($column_fk_store_social_name);
 
         $action_onEdit = new TDataGridAction(array('CashierForm', 'onEdit'));
@@ -151,7 +143,7 @@ class CashierList extends TPage
 
         $panel->getBody()->insert(0, $headerActions);
 
-        $dropdown_button_exportar = new TDropDown("Exportar", 'fas:file-export #2d3436');
+        $dropdown_button_exportar = new TDropDown("Exportar", 'fas:file-export #FFFFFF');
         $dropdown_button_exportar->setPullSide('right');
         $dropdown_button_exportar->setButtonClass('btn btn-default waves-effect dropdown-toggle');
         $dropdown_button_exportar->addPostAction( "CSV", new TAction(['CashierList', 'onExportCsv'],['static' => 1]), 'datagrid_'.self::$formName, 'fas:file-csv #00b894' );
@@ -218,7 +210,6 @@ class CashierList extends TPage
             new TQuestion(AdiantiCoreTranslator::translate('Do you really want to delete ?'), $action);   
         }
     }
-
     public function onExportCsv($param = null) 
     {
         try
@@ -276,7 +267,6 @@ class CashierList extends TPage
             new TMessage('error', $e->getMessage()); // shows the exception error message
         }
     }
-
     public function onExportXls($param = null) 
     {
         try
@@ -368,7 +358,6 @@ class CashierList extends TPage
             new TMessage('error', $e->getMessage()); // shows the exception error message
         }
     }
-
     public function onExportPdf($param = null) 
     {
         try
@@ -410,7 +399,6 @@ class CashierList extends TPage
             new TMessage('error', $e->getMessage()); // shows the exception error message
         }
     }
-
     public function onExportXml($param = null) 
     {
         try
@@ -499,22 +487,16 @@ class CashierList extends TPage
             $filters[] = new TFilter('name', 'like', "%{$data->name}%");// create the filter 
         }
 
-        if (isset($data->cashier_type) AND ( (is_scalar($data->cashier_type) AND $data->cashier_type !== '') OR (is_array($data->cashier_type) AND (!empty($data->cashier_type)) )) )
-        {
-
-            $filters[] = new TFilter('cashier_type', '=', $data->cashier_type);// create the filter 
-        }
-
-        if (isset($data->user_authenticated) AND ( (is_scalar($data->user_authenticated) AND $data->user_authenticated !== '') OR (is_array($data->user_authenticated) AND (!empty($data->user_authenticated)) )) )
-        {
-
-            $filters[] = new TFilter('user_authenticated', '=', $data->user_authenticated);// create the filter 
-        }
-
         if (isset($data->store) AND ( (is_scalar($data->store) AND $data->store !== '') OR (is_array($data->store) AND (!empty($data->store)) )) )
         {
 
             $filters[] = new TFilter('store', '=', $data->store);// create the filter 
+        }
+
+        if (isset($data->cashier_type) AND ( (is_scalar($data->cashier_type) AND $data->cashier_type !== '') OR (is_array($data->cashier_type) AND (!empty($data->cashier_type)) )) )
+        {
+
+            $filters[] = new TFilter('cashier_type', '=', $data->cashier_type);// create the filter 
         }
 
         // fill the form with data again
@@ -573,9 +555,12 @@ class CashierList extends TPage
                 foreach ($objects as $object)
                 {
 
+                    $object->cashier_type = $object->cashier_type=='1' ? "Desktop":"Mobile";
+
                     $row = $this->datagrid->addItem($object);
                     $row->id = "row_{$object->id}";
 
+                    //</onAfterDatagridAddItem>
                 }
             }
 

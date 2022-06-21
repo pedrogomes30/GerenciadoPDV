@@ -6,6 +6,8 @@ class Store extends TRecord
     const PRIMARYKEY = 'id';
     const IDPOLICY   =  'serial'; // {max, serial}
 
+    const example = '1';
+
     private $fk_store_group;
 
     
@@ -23,7 +25,7 @@ class Store extends TRecord
         parent::addAttribute('fantasy_name');
         parent::addAttribute('obs');
         parent::addAttribute('state_inscription');
-        parent::addAttribute('minicipal_inscription');
+        parent::addAttribute('municipal_inscription');
         parent::addAttribute('icms');
         parent::addAttribute('tax_regime');
         parent::addAttribute('invoice_type');
@@ -42,11 +44,11 @@ class Store extends TRecord
     }
 
     /**
-     * Method set_group_store
-     * Sample of usage: $var->group_store = $object;
-     * @param $object Instance of GroupStore
+     * Method set_store_group
+     * Sample of usage: $var->store_group = $object;
+     * @param $object Instance of StoreGroup
      */
-    public function set_fk_store_group(GroupStore $object)
+    public function set_fk_store_group(StoreGroup $object)
     {
         $this->fk_store_group = $object;
         $this->store_group = $object->id;
@@ -55,14 +57,14 @@ class Store extends TRecord
     /**
      * Method get_fk_store_group
      * Sample of usage: $var->fk_store_group->attribute;
-     * @returns GroupStore instance
+     * @returns StoreGroup instance
      */
     public function get_fk_store_group()
     {
     
         // loads the associated object
         if (empty($this->fk_store_group))
-            $this->fk_store_group = new GroupStore($this->store_group);
+            $this->fk_store_group = new StoreGroup($this->store_group);
     
         // returns the associated object
         return $this->fk_store_group;
@@ -76,15 +78,6 @@ class Store extends TRecord
         $criteria = new TCriteria;
         $criteria->add(new TFilter('store', '=', $this->id));
         return Cashier::getObjects( $criteria );
-    }
-    /**
-     * Method getUsers
-     */
-    public function getUsers()
-    {
-        $criteria = new TCriteria;
-        $criteria->add(new TFilter('store', '=', $this->id));
-        return User::getObjects( $criteria );
     }
     /**
      * Method getDeposits
@@ -105,13 +98,13 @@ class Store extends TRecord
         return Sale::getObjects( $criteria );
     }
     /**
-     * Method getMethodPaymentStores
+     * Method getPaymentMethodStores
      */
-    public function getMethodPaymentStores()
+    public function getPaymentMethodStores()
     {
         $criteria = new TCriteria;
-        $criteria->add(new TFilter('store_id', '=', $this->id));
-        return MethodPaymentStore::getObjects( $criteria );
+        $criteria->add(new TFilter('store', '=', $this->id));
+        return PaymentMethodStore::getObjects( $criteria );
     }
     /**
      * Method getClosures
@@ -167,6 +160,24 @@ class Store extends TRecord
         $criteria->add(new TFilter('store', '=', $this->id));
         return PriceList::getObjects( $criteria );
     }
+    /**
+     * Method getUsers
+     */
+    public function getUsersByFkOriginStores()
+    {
+        $criteria = new TCriteria;
+        $criteria->add(new TFilter('origin_store', '=', $this->id));
+        return User::getObjects( $criteria );
+    }
+    /**
+     * Method getUsers
+     */
+    public function getUsersByFkCurrentStores()
+    {
+        $criteria = new TCriteria;
+        $criteria->add(new TFilter('current_store', '=', $this->id));
+        return User::getObjects( $criteria );
+    }
 
     public function set_cashier_fk_user_authenticated_to_string($cashier_fk_user_authenticated_to_string)
     {
@@ -220,32 +231,6 @@ class Store extends TRecord
         return implode(', ', $values);
     }
 
-    public function set_user_fk_store_to_string($user_fk_store_to_string)
-    {
-        if(is_array($user_fk_store_to_string))
-        {
-            $values = Store::where('id', 'in', $user_fk_store_to_string)->getIndexedArray('social_name', 'social_name');
-            $this->user_fk_store_to_string = implode(', ', $values);
-        }
-        else
-        {
-            $this->user_fk_store_to_string = $user_fk_store_to_string;
-        }
-
-        $this->vdata['user_fk_store_to_string'] = $this->user_fk_store_to_string;
-    }
-
-    public function get_user_fk_store_to_string()
-    {
-        if(!empty($this->user_fk_store_to_string))
-        {
-            return $this->user_fk_store_to_string;
-        }
-    
-        $values = User::where('store', '=', $this->id)->getIndexedArray('store','{fk_store->social_name}');
-        return implode(', ', $values);
-    }
-
     public function set_sale_fk_status_to_string($sale_fk_status_to_string)
     {
         if(is_array($sale_fk_status_to_string))
@@ -272,55 +257,55 @@ class Store extends TRecord
         return implode(', ', $values);
     }
 
-    public function set_method_payment_store_method_to_string($method_payment_store_method_to_string)
+    public function set_payment_method_store_fk_method_to_string($payment_method_store_fk_method_to_string)
     {
-        if(is_array($method_payment_store_method_to_string))
+        if(is_array($payment_method_store_fk_method_to_string))
         {
-            $values = PaymentMethod::where('id', 'in', $method_payment_store_method_to_string)->getIndexedArray('id', 'id');
-            $this->method_payment_store_method_to_string = implode(', ', $values);
+            $values = PaymentMethod::where('id', 'in', $payment_method_store_fk_method_to_string)->getIndexedArray('id', 'id');
+            $this->payment_method_store_fk_method_to_string = implode(', ', $values);
         }
         else
         {
-            $this->method_payment_store_method_to_string = $method_payment_store_method_to_string;
+            $this->payment_method_store_fk_method_to_string = $payment_method_store_fk_method_to_string;
         }
 
-        $this->vdata['method_payment_store_method_to_string'] = $this->method_payment_store_method_to_string;
+        $this->vdata['payment_method_store_fk_method_to_string'] = $this->payment_method_store_fk_method_to_string;
     }
 
-    public function get_method_payment_store_method_to_string()
+    public function get_payment_method_store_fk_method_to_string()
     {
-        if(!empty($this->method_payment_store_method_to_string))
+        if(!empty($this->payment_method_store_fk_method_to_string))
         {
-            return $this->method_payment_store_method_to_string;
+            return $this->payment_method_store_fk_method_to_string;
         }
     
-        $values = MethodPaymentStore::where('store_id', '=', $this->id)->getIndexedArray('method_id','{method->id}');
+        $values = PaymentMethodStore::where('store', '=', $this->id)->getIndexedArray('method','{fk_method->id}');
         return implode(', ', $values);
     }
 
-    public function set_method_payment_store_store_to_string($method_payment_store_store_to_string)
+    public function set_payment_method_store_fk_store_to_string($payment_method_store_fk_store_to_string)
     {
-        if(is_array($method_payment_store_store_to_string))
+        if(is_array($payment_method_store_fk_store_to_string))
         {
-            $values = Store::where('id', 'in', $method_payment_store_store_to_string)->getIndexedArray('social_name', 'social_name');
-            $this->method_payment_store_store_to_string = implode(', ', $values);
+            $values = Store::where('id', 'in', $payment_method_store_fk_store_to_string)->getIndexedArray('social_name', 'social_name');
+            $this->payment_method_store_fk_store_to_string = implode(', ', $values);
         }
         else
         {
-            $this->method_payment_store_store_to_string = $method_payment_store_store_to_string;
+            $this->payment_method_store_fk_store_to_string = $payment_method_store_fk_store_to_string;
         }
 
-        $this->vdata['method_payment_store_store_to_string'] = $this->method_payment_store_store_to_string;
+        $this->vdata['payment_method_store_fk_store_to_string'] = $this->payment_method_store_fk_store_to_string;
     }
 
-    public function get_method_payment_store_store_to_string()
+    public function get_payment_method_store_fk_store_to_string()
     {
-        if(!empty($this->method_payment_store_store_to_string))
+        if(!empty($this->payment_method_store_fk_store_to_string))
         {
-            return $this->method_payment_store_store_to_string;
+            return $this->payment_method_store_fk_store_to_string;
         }
     
-        $values = MethodPaymentStore::where('store_id', '=', $this->id)->getIndexedArray('store_id','{store->social_name}');
+        $values = PaymentMethodStore::where('store', '=', $this->id)->getIndexedArray('store','{fk_store->social_name}');
         return implode(', ', $values);
     }
 
@@ -477,6 +462,84 @@ class Store extends TRecord
         }
     
         $values = SaleItem::where('store', '=', $this->id)->getIndexedArray('sale','{fk_sale->id}');
+        return implode(', ', $values);
+    }
+
+    public function set_user_fk_origin_store_to_string($user_fk_origin_store_to_string)
+    {
+        if(is_array($user_fk_origin_store_to_string))
+        {
+            $values = Store::where('id', 'in', $user_fk_origin_store_to_string)->getIndexedArray('social_name', 'social_name');
+            $this->user_fk_origin_store_to_string = implode(', ', $values);
+        }
+        else
+        {
+            $this->user_fk_origin_store_to_string = $user_fk_origin_store_to_string;
+        }
+
+        $this->vdata['user_fk_origin_store_to_string'] = $this->user_fk_origin_store_to_string;
+    }
+
+    public function get_user_fk_origin_store_to_string()
+    {
+        if(!empty($this->user_fk_origin_store_to_string))
+        {
+            return $this->user_fk_origin_store_to_string;
+        }
+    
+        $values = User::where('current_store', '=', $this->id)->getIndexedArray('origin_store','{fk_origin_store->social_name}');
+        return implode(', ', $values);
+    }
+
+    public function set_user_fk_current_store_to_string($user_fk_current_store_to_string)
+    {
+        if(is_array($user_fk_current_store_to_string))
+        {
+            $values = Store::where('id', 'in', $user_fk_current_store_to_string)->getIndexedArray('social_name', 'social_name');
+            $this->user_fk_current_store_to_string = implode(', ', $values);
+        }
+        else
+        {
+            $this->user_fk_current_store_to_string = $user_fk_current_store_to_string;
+        }
+
+        $this->vdata['user_fk_current_store_to_string'] = $this->user_fk_current_store_to_string;
+    }
+
+    public function get_user_fk_current_store_to_string()
+    {
+        if(!empty($this->user_fk_current_store_to_string))
+        {
+            return $this->user_fk_current_store_to_string;
+        }
+    
+        $values = User::where('current_store', '=', $this->id)->getIndexedArray('current_store','{fk_current_store->social_name}');
+        return implode(', ', $values);
+    }
+
+    public function set_user_fk_profession_to_string($user_fk_profession_to_string)
+    {
+        if(is_array($user_fk_profession_to_string))
+        {
+            $values = Profession::where('id', 'in', $user_fk_profession_to_string)->getIndexedArray('id', 'id');
+            $this->user_fk_profession_to_string = implode(', ', $values);
+        }
+        else
+        {
+            $this->user_fk_profession_to_string = $user_fk_profession_to_string;
+        }
+
+        $this->vdata['user_fk_profession_to_string'] = $this->user_fk_profession_to_string;
+    }
+
+    public function get_user_fk_profession_to_string()
+    {
+        if(!empty($this->user_fk_profession_to_string))
+        {
+            return $this->user_fk_profession_to_string;
+        }
+    
+        $values = User::where('current_store', '=', $this->id)->getIndexedArray('profession','{fk_profession->id}');
         return implode(', ', $values);
     }
 

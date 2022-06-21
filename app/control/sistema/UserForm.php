@@ -25,41 +25,50 @@ class UserForm extends TPage
         // creates the form
         $this->form = new BootstrapFormBuilder(self::$formName);
         // define the form title
-        $this->form->setFormTitle("Cadastro de Usuário");
+        $this->form->setFormTitle("Cadastro de user");
 
 
         $id = new TEntry('id');
         $obs = new TEntry('obs');
-        $is_manager = new TRadioGroup('is_manager');
-        $store = new TDBCombo('store', 'pos_system', 'Store', 'id', '{social_name}','social_name asc'  );
+        $profile_img = new TEntry('profile_img');
+        $origin_store = new TDBCombo('origin_store', 'pos_system', 'Store', 'id', '{social_name}','social_name asc'  );
+        $current_store = new TDBCombo('current_store', 'pos_system', 'Store', 'id', '{social_name}','social_name asc'  );
+        $profession = new TDBCombo('profession', 'pos_system', 'Profession', 'id', '{id}','id asc'  );
         $system_user = new TDBCombo('system_user', 'permission', 'SystemUsers', 'id', '{name}','name asc'  );
 
-        $is_manager->addValidation("Is manager", new TRequiredValidator()); 
+        $current_store->addValidation("Current store", new TRequiredValidator()); 
+        $profession->addValidation("Profession", new TRequiredValidator()); 
         $system_user->addValidation("System user", new TRequiredValidator()); 
 
         $id->setEditable(false);
+        $origin_store->setValue('1');
         $obs->setMaxLength(200);
-        $is_manager->addItems(["1"=>"Sim","2"=>"Não"]);
-        $is_manager->setLayout('vertical');
-        $is_manager->setValue('false');
-        $is_manager->setBooleanMode();
-        $store->enableSearch();
+        $profile_img->setMaxLength(255);
+
+        $profession->enableSearch();
         $system_user->enableSearch();
+        $origin_store->enableSearch();
+        $current_store->enableSearch();
 
         $id->setSize(100);
         $obs->setSize('100%');
-        $store->setSize('100%');
-        $is_manager->setSize(80);
+        $profession->setSize('100%');
+        $profile_img->setSize('100%');
         $system_user->setSize('100%');
+        $origin_store->setSize('100%');
+        $current_store->setSize('100%');
 
         $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Observação:", null, '14px', null, '100%'),$obs]);
         $row1->layout = ['col-sm-6','col-sm-6'];
 
-        $row2 = $this->form->addFields([new TLabel("Is manager:", '#ff0000', '14px', null, '100%'),$is_manager],[new TLabel("Store:", null, '14px', null, '100%'),$store]);
+        $row2 = $this->form->addFields([new TLabel("url imagem perfil:", null, '14px', null, '100%'),$profile_img],[new TLabel("Origin store:", null, '14px', null, '100%'),$origin_store]);
         $row2->layout = ['col-sm-6','col-sm-6'];
 
-        $row3 = $this->form->addFields([new TLabel("System user:", '#ff0000', '14px', null, '100%'),$system_user],[]);
+        $row3 = $this->form->addFields([new TLabel("Current store:", '#ff0000', '14px', null, '100%'),$current_store],[new TLabel("Profession:", '#ff0000', '14px', null, '100%'),$profession]);
         $row3->layout = ['col-sm-6','col-sm-6'];
+
+        $row4 = $this->form->addFields([new TLabel("System user:", '#ff0000', '14px', null, '100%'),$system_user],[]);
+        $row4->layout = ['col-sm-6','col-sm-6'];
 
         // create the form actions
         $btn_onsave = $this->form->addAction("Salvar", new TAction([$this, 'onSave']), 'fas:save #ffffff');
@@ -78,7 +87,7 @@ class UserForm extends TPage
         $container->class = 'form-container';
         if(empty($param['target_container']))
         {
-            $container->add(TBreadCrumb::create(["Sistema","Cadastro de Usuário"]));
+            $container->add(TBreadCrumb::create(["Sistema","Cadastro de user"]));
         }
         $container->add($this->form);
 

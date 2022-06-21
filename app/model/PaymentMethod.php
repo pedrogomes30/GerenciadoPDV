@@ -11,7 +11,6 @@ class PaymentMethod extends TRecord
     const debit_card = '3';
     const store_credit = '4';
     const money = '5';
-    const cash_credit_card = '6';
 
     
 
@@ -22,18 +21,19 @@ class PaymentMethod extends TRecord
     {
         parent::__construct($id, $callObjectLoad);
         parent::addAttribute('method');
+        parent::addAttribute('alias');
         parent::addAttribute('issue');
             
     }
 
     /**
-     * Method getMethodPaymentStores
+     * Method getPaymentMethodStores
      */
-    public function getMethodPaymentStores()
+    public function getPaymentMethodStores()
     {
         $criteria = new TCriteria;
-        $criteria->add(new TFilter('method_id', '=', $this->id));
-        return MethodPaymentStore::getObjects( $criteria );
+        $criteria->add(new TFilter('method', '=', $this->id));
+        return PaymentMethodStore::getObjects( $criteria );
     }
     /**
      * Method getClosurePaymentMethodss
@@ -63,55 +63,55 @@ class PaymentMethod extends TRecord
         return SalePayment::getObjects( $criteria );
     }
 
-    public function set_method_payment_store_method_to_string($method_payment_store_method_to_string)
+    public function set_payment_method_store_fk_method_to_string($payment_method_store_fk_method_to_string)
     {
-        if(is_array($method_payment_store_method_to_string))
+        if(is_array($payment_method_store_fk_method_to_string))
         {
-            $values = PaymentMethod::where('id', 'in', $method_payment_store_method_to_string)->getIndexedArray('id', 'id');
-            $this->method_payment_store_method_to_string = implode(', ', $values);
+            $values = PaymentMethod::where('id', 'in', $payment_method_store_fk_method_to_string)->getIndexedArray('id', 'id');
+            $this->payment_method_store_fk_method_to_string = implode(', ', $values);
         }
         else
         {
-            $this->method_payment_store_method_to_string = $method_payment_store_method_to_string;
+            $this->payment_method_store_fk_method_to_string = $payment_method_store_fk_method_to_string;
         }
 
-        $this->vdata['method_payment_store_method_to_string'] = $this->method_payment_store_method_to_string;
+        $this->vdata['payment_method_store_fk_method_to_string'] = $this->payment_method_store_fk_method_to_string;
     }
 
-    public function get_method_payment_store_method_to_string()
+    public function get_payment_method_store_fk_method_to_string()
     {
-        if(!empty($this->method_payment_store_method_to_string))
+        if(!empty($this->payment_method_store_fk_method_to_string))
         {
-            return $this->method_payment_store_method_to_string;
+            return $this->payment_method_store_fk_method_to_string;
         }
     
-        $values = MethodPaymentStore::where('method_id', '=', $this->id)->getIndexedArray('method_id','{method->id}');
+        $values = PaymentMethodStore::where('method', '=', $this->id)->getIndexedArray('method','{fk_method->id}');
         return implode(', ', $values);
     }
 
-    public function set_method_payment_store_store_to_string($method_payment_store_store_to_string)
+    public function set_payment_method_store_fk_store_to_string($payment_method_store_fk_store_to_string)
     {
-        if(is_array($method_payment_store_store_to_string))
+        if(is_array($payment_method_store_fk_store_to_string))
         {
-            $values = Store::where('id', 'in', $method_payment_store_store_to_string)->getIndexedArray('social_name', 'social_name');
-            $this->method_payment_store_store_to_string = implode(', ', $values);
+            $values = Store::where('id', 'in', $payment_method_store_fk_store_to_string)->getIndexedArray('social_name', 'social_name');
+            $this->payment_method_store_fk_store_to_string = implode(', ', $values);
         }
         else
         {
-            $this->method_payment_store_store_to_string = $method_payment_store_store_to_string;
+            $this->payment_method_store_fk_store_to_string = $payment_method_store_fk_store_to_string;
         }
 
-        $this->vdata['method_payment_store_store_to_string'] = $this->method_payment_store_store_to_string;
+        $this->vdata['payment_method_store_fk_store_to_string'] = $this->payment_method_store_fk_store_to_string;
     }
 
-    public function get_method_payment_store_store_to_string()
+    public function get_payment_method_store_fk_store_to_string()
     {
-        if(!empty($this->method_payment_store_store_to_string))
+        if(!empty($this->payment_method_store_fk_store_to_string))
         {
-            return $this->method_payment_store_store_to_string;
+            return $this->payment_method_store_fk_store_to_string;
         }
     
-        $values = MethodPaymentStore::where('method_id', '=', $this->id)->getIndexedArray('store_id','{store->social_name}');
+        $values = PaymentMethodStore::where('method', '=', $this->id)->getIndexedArray('store','{fk_store->social_name}');
         return implode(', ', $values);
     }
 

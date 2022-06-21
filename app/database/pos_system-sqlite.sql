@@ -20,24 +20,25 @@ CREATE TABLE cashier_log(
 FOREIGN KEY(cashier_id) REFERENCES cashier(id),
 FOREIGN KEY(user) REFERENCES user(id)) ; 
 
-CREATE TABLE group_store( 
-      id  INTEGER    NOT NULL  , 
-      name varchar  (50)   NOT NULL  , 
-      default_theme json   , 
- PRIMARY KEY (id)) ; 
-
-CREATE TABLE method_payment_store( 
-      id  INTEGER    NOT NULL  , 
-      method_id int   NOT NULL  , 
-      store_id int   NOT NULL  , 
- PRIMARY KEY (id),
-FOREIGN KEY(method_id) REFERENCES payment_method(id),
-FOREIGN KEY(store_id) REFERENCES store(id)) ; 
-
 CREATE TABLE payment_method( 
       id  INTEGER    NOT NULL  , 
       method varchar  (50)   NOT NULL  , 
+      alias varchar  (50)   NOT NULL  , 
       issue text   NOT NULL    DEFAULT 'F', 
+ PRIMARY KEY (id)) ; 
+
+CREATE TABLE payment_method_store( 
+      id  INTEGER    NOT NULL  , 
+      method int   NOT NULL  , 
+      store int   NOT NULL  , 
+ PRIMARY KEY (id),
+FOREIGN KEY(method) REFERENCES payment_method(id),
+FOREIGN KEY(store) REFERENCES store(id)) ; 
+
+CREATE TABLE profession( 
+      id  INTEGER    NOT NULL  , 
+      description varchar  (60)   NOT NULL  , 
+      is_manager text   NOT NULL    DEFAULT '0', 
  PRIMARY KEY (id)) ; 
 
 CREATE TABLE store( 
@@ -49,7 +50,7 @@ CREATE TABLE store(
       fantasy_name varchar  (100)   , 
       obs varchar  (200)   , 
       state_inscription varchar  (30)   , 
-      minicipal_inscription varchar  (30)   , 
+      municipal_inscription varchar  (30)   , 
       icms varchar  (30)   , 
       tax_regime varchar  (5)   , 
       invoice_type int   NOT NULL    DEFAULT 1, 
@@ -65,16 +66,26 @@ CREATE TABLE store(
       certificate_password varchar  (50)   , 
       store_group int   NOT NULL  , 
  PRIMARY KEY (id),
-FOREIGN KEY(store_group) REFERENCES group_store(id)) ; 
+FOREIGN KEY(store_group) REFERENCES store_group(id)) ; 
+
+CREATE TABLE store_group( 
+      id  INTEGER    NOT NULL  , 
+      name varchar  (50)   NOT NULL  , 
+      default_theme json   , 
+ PRIMARY KEY (id)) ; 
 
 CREATE TABLE user( 
       id  INTEGER    NOT NULL  , 
       obs varchar  (200)   , 
-      is_manager text   NOT NULL    DEFAULT 'F', 
-      store int   , 
+      profile_img varchar  (255)   , 
+      origin_store int     DEFAULT 1, 
+      current_store int   NOT NULL  , 
+      profession int   NOT NULL  , 
       system_user int   NOT NULL  , 
  PRIMARY KEY (id),
-FOREIGN KEY(store) REFERENCES store(id)) ; 
+FOREIGN KEY(profession) REFERENCES profession(id),
+FOREIGN KEY(origin_store) REFERENCES store(id),
+FOREIGN KEY(current_store) REFERENCES store(id)) ; 
 
 CREATE TABLE user_store_transfer( 
       id  INTEGER    NOT NULL  , 
@@ -91,6 +102,7 @@ FOREIGN KEY(store_origin) REFERENCES store(id)) ;
  
  CREATE UNIQUE INDEX unique_idx_cashier_user_authenticated ON cashier(user_authenticated);
  CREATE UNIQUE INDEX unique_idx_payment_method_method ON payment_method(method);
+ CREATE UNIQUE INDEX unique_idx_payment_method_alias ON payment_method(alias);
  CREATE UNIQUE INDEX unique_idx_store_abbreviation ON store(abbreviation);
  CREATE UNIQUE INDEX unique_idx_store_cnpj ON store(cnpj);
  CREATE UNIQUE INDEX unique_idx_store_fantasy_name ON store(fantasy_name);

@@ -28,16 +28,15 @@ class SystemRequestPasswordResetForm extends TPage
         $this->form = new BootstrapFormBuilder('form_login');
         $this->form->setFormTitle( _t('Reset password') );
         
-        // create the form fields
         $login = new TEntry('login');
-        
-        // define the sizes
-        $login->setSize('70%', 40);
-        
-        $login->style = 'height:35px; font-size:14px;float:left;border-bottom-left-radius: 0;border-top-left-radius: 0;';
-        $login->placeholder = _t('User');
-        $user = '<span style="float:left;margin-left:44px;height:35px;" class="login-avatar"><span class="fa fa-user"></span></span>';
-        $this->form->addFields( [$user, $login] );
+
+        $login->setSize('100%');
+        $login->setInnerIcon(new TImage('fas:user'), 'left');
+
+        $login->placeholder =  _t('User');
+
+        $row1 = $this->form->addFields([$login]);
+        $row1->layout = [' col-sm-12'];
         
         $btn = $this->form->addAction(_t('Send'), new TAction(array($this, 'onRequest')), '');
         $btn->class = 'btn btn-primary';

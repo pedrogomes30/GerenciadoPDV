@@ -25,13 +25,13 @@ class CategoryForm extends TPage
         // creates the form
         $this->form = new BootstrapFormBuilder(self::$formName);
         // define the form title
-        $this->form->setFormTitle("Cadastro de categoria do produto");
+        $this->form->setFormTitle("Cadastro de category");
 
 
         $id = new TEntry('id');
         $name = new TEntry('name');
-        $icon_category = new TEntry('icon_category');
         $cest_ncm_default = new TDBCombo('cest_ncm_default', 'pos_product', 'CestNcm', 'id', '{id}','id asc'  );
+        $icon_category = new TEntry('icon_category');
 
         $name->addValidation("Nome", new TRequiredValidator()); 
         $cest_ncm_default->addValidation("Cest ncm default", new TRequiredValidator()); 
@@ -50,7 +50,7 @@ class CategoryForm extends TPage
         $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Nome:", '#ff0000', '14px', null, '100%'),$name]);
         $row1->layout = ['col-sm-6','col-sm-6'];
 
-        $row2 = $this->form->addFields([new TLabel("Icon category:", null, '14px', null, '100%'),$icon_category],[new TLabel("Cest ncm default:", '#ff0000', '14px', null, '100%'),$cest_ncm_default]);
+        $row2 = $this->form->addFields([new TLabel("Cest ncm default:", '#ff0000', '14px', null, '100%'),$cest_ncm_default],[new TLabel("Icon category:", null, '14px', null, '100%'),$icon_category]);
         $row2->layout = ['col-sm-6','col-sm-6'];
 
         // create the form actions
@@ -70,7 +70,7 @@ class CategoryForm extends TPage
         $container->class = 'form-container';
         if(empty($param['target_container']))
         {
-            $container->add(TBreadCrumb::create(["Estoque","Cadastro de categoria do produto"]));
+            $container->add(TBreadCrumb::create(["Estoque","Cadastro de category"]));
         }
         $container->add($this->form);
 

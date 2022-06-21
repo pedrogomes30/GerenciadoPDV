@@ -45,7 +45,7 @@ class ClosureList extends TPage
 
 
         $closure_type->addItems(["1"=>"Sim","2"=>"Não"]);
-        $closure_type->setLayout('vertical');
+        $closure_type->setLayout('horizontal');
         $closure_type->setBooleanMode();
         $dt_open->setMask('dd/mm/yyyy hh:ii');
         $dt_close->setMask('dd/mm/yyyy hh:ii');
@@ -87,9 +87,6 @@ class ClosureList extends TPage
         $this->btn_onsearch = $btn_onsearch;
         $btn_onsearch->addStyleClass('btn-primary'); 
 
-        $btn_onshow = $this->form->addAction("Cadastrar", new TAction(['ClosureForm', 'onShow']), 'fas:plus #69aa46');
-        $this->btn_onshow = $btn_onshow;
-
         // creates a Datagrid
         $this->datagrid = new TDataGrid;
         $this->datagrid->disableHtmlConversion();
@@ -124,15 +121,6 @@ class ClosureList extends TPage
         $this->datagrid->addColumn($column_dt_open);
         $this->datagrid->addColumn($column_dt_close);
         $this->datagrid->addColumn($column_value_total);
-
-        $action_onEdit = new TDataGridAction(array('ClosureForm', 'onEdit'));
-        $action_onEdit->setUseButton(false);
-        $action_onEdit->setButtonClass('btn btn-default btn-sm');
-        $action_onEdit->setLabel("Editar");
-        $action_onEdit->setImage('far:edit #478fca');
-        $action_onEdit->setField(self::$primaryKey);
-
-        $this->datagrid->addAction($action_onEdit);
 
         $action_onDelete = new TDataGridAction(array('ClosureList', 'onDelete'));
         $action_onDelete->setUseButton(false);

@@ -31,114 +31,37 @@ class StoreList extends TPage
         $this->form = new BootstrapFormBuilder(self::$formName);
 
         // define the form title
-        $this->form->setFormTitle("Listagem de lojas");
+        $this->form->setFormTitle("Listagem de stores");
         $this->limit = 20;
 
         $id = new TEntry('id');
-        $social_name = new TEntry('social_name');
+        $social_name = new TDBCombo('social_name', 'pos_system', 'Store', 'id', '{social_name}','social_name asc'  );
+        $fantasy_name = new TDBCombo('fantasy_name', 'pos_system', 'Store', 'id', '{fantasy_name}','fantasy_name asc'  );
         $abbreviation = new TEntry('abbreviation');
         $cnpj = new TEntry('cnpj');
-        $icon_url = new TEntry('icon_url');
-        $fantasy_name = new TEntry('fantasy_name');
-        $obs = new TEntry('obs');
-        $state_inscription = new TEntry('state_inscription');
-        $minicipal_inscription = new TEntry('minicipal_inscription');
-        $icms = new TEntry('icms');
-        $tax_regime = new TEntry('tax_regime');
-        $invoice_type = new TEntry('invoice_type');
-        $invoice_provider_id = new TEntry('invoice_provider_id');
-        $production_csc_number = new TEntry('production_csc_number');
-        $production_csc_id = new TEntry('production_csc_id');
-        $production_invoice_serie = new TEntry('production_invoice_serie');
-        $production_invoice_sequence = new TEntry('production_invoice_sequence');
-        $homologation_csc_number = new TEntry('homologation_csc_number');
-        $homologation_csc_id = new TEntry('homologation_csc_id');
-        $homologation_invoice_serie = new TEntry('homologation_invoice_serie');
-        $homologation_invoice_sequence = new TEntry('homologation_invoice_sequence');
-        $certificate_password = new TEntry('certificate_password');
-        $store_group = new TDBCombo('store_group', 'pos_system', 'GroupStore', 'id', '{name}','name asc'  );
+        $store_group = new TDBCombo('store_group', 'pos_system', 'StoreGroup', 'id', '{name}','name asc'  );
 
 
-        $store_group->enableSearch();
         $cnpj->setMaxLength(20);
-        $obs->setMaxLength(200);
-        $icms->setMaxLength(30);
-        $icon_url->setMaxLength(255);
-        $tax_regime->setMaxLength(5);
-        $social_name->setMaxLength(50);
         $abbreviation->setMaxLength(5);
-        $fantasy_name->setMaxLength(100);
-        $state_inscription->setMaxLength(30);
-        $production_csc_id->setMaxLength(50);
-        $invoice_provider_id->setMaxLength(50);
-        $homologation_csc_id->setMaxLength(50);
-        $certificate_password->setMaxLength(50);
-        $minicipal_inscription->setMaxLength(30);
-        $production_csc_number->setMaxLength(50);
-        $homologation_csc_number->setMaxLength(50);
+
+        $social_name->enableSearch();
+        $store_group->enableSearch();
+        $fantasy_name->enableSearch();
 
         $id->setSize(100);
-        $obs->setSize('100%');
-        $icms->setSize('100%');
         $cnpj->setSize('100%');
-        $icon_url->setSize('100%');
-        $tax_regime->setSize('100%');
         $social_name->setSize('100%');
         $store_group->setSize('100%');
         $fantasy_name->setSize('100%');
         $abbreviation->setSize('100%');
-        $invoice_type->setSize('100%');
-        $state_inscription->setSize('100%');
-        $production_csc_id->setSize('100%');
-        $invoice_provider_id->setSize('100%');
-        $homologation_csc_id->setSize('100%');
-        $certificate_password->setSize('100%');
-        $minicipal_inscription->setSize('100%');
-        $production_csc_number->setSize('100%');
-        $homologation_csc_number->setSize('100%');
-        $production_invoice_serie->setSize('100%');
-        $homologation_invoice_serie->setSize('100%');
-        $production_invoice_sequence->setSize('100%');
-        $homologation_invoice_sequence->setSize('100%');
 
 
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Razão Social:", null, '14px', null, '100%'),$social_name],[new TLabel("Nome Fantasia:", null, '14px', null, '100%'),$fantasy_name],[new TLabel("Abreviação:", null, '14px', null, '100%'),$abbreviation]);
+        $row1->layout = [' col-sm-6 col-lg-2',' col-sm-6 col-lg-4',' col-sm-6 col-lg-3',' col-sm-6 col-lg-3'];
 
-
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Social name:", null, '14px', null, '100%'),$social_name]);
-        $row1->layout = ['col-sm-6','col-sm-6'];
-
-        $row2 = $this->form->addFields([new TLabel("Abbreviation:", null, '14px', null, '100%'),$abbreviation],[new TLabel("Cnpj:", null, '14px', null, '100%'),$cnpj]);
+        $row2 = $this->form->addFields([new TLabel("Cnpj:", null, '14px', null, '100%'),$cnpj],[new TLabel("Grupo de Loja:", null, '14px', null, '100%'),$store_group]);
         $row2->layout = ['col-sm-6','col-sm-6'];
-
-        $row3 = $this->form->addFields([new TLabel("Icon url:", null, '14px', null, '100%'),$icon_url],[new TLabel("Fantasy name:", null, '14px', null, '100%'),$fantasy_name]);
-        $row3->layout = ['col-sm-6','col-sm-6'];
-
-        $row4 = $this->form->addFields([new TLabel("Obs:", null, '14px', null, '100%'),$obs],[new TLabel("State inscription:", null, '14px', null, '100%'),$state_inscription]);
-        $row4->layout = ['col-sm-6','col-sm-6'];
-
-        $row5 = $this->form->addFields([new TLabel("Minicipal inscription:", null, '14px', null, '100%'),$minicipal_inscription],[new TLabel("Icms:", null, '14px', null, '100%'),$icms]);
-        $row5->layout = ['col-sm-6','col-sm-6'];
-
-        $row6 = $this->form->addFields([new TLabel("Tax regime:", null, '14px', null, '100%'),$tax_regime],[new TLabel("Invoice type:", null, '14px', null, '100%'),$invoice_type]);
-        $row6->layout = ['col-sm-6','col-sm-6'];
-
-        $row7 = $this->form->addFields([new TLabel("Invoice provider id:", null, '14px', null, '100%'),$invoice_provider_id],[new TLabel("Production csc number:", null, '14px', null, '100%'),$production_csc_number]);
-        $row7->layout = ['col-sm-6','col-sm-6'];
-
-        $row8 = $this->form->addFields([new TLabel("Production csc id:", null, '14px', null, '100%'),$production_csc_id],[new TLabel("Production invoice serie:", null, '14px', null, '100%'),$production_invoice_serie]);
-        $row8->layout = ['col-sm-6','col-sm-6'];
-
-        $row9 = $this->form->addFields([new TLabel("Production invoice sequence:", null, '14px', null, '100%'),$production_invoice_sequence],[new TLabel("Homologation csc number:", null, '14px', null, '100%'),$homologation_csc_number]);
-        $row9->layout = ['col-sm-6','col-sm-6'];
-
-        $row10 = $this->form->addFields([new TLabel("Homologation csc id:", null, '14px', null, '100%'),$homologation_csc_id],[new TLabel("Homologation invoice serie:", null, '14px', null, '100%'),$homologation_invoice_serie]);
-        $row10->layout = ['col-sm-6','col-sm-6'];
-
-        $row11 = $this->form->addFields([new TLabel("Homologation invoice sequence:", null, '14px', null, '100%'),$homologation_invoice_sequence],[new TLabel("Certificate password:", null, '14px', null, '100%'),$certificate_password]);
-        $row11->layout = ['col-sm-6','col-sm-6'];
-
-        $row12 = $this->form->addFields([new TLabel("Store group:", null, '14px', null, '100%'),$store_group],[]);
-        $row12->layout = ['col-sm-6','col-sm-6'];
 
         // keep the form filled during navigation with session data
         $this->form->setData( TSession::getValue(__CLASS__.'_filter_data') );
@@ -164,28 +87,12 @@ class StoreList extends TPage
         $this->datagrid->setHeight(320);
 
         $column_id = new TDataGridColumn('id', "Id", 'center' , '70px');
-        $column_social_name = new TDataGridColumn('social_name', "Social name", 'left');
-        $column_abbreviation = new TDataGridColumn('abbreviation', "Abbreviation", 'left');
-        $column_cnpj = new TDataGridColumn('cnpj', "Cnpj", 'left');
-        $column_icon_url = new TDataGridColumn('icon_url', "Icon url", 'left');
-        $column_fantasy_name = new TDataGridColumn('fantasy_name', "Fantasy name", 'left');
-        $column_obs = new TDataGridColumn('obs', "Obs", 'left');
-        $column_state_inscription = new TDataGridColumn('state_inscription', "State inscription", 'left');
-        $column_minicipal_inscription = new TDataGridColumn('minicipal_inscription', "Minicipal inscription", 'left');
-        $column_icms = new TDataGridColumn('icms', "Icms", 'left');
-        $column_tax_regime = new TDataGridColumn('tax_regime', "Tax regime", 'left');
-        $column_invoice_type = new TDataGridColumn('invoice_type', "Invoice type", 'left');
-        $column_invoice_provider_id = new TDataGridColumn('invoice_provider_id', "Invoice provider id", 'left');
-        $column_production_csc_number = new TDataGridColumn('production_csc_number', "Production csc number", 'left');
-        $column_production_csc_id = new TDataGridColumn('production_csc_id', "Production csc id", 'left');
-        $column_production_invoice_serie = new TDataGridColumn('production_invoice_serie', "Production invoice serie", 'left');
-        $column_production_invoice_sequence = new TDataGridColumn('production_invoice_sequence', "Production invoice sequence", 'left');
-        $column_homologation_csc_number = new TDataGridColumn('homologation_csc_number', "Homologation csc number", 'left');
-        $column_homologation_csc_id = new TDataGridColumn('homologation_csc_id', "Homologation csc id", 'left');
-        $column_homologation_invoice_serie = new TDataGridColumn('homologation_invoice_serie', "Homologation invoice serie", 'left');
-        $column_homologation_invoice_sequence = new TDataGridColumn('homologation_invoice_sequence', "Homologation invoice sequence", 'left');
-        $column_certificate_password = new TDataGridColumn('certificate_password', "Certificate password", 'left');
-        $column_fk_store_group_name = new TDataGridColumn('fk_store_group->name', "Store group", 'left');
+        $column_social_name = new TDataGridColumn('social_name', "Razão Social", 'left');
+        $column_fantasy_name = new TDataGridColumn('fantasy_name', "Nome Fantasia", 'left');
+        $column_abbreviation = new TDataGridColumn('abbreviation', "Abreviação", 'left');
+        $column_cnpj = new TDataGridColumn('cnpj', "CNPJ", 'left');
+        $column_fk_store_group_name = new TDataGridColumn('fk_store_group->name', "Grupo de loja", 'left');
+        $column_icon_url = new TDataGridColumn('icon_url', "", 'left');
 
         $order_id = new TAction(array($this, 'onReload'));
         $order_id->setParameter('order', 'id');
@@ -193,27 +100,11 @@ class StoreList extends TPage
 
         $this->datagrid->addColumn($column_id);
         $this->datagrid->addColumn($column_social_name);
+        $this->datagrid->addColumn($column_fantasy_name);
         $this->datagrid->addColumn($column_abbreviation);
         $this->datagrid->addColumn($column_cnpj);
-        $this->datagrid->addColumn($column_icon_url);
-        $this->datagrid->addColumn($column_fantasy_name);
-        $this->datagrid->addColumn($column_obs);
-        $this->datagrid->addColumn($column_state_inscription);
-        $this->datagrid->addColumn($column_minicipal_inscription);
-        $this->datagrid->addColumn($column_icms);
-        $this->datagrid->addColumn($column_tax_regime);
-        $this->datagrid->addColumn($column_invoice_type);
-        $this->datagrid->addColumn($column_invoice_provider_id);
-        $this->datagrid->addColumn($column_production_csc_number);
-        $this->datagrid->addColumn($column_production_csc_id);
-        $this->datagrid->addColumn($column_production_invoice_serie);
-        $this->datagrid->addColumn($column_production_invoice_sequence);
-        $this->datagrid->addColumn($column_homologation_csc_number);
-        $this->datagrid->addColumn($column_homologation_csc_id);
-        $this->datagrid->addColumn($column_homologation_invoice_serie);
-        $this->datagrid->addColumn($column_homologation_invoice_sequence);
-        $this->datagrid->addColumn($column_certificate_password);
         $this->datagrid->addColumn($column_fk_store_group_name);
+        $this->datagrid->addColumn($column_icon_url);
 
         $action_onEdit = new TDataGridAction(array('StoreForm', 'onEdit'));
         $action_onEdit->setUseButton(false);
@@ -267,7 +158,7 @@ class StoreList extends TPage
 
         $panel->getBody()->insert(0, $headerActions);
 
-        $dropdown_button_exportar = new TDropDown("Exportar", 'fas:file-export #2d3436');
+        $dropdown_button_exportar = new TDropDown("Exportar", 'fas:file-export #FFFFFF');
         $dropdown_button_exportar->setPullSide('right');
         $dropdown_button_exportar->setButtonClass('btn btn-default waves-effect dropdown-toggle');
         $dropdown_button_exportar->addPostAction( "CSV", new TAction(['StoreList', 'onExportCsv'],['static' => 1]), 'datagrid_'.self::$formName, 'fas:file-csv #00b894' );
@@ -615,6 +506,12 @@ class StoreList extends TPage
             $filters[] = new TFilter('social_name', 'like', "%{$data->social_name}%");// create the filter 
         }
 
+        if (isset($data->fantasy_name) AND ( (is_scalar($data->fantasy_name) AND $data->fantasy_name !== '') OR (is_array($data->fantasy_name) AND (!empty($data->fantasy_name)) )) )
+        {
+
+            $filters[] = new TFilter('fantasy_name', 'like', "%{$data->fantasy_name}%");// create the filter 
+        }
+
         if (isset($data->abbreviation) AND ( (is_scalar($data->abbreviation) AND $data->abbreviation !== '') OR (is_array($data->abbreviation) AND (!empty($data->abbreviation)) )) )
         {
 
@@ -625,114 +522,6 @@ class StoreList extends TPage
         {
 
             $filters[] = new TFilter('cnpj', 'like', "%{$data->cnpj}%");// create the filter 
-        }
-
-        if (isset($data->icon_url) AND ( (is_scalar($data->icon_url) AND $data->icon_url !== '') OR (is_array($data->icon_url) AND (!empty($data->icon_url)) )) )
-        {
-
-            $filters[] = new TFilter('icon_url', 'like', "%{$data->icon_url}%");// create the filter 
-        }
-
-        if (isset($data->fantasy_name) AND ( (is_scalar($data->fantasy_name) AND $data->fantasy_name !== '') OR (is_array($data->fantasy_name) AND (!empty($data->fantasy_name)) )) )
-        {
-
-            $filters[] = new TFilter('fantasy_name', 'like', "%{$data->fantasy_name}%");// create the filter 
-        }
-
-        if (isset($data->obs) AND ( (is_scalar($data->obs) AND $data->obs !== '') OR (is_array($data->obs) AND (!empty($data->obs)) )) )
-        {
-
-            $filters[] = new TFilter('obs', 'like', "%{$data->obs}%");// create the filter 
-        }
-
-        if (isset($data->state_inscription) AND ( (is_scalar($data->state_inscription) AND $data->state_inscription !== '') OR (is_array($data->state_inscription) AND (!empty($data->state_inscription)) )) )
-        {
-
-            $filters[] = new TFilter('state_inscription', 'like', "%{$data->state_inscription}%");// create the filter 
-        }
-
-        if (isset($data->minicipal_inscription) AND ( (is_scalar($data->minicipal_inscription) AND $data->minicipal_inscription !== '') OR (is_array($data->minicipal_inscription) AND (!empty($data->minicipal_inscription)) )) )
-        {
-
-            $filters[] = new TFilter('minicipal_inscription', 'like', "%{$data->minicipal_inscription}%");// create the filter 
-        }
-
-        if (isset($data->icms) AND ( (is_scalar($data->icms) AND $data->icms !== '') OR (is_array($data->icms) AND (!empty($data->icms)) )) )
-        {
-
-            $filters[] = new TFilter('icms', 'like', "%{$data->icms}%");// create the filter 
-        }
-
-        if (isset($data->tax_regime) AND ( (is_scalar($data->tax_regime) AND $data->tax_regime !== '') OR (is_array($data->tax_regime) AND (!empty($data->tax_regime)) )) )
-        {
-
-            $filters[] = new TFilter('tax_regime', 'like', "%{$data->tax_regime}%");// create the filter 
-        }
-
-        if (isset($data->invoice_type) AND ( (is_scalar($data->invoice_type) AND $data->invoice_type !== '') OR (is_array($data->invoice_type) AND (!empty($data->invoice_type)) )) )
-        {
-
-            $filters[] = new TFilter('invoice_type', '=', $data->invoice_type);// create the filter 
-        }
-
-        if (isset($data->invoice_provider_id) AND ( (is_scalar($data->invoice_provider_id) AND $data->invoice_provider_id !== '') OR (is_array($data->invoice_provider_id) AND (!empty($data->invoice_provider_id)) )) )
-        {
-
-            $filters[] = new TFilter('invoice_provider_id', 'like', "%{$data->invoice_provider_id}%");// create the filter 
-        }
-
-        if (isset($data->production_csc_number) AND ( (is_scalar($data->production_csc_number) AND $data->production_csc_number !== '') OR (is_array($data->production_csc_number) AND (!empty($data->production_csc_number)) )) )
-        {
-
-            $filters[] = new TFilter('production_csc_number', 'like', "%{$data->production_csc_number}%");// create the filter 
-        }
-
-        if (isset($data->production_csc_id) AND ( (is_scalar($data->production_csc_id) AND $data->production_csc_id !== '') OR (is_array($data->production_csc_id) AND (!empty($data->production_csc_id)) )) )
-        {
-
-            $filters[] = new TFilter('production_csc_id', 'like', "%{$data->production_csc_id}%");// create the filter 
-        }
-
-        if (isset($data->production_invoice_serie) AND ( (is_scalar($data->production_invoice_serie) AND $data->production_invoice_serie !== '') OR (is_array($data->production_invoice_serie) AND (!empty($data->production_invoice_serie)) )) )
-        {
-
-            $filters[] = new TFilter('production_invoice_serie', '=', $data->production_invoice_serie);// create the filter 
-        }
-
-        if (isset($data->production_invoice_sequence) AND ( (is_scalar($data->production_invoice_sequence) AND $data->production_invoice_sequence !== '') OR (is_array($data->production_invoice_sequence) AND (!empty($data->production_invoice_sequence)) )) )
-        {
-
-            $filters[] = new TFilter('production_invoice_sequence', '=', $data->production_invoice_sequence);// create the filter 
-        }
-
-        if (isset($data->homologation_csc_number) AND ( (is_scalar($data->homologation_csc_number) AND $data->homologation_csc_number !== '') OR (is_array($data->homologation_csc_number) AND (!empty($data->homologation_csc_number)) )) )
-        {
-
-            $filters[] = new TFilter('homologation_csc_number', 'like', "%{$data->homologation_csc_number}%");// create the filter 
-        }
-
-        if (isset($data->homologation_csc_id) AND ( (is_scalar($data->homologation_csc_id) AND $data->homologation_csc_id !== '') OR (is_array($data->homologation_csc_id) AND (!empty($data->homologation_csc_id)) )) )
-        {
-
-            $filters[] = new TFilter('homologation_csc_id', 'like', "%{$data->homologation_csc_id}%");// create the filter 
-        }
-
-        if (isset($data->homologation_invoice_serie) AND ( (is_scalar($data->homologation_invoice_serie) AND $data->homologation_invoice_serie !== '') OR (is_array($data->homologation_invoice_serie) AND (!empty($data->homologation_invoice_serie)) )) )
-        {
-
-            $filters[] = new TFilter('homologation_invoice_serie', '=', $data->homologation_invoice_serie);// create the filter 
-        }
-
-        if (isset($data->homologation_invoice_sequence) AND ( (is_scalar($data->homologation_invoice_sequence) AND $data->homologation_invoice_sequence !== '') OR (is_array($data->homologation_invoice_sequence) AND (!empty($data->homologation_invoice_sequence)) )) )
-        {
-
-            $filters[] = new TFilter('homologation_invoice_sequence', '=', $data->homologation_invoice_sequence);// create the filter 
-        }
-
-        if (isset($data->certificate_password) AND ( (is_scalar($data->certificate_password) AND $data->certificate_password !== '') OR (is_array($data->certificate_password) AND (!empty($data->certificate_password)) )) )
-        {
-
-            $filters[] = new TFilter('certificate_password', 'like', "%{$data->certificate_password}%");// create the filter 
         }
 
         if (isset($data->store_group) AND ( (is_scalar($data->store_group) AND $data->store_group !== '') OR (is_array($data->store_group) AND (!empty($data->store_group)) )) )

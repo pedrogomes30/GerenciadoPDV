@@ -25,7 +25,7 @@ class ProductValidateDateForm extends TPage
         // creates the form
         $this->form = new BootstrapFormBuilder(self::$formName);
         // define the form title
-        $this->form->setFormTitle("Cadastro de Datas de validade");
+        $this->form->setFormTitle("Cadastro de product validate date");
 
 
         $id = new TEntry('id');
@@ -70,7 +70,7 @@ class ProductValidateDateForm extends TPage
         $container->class = 'form-container';
         if(empty($param['target_container']))
         {
-            $container->add(TBreadCrumb::create(["Estoque","Cadastro de Datas de validade"]));
+            $container->add(TBreadCrumb::create(["Estoque","Cadastro de product validate date"]));
         }
         $container->add($this->form);
 

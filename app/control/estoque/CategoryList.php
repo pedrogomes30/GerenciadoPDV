@@ -31,13 +31,13 @@ class CategoryList extends TPage
         $this->form = new BootstrapFormBuilder(self::$formName);
 
         // define the form title
-        $this->form->setFormTitle("Listagem de categoria de produto");
+        $this->form->setFormTitle("Listagem de categorys");
         $this->limit = 20;
 
         $id = new TEntry('id');
         $name = new TEntry('name');
-        $icon_category = new TEntry('icon_category');
         $cest_ncm_default = new TDBCombo('cest_ncm_default', 'pos_product', 'CestNcm', 'id', '{id}','id asc'  );
+        $icon_category = new TEntry('icon_category');
 
 
         $cest_ncm_default->enableSearch();
@@ -53,7 +53,7 @@ class CategoryList extends TPage
         $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Nome:", null, '14px', null, '100%'),$name]);
         $row1->layout = ['col-sm-6','col-sm-6'];
 
-        $row2 = $this->form->addFields([new TLabel("Icon category:", null, '14px', null, '100%'),$icon_category],[new TLabel("Cest ncm default:", null, '14px', null, '100%'),$cest_ncm_default]);
+        $row2 = $this->form->addFields([new TLabel("Cest ncm default:", null, '14px', null, '100%'),$cest_ncm_default],[new TLabel("Icon category:", null, '14px', null, '100%'),$icon_category]);
         $row2->layout = ['col-sm-6','col-sm-6'];
 
         // keep the form filled during navigation with session data
@@ -81,8 +81,8 @@ class CategoryList extends TPage
 
         $column_id = new TDataGridColumn('id', "Id", 'center' , '70px');
         $column_name = new TDataGridColumn('name', "Nome", 'left');
-        $column_icon_category = new TDataGridColumn('icon_category', "Icon category", 'left');
         $column_cest_ncm_default = new TDataGridColumn('cest_ncm_default', "Cest ncm default", 'left');
+        $column_icon_category = new TDataGridColumn('icon_category', "Icon category", 'left');
 
         $order_id = new TAction(array($this, 'onReload'));
         $order_id->setParameter('order', 'id');
@@ -90,8 +90,8 @@ class CategoryList extends TPage
 
         $this->datagrid->addColumn($column_id);
         $this->datagrid->addColumn($column_name);
-        $this->datagrid->addColumn($column_icon_category);
         $this->datagrid->addColumn($column_cest_ncm_default);
+        $this->datagrid->addColumn($column_icon_category);
 
         $action_onEdit = new TDataGridAction(array('CategoryForm', 'onEdit'));
         $action_onEdit->setUseButton(false);
@@ -160,7 +160,7 @@ class CategoryList extends TPage
         $container->style = 'width: 100%';
         if(empty($param['target_container']))
         {
-            $container->add(TBreadCrumb::create(["Estoque","Categoria de Produto"]));
+            $container->add(TBreadCrumb::create(["Estoque","Categorias Produto"]));
         }
         $container->add($this->form);
         $container->add($panel);
@@ -493,16 +493,16 @@ class CategoryList extends TPage
             $filters[] = new TFilter('name', 'like', "%{$data->name}%");// create the filter 
         }
 
-        if (isset($data->icon_category) AND ( (is_scalar($data->icon_category) AND $data->icon_category !== '') OR (is_array($data->icon_category) AND (!empty($data->icon_category)) )) )
-        {
-
-            $filters[] = new TFilter('icon_category', 'like', "%{$data->icon_category}%");// create the filter 
-        }
-
         if (isset($data->cest_ncm_default) AND ( (is_scalar($data->cest_ncm_default) AND $data->cest_ncm_default !== '') OR (is_array($data->cest_ncm_default) AND (!empty($data->cest_ncm_default)) )) )
         {
 
             $filters[] = new TFilter('cest_ncm_default', '=', $data->cest_ncm_default);// create the filter 
+        }
+
+        if (isset($data->icon_category) AND ( (is_scalar($data->icon_category) AND $data->icon_category !== '') OR (is_array($data->icon_category) AND (!empty($data->icon_category)) )) )
+        {
+
+            $filters[] = new TFilter('icon_category', 'like', "%{$data->icon_category}%");// create the filter 
         }
 
         // fill the form with data again
