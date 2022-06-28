@@ -1,24 +1,24 @@
 <?php return array (
   'root' => 
   array (
-    'pretty_version' => 'dev-master',
-    'version' => 'dev-master',
+    'pretty_version' => '1.0.0+no-version-set',
+    'version' => '1.0.0.0',
     'aliases' => 
     array (
     ),
-    'reference' => '785e3c83a0aea5e934252886a508d3457e759ff2',
+    'reference' => NULL,
     'name' => '__root__',
   ),
   'versions' => 
   array (
     '__root__' => 
     array (
-      'pretty_version' => 'dev-master',
-      'version' => 'dev-master',
+      'pretty_version' => '1.0.0+no-version-set',
+      'version' => '1.0.0.0',
       'aliases' => 
       array (
       ),
-      'reference' => '785e3c83a0aea5e934252886a508d3457e759ff2',
+      'reference' => NULL,
     ),
     'adianti/pdfdesigner' => 
     array (
@@ -57,6 +57,15 @@
       array (
       ),
       'reference' => 'de4aad040737a89fae2129cdeb0f79c45513128d',
+    ),
+    'enotas/php-client-v2' => 
+    array (
+      'pretty_version' => 'v1.0.1',
+      'version' => '1.0.1.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '4c69e27047b991863978aacebc4766f1bd90cf89',
     ),
     'firebase/php-jwt' => 
     array (

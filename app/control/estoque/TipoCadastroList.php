@@ -8,7 +8,7 @@ class TipoCadastroList extends TPage
     private $loaded;
     private $filter_criteria;
     private static $database = 'pos_product';
-    private static $activeRecord = 'TipoCadastro';
+    private static $activeRecord = 'ProductType';
     private static $primaryKey = 'id';
     private static $formName = 'form_TipoCadastroList';
     private $showMethods = ['onReload', 'onSearch', 'onRefresh', 'onClearFilters'];
@@ -35,15 +35,15 @@ class TipoCadastroList extends TPage
         $this->limit = 20;
 
         $id = new TEntry('id');
-        $descricao = new TEntry('descricao');
+        $description = new TEntry('description');
 
 
-        $descricao->setMaxLength(200);
+        $description->setMaxLength(200);
         $id->setSize(100);
-        $descricao->setSize('100%');
+        $description->setSize('100%');
 
 
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Descricao:", null, '14px', null, '100%'),$descricao]);
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Descricao:", null, '14px', null, '100%'),$description]);
         $row1->layout = ['col-sm-6','col-sm-6'];
 
         // keep the form filled during navigation with session data
@@ -70,14 +70,14 @@ class TipoCadastroList extends TPage
         $this->datagrid->setHeight(320);
 
         $column_id = new TDataGridColumn('id', "Id", 'center' , '70px');
-        $column_descricao = new TDataGridColumn('descricao', "Descricao", 'left');
+        $column_description = new TDataGridColumn('description', "Descricao", 'left');
 
         $order_id = new TAction(array($this, 'onReload'));
         $order_id->setParameter('order', 'id');
         $column_id->setAction($order_id);
 
         $this->datagrid->addColumn($column_id);
-        $this->datagrid->addColumn($column_descricao);
+        $this->datagrid->addColumn($column_description);
 
         $action_onEdit = new TDataGridAction(array('TipoCadastroForm', 'onEdit'));
         $action_onEdit->setUseButton(false);
@@ -167,7 +167,7 @@ class TipoCadastroList extends TPage
                 TTransaction::open(self::$database);
 
                 // instantiates object
-                $object = new TipoCadastro($key, FALSE); 
+                $object = new ProductType($key, FALSE); 
 
                 // deletes the object from the database
                 $object->delete();
@@ -473,10 +473,10 @@ class TipoCadastroList extends TPage
             $filters[] = new TFilter('id', '=', $data->id);// create the filter 
         }
 
-        if (isset($data->descricao) AND ( (is_scalar($data->descricao) AND $data->descricao !== '') OR (is_array($data->descricao) AND (!empty($data->descricao)) )) )
+        if (isset($data->description) AND ( (is_scalar($data->description) AND $data->description !== '') OR (is_array($data->description) AND (!empty($data->description)) )) )
         {
 
-            $filters[] = new TFilter('descricao', 'like', "%{$data->descricao}%");// create the filter 
+            $filters[] = new TFilter('description', 'like', "%{$data->description}%");// create the filter 
         }
 
         // fill the form with data again
@@ -499,7 +499,7 @@ class TipoCadastroList extends TPage
             // open a transaction with database 'pos_product'
             TTransaction::open(self::$database);
 
-            // creates a repository for TipoCadastro
+            // creates a repository for ProductType
             $repository = new TRepository(self::$activeRecord);
 
             $criteria = clone $this->filter_criteria;

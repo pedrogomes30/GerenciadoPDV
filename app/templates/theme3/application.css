@@ -1267,6 +1267,14 @@ div[form=form_login] .fb-inline-field-container
 .card-body [widget="bootstrapformbuilder"]:not(.bContainer-fieldset) .card-body .tab-pane{
     padding:10px !important;
 }
+
+.tfullcalendar{
+    background-color: #ffffff;
+}
+
+.inner-icon-container {
+    position: relative;
+}
 @media (max-width: 576px) {
   #adianti_right_panel.right-panel {
   width: 100% !important;
@@ -1449,18 +1457,6 @@ hr.tseparator-divisor{
 
 
 
-.builder-template-layout.sidebar-collapse .main-header .logo {
-  background: url('../../../app/images/builderLayoutIcon.png');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  color: transparent;
-  border: transparent;
-  width: 42px !important;
-  height: 42px;
-  margin-top: 5px;
-  margin-left: 5px;
-}
 .builder-template-layout:not(.sidebar-collapse) .main-header .logo {
   background-image: url('../../../app/images/builderLayoutLogo.png');
   background-position: center;

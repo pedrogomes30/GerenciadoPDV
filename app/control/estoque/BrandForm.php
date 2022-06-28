@@ -25,7 +25,7 @@ class BrandForm extends TPage
         // creates the form
         $this->form = new BootstrapFormBuilder(self::$formName);
         // define the form title
-        $this->form->setFormTitle("Cadastro de brand");
+        $this->form->setFormTitle("Cadastro de Marca");
 
 
         $id = new TEntry('id');
@@ -41,11 +41,8 @@ class BrandForm extends TPage
         $name->setSize('100%');
         $provider->setSize('100%');
 
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Name:", '#ff0000', '14px', null, '100%'),$name]);
-        $row1->layout = ['col-sm-6','col-sm-6'];
-
-        $row2 = $this->form->addFields([new TLabel("Provider:", null, '14px', null, '100%'),$provider],[]);
-        $row2->layout = ['col-sm-6','col-sm-6'];
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Nome:", '#ff0000', '14px', null, '100%'),$name],[new TLabel("Fornecedor:", null, '14px', null, '100%'),$provider]);
+        $row1->layout = [' col-sm-6 col-lg-2',' col-sm-6 col-lg-5',' col-sm-6 col-lg-5'];
 
         // create the form actions
         $btn_onsave = $this->form->addAction("Salvar", new TAction([$this, 'onSave']), 'fas:save #ffffff');
@@ -58,17 +55,18 @@ class BrandForm extends TPage
         $btn_onshow = $this->form->addAction("Voltar", new TAction(['BrandList', 'onShow']), 'fas:arrow-left #000000');
         $this->btn_onshow = $btn_onshow;
 
-        // vertical box container
-        $container = new TVBox;
-        $container->style = 'width: 100%';
-        $container->class = 'form-container';
-        if(empty($param['target_container']))
-        {
-            $container->add(TBreadCrumb::create(["Estoque","Cadastro de brand"]));
-        }
-        $container->add($this->form);
+        parent::setTargetContainer('adianti_right_panel');
 
-        parent::add($container);
+        $btnClose = new TButton('closeCurtain');
+        $btnClose->class = 'btn btn-sm btn-default';
+        $btnClose->style = 'margin-right:10px;';
+        $btnClose->onClick = "Template.closeRightPanel();";
+        $btnClose->setLabel("Fechar");
+        $btnClose->setImage('fas:times');
+
+        $this->form->addHeaderWidget($btnClose);
+
+        parent::add($this->form);
 
     }
 
@@ -105,6 +103,7 @@ class BrandForm extends TPage
             TToast::show('success', "Registro salvo", 'topRight', 'far:check-circle');
             TApplication::loadPage('BrandList', 'onShow', $loadPageParam); 
 
+                        TScript::create("Template.closeRightPanel();"); 
         }
         catch (Exception $e) // in case of exception
         {

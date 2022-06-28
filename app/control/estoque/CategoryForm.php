@@ -9,6 +9,8 @@ class CategoryForm extends TPage
     private static $primaryKey = 'id';
     private static $formName = 'form_CategoryForm';
 
+    use Adianti\Base\AdiantiFileSaveTrait;
+
     /**
      * Form constructor
      * @param $param Request
@@ -25,33 +27,34 @@ class CategoryForm extends TPage
         // creates the form
         $this->form = new BootstrapFormBuilder(self::$formName);
         // define the form title
-        $this->form->setFormTitle("Cadastro de category");
+        $this->form->setFormTitle("Cadastro de categoria de produto");
 
 
         $id = new TEntry('id');
         $name = new TEntry('name');
-        $cest_ncm_default = new TDBCombo('cest_ncm_default', 'pos_product', 'CestNcm', 'id', '{id}','id asc'  );
-        $icon_category = new TEntry('icon_category');
+        $cest_ncm_default = new TDBCombo('cest_ncm_default', 'pos_product', 'CestNcm', 'id', 'cest: {fk_cest->number} ncm: {fk_ncm->number} ','id asc'  );
+        $icon_category = new TFile('icon_category');
+        $color = new TColor('color');
 
         $name->addValidation("Nome", new TRequiredValidator()); 
         $cest_ncm_default->addValidation("Cest ncm default", new TRequiredValidator()); 
 
         $id->setEditable(false);
-        $cest_ncm_default->enableSearch();
         $name->setMaxLength(50);
-        $icon_category->setMaxLength(400);
-
+        $cest_ncm_default->enableSearch();
+        $icon_category->enableFileHandling();
+        $color->setValue('#FD03BE');
         $id->setSize(100);
         $name->setSize('100%');
+        $color->setSize('100%');
         $icon_category->setSize('100%');
         $cest_ncm_default->setSize('100%');
 
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Nome:", null, '14px', null, '100%'),$name],[new TLabel("Cest e NCM padrão", null, '14px', null, '100%'),$cest_ncm_default]);
+        $row1->layout = ['col-sm-6 col-lg-2',' col-sm-6 col-lg-7','col-sm-6 col-lg-3'];
 
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Nome:", '#ff0000', '14px', null, '100%'),$name]);
-        $row1->layout = ['col-sm-6','col-sm-6'];
-
-        $row2 = $this->form->addFields([new TLabel("Cest ncm default:", '#ff0000', '14px', null, '100%'),$cest_ncm_default],[new TLabel("Icon category:", null, '14px', null, '100%'),$icon_category]);
-        $row2->layout = ['col-sm-6','col-sm-6'];
+        $row2 = $this->form->addFields([new TLabel("url Icone:", null, '14px', null, '100%'),$icon_category],[new TLabel("Cor padrão:", null, '14px', null, '100%'),$color],[new TLabel("Multiplicador:", null, '14px', null, '100%')]);
+        $row2->layout = [' col-sm-6 col-lg-4',' col-sm-2 col-lg-3',' col-sm-2 col-lg-3'];
 
         // create the form actions
         $btn_onsave = $this->form->addAction("Salvar", new TAction([$this, 'onSave']), 'fas:save #ffffff');
@@ -64,17 +67,18 @@ class CategoryForm extends TPage
         $btn_onshow = $this->form->addAction("Voltar", new TAction(['CategoryList', 'onShow']), 'fas:arrow-left #000000');
         $this->btn_onshow = $btn_onshow;
 
-        // vertical box container
-        $container = new TVBox;
-        $container->style = 'width: 100%';
-        $container->class = 'form-container';
-        if(empty($param['target_container']))
-        {
-            $container->add(TBreadCrumb::create(["Estoque","Cadastro de category"]));
-        }
-        $container->add($this->form);
+        parent::setTargetContainer('adianti_right_panel');
 
-        parent::add($container);
+        $btnClose = new TButton('closeCurtain');
+        $btnClose->class = 'btn btn-sm btn-default';
+        $btnClose->style = 'margin-right:10px;';
+        $btnClose->onClick = "Template.closeRightPanel();";
+        $btnClose->setLabel("Fechar");
+        $btnClose->setImage('fas:times');
+
+        $this->form->addHeaderWidget($btnClose);
+
+        parent::add($this->form);
 
     }
 
@@ -93,8 +97,11 @@ class CategoryForm extends TPage
             $data = $this->form->getData(); // get form data as array
             $object->fromArray( (array) $data); // load the object with data
 
+            $icon_category_dir = '/icons/category'; 
+
             $object->store(); // save the object 
 
+            $this->saveFile($object, $data, 'icon_category', $icon_category_dir);
             $loadPageParam = [];
 
             if(!empty($param['target_container']))
@@ -111,6 +118,7 @@ class CategoryForm extends TPage
             TToast::show('success', "Registro salvo", 'topRight', 'far:check-circle');
             TApplication::loadPage('CategoryList', 'onShow', $loadPageParam); 
 
+                        TScript::create("Template.closeRightPanel();"); 
         }
         catch (Exception $e) // in case of exception
         {

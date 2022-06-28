@@ -336,8 +336,10 @@ window.BuilderTemplate = ( function() {
 
     const defineTheme = function(theme)
     {
+        let time = new Date().getTime();
+        
         $('.change-theme').removeClass('checked');
-        $('[theme-style]').attr('href', 'app/templates/theme-builder/themes/' + theme + '.css');
+        $('[theme-style]').attr('href', 'app/templates/theme-builder/themes/' + theme + '.css?time='+time);
         $('[theme=' + theme + ']').addClass('checked');
     }
 

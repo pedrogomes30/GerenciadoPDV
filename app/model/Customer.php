@@ -21,6 +21,9 @@ class Customer extends TRecord
         parent::addAttribute('document');
         parent::addAttribute('document_type');
         parent::addAttribute('email');
+        parent::addAttribute('city');
+        parent::addAttribute('uf');
+        parent::addAttribute('postal_code');
         parent::addAttribute('phone_1');
         parent::addAttribute('phone_2');
         parent::addAttribute('phone_3');
@@ -80,42 +83,6 @@ class Customer extends TRecord
     
         // returns the associated object
         return $this->fk_store_partiner;
-    }
-
-    /**
-     * Method getAddresss
-     */
-    public function getAddresss()
-    {
-        $criteria = new TCriteria;
-        $criteria->add(new TFilter('customer', '=', $this->id));
-        return Address::getObjects( $criteria );
-    }
-
-    public function set_address_fk_customer_to_string($address_fk_customer_to_string)
-    {
-        if(is_array($address_fk_customer_to_string))
-        {
-            $values = Customer::where('id', 'in', $address_fk_customer_to_string)->getIndexedArray('id', 'id');
-            $this->address_fk_customer_to_string = implode(', ', $values);
-        }
-        else
-        {
-            $this->address_fk_customer_to_string = $address_fk_customer_to_string;
-        }
-
-        $this->vdata['address_fk_customer_to_string'] = $this->address_fk_customer_to_string;
-    }
-
-    public function get_address_fk_customer_to_string()
-    {
-        if(!empty($this->address_fk_customer_to_string))
-        {
-            return $this->address_fk_customer_to_string;
-        }
-    
-        $values = Address::where('customer', '=', $this->id)->getIndexedArray('customer','{fk_customer->id}');
-        return implode(', ', $values);
     }
 
     

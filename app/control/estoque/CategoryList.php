@@ -31,30 +31,22 @@ class CategoryList extends TPage
         $this->form = new BootstrapFormBuilder(self::$formName);
 
         // define the form title
-        $this->form->setFormTitle("Listagem de categorys");
+        $this->form->setFormTitle("Listagem de categoria");
         $this->limit = 20;
 
         $id = new TEntry('id');
         $name = new TEntry('name');
-        $cest_ncm_default = new TDBCombo('cest_ncm_default', 'pos_product', 'CestNcm', 'id', '{id}','id asc'  );
-        $icon_category = new TEntry('icon_category');
+        $cest_ncm_default = new TDBCombo('cest_ncm_default', 'pos_product', 'CestNcm', 'id', 'cest: {fk_cest->number}  ncm:{fk_ncm->number} ','id asc'  );
 
 
-        $cest_ncm_default->enableSearch();
         $name->setMaxLength(50);
-        $icon_category->setMaxLength(400);
-
+        $cest_ncm_default->enableSearch();
         $id->setSize(100);
         $name->setSize('100%');
-        $icon_category->setSize('100%');
         $cest_ncm_default->setSize('100%');
 
-
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Nome:", null, '14px', null, '100%'),$name]);
-        $row1->layout = ['col-sm-6','col-sm-6'];
-
-        $row2 = $this->form->addFields([new TLabel("Cest ncm default:", null, '14px', null, '100%'),$cest_ncm_default],[new TLabel("Icon category:", null, '14px', null, '100%'),$icon_category]);
-        $row2->layout = ['col-sm-6','col-sm-6'];
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Nome:", null, '14px', null, '100%'),$name],[new TLabel("Cest Ncm padrão:", null, '14px', null, '100%'),$cest_ncm_default]);
+        $row1->layout = [' col-sm-6 col-lg-2',' col-sm-6 col-lg-5',' col-sm-6 col-lg-5'];
 
         // keep the form filled during navigation with session data
         $this->form->setData( TSession::getValue(__CLASS__.'_filter_data') );
@@ -81,8 +73,8 @@ class CategoryList extends TPage
 
         $column_id = new TDataGridColumn('id', "Id", 'center' , '70px');
         $column_name = new TDataGridColumn('name', "Nome", 'left');
-        $column_cest_ncm_default = new TDataGridColumn('cest_ncm_default', "Cest ncm default", 'left');
-        $column_icon_category = new TDataGridColumn('icon_category', "Icon category", 'left');
+        $column_cest_fk_cest_ncm_default_fk_cest_number_ncm_fk_cest_ncm_default_fk_ncm_number = new TDataGridColumn('cest: {fk_cest_ncm_default->fk_cest->number}  ncm: {fk_cest_ncm_default->fk_ncm->number}', "Cest Ncm Padrão", 'left');
+        $column_icon_category = new TDataGridColumn('icon_category', "Icone", 'left');
 
         $order_id = new TAction(array($this, 'onReload'));
         $order_id->setParameter('order', 'id');
@@ -90,7 +82,7 @@ class CategoryList extends TPage
 
         $this->datagrid->addColumn($column_id);
         $this->datagrid->addColumn($column_name);
-        $this->datagrid->addColumn($column_cest_ncm_default);
+        $this->datagrid->addColumn($column_cest_fk_cest_ncm_default_fk_cest_number_ncm_fk_cest_ncm_default_fk_ncm_number);
         $this->datagrid->addColumn($column_icon_category);
 
         $action_onEdit = new TDataGridAction(array('CategoryForm', 'onEdit'));
@@ -145,7 +137,7 @@ class CategoryList extends TPage
 
         $panel->getBody()->insert(0, $headerActions);
 
-        $dropdown_button_exportar = new TDropDown("Exportar", 'fas:file-export #2d3436');
+        $dropdown_button_exportar = new TDropDown("Exportar", 'fas:file-export #FFFFFF');
         $dropdown_button_exportar->setPullSide('right');
         $dropdown_button_exportar->setButtonClass('btn btn-default waves-effect dropdown-toggle');
         $dropdown_button_exportar->addPostAction( "CSV", new TAction(['CategoryList', 'onExportCsv'],['static' => 1]), 'datagrid_'.self::$formName, 'fas:file-csv #00b894' );
@@ -497,12 +489,6 @@ class CategoryList extends TPage
         {
 
             $filters[] = new TFilter('cest_ncm_default', '=', $data->cest_ncm_default);// create the filter 
-        }
-
-        if (isset($data->icon_category) AND ( (is_scalar($data->icon_category) AND $data->icon_category !== '') OR (is_array($data->icon_category) AND (!empty($data->icon_category)) )) )
-        {
-
-            $filters[] = new TFilter('icon_category', 'like', "%{$data->icon_category}%");// create the filter 
         }
 
         // fill the form with data again

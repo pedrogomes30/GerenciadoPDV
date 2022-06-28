@@ -7,7 +7,7 @@ class SaleList extends TPage
     private $pageNavigation;
     private $loaded;
     private $filter_criteria;
-    private static $database = 'pos_sales';
+    private static $database = 'pos_sale';
     private static $activeRecord = 'Sale';
     private static $primaryKey = 'id';
     private static $formName = 'form_SaleList';
@@ -31,111 +31,67 @@ class SaleList extends TPage
         $this->form = new BootstrapFormBuilder(self::$formName);
 
         // define the form title
-        $this->form->setFormTitle("Listagem de vendas");
+        $this->form->setFormTitle("Vendas");
         $this->limit = 20;
 
         $id = new TEntry('id');
         $number = new TEntry('number');
-        $products_value = new TNumeric('products_value', '2', ',', '.' );
-        $payments_value = new TNumeric('payments_value', '2', ',', '.' );
-        $total_value = new TNumeric('total_value', '2', ',', '.' );
-        $sale_date = new TDateTime('sale_date');
-        $invoiced = new TRadioGroup('invoiced');
-        $invoice_ambient = new TRadioGroup('invoice_ambient');
-        $discont_value = new TNumeric('discont_value', '2', ',', '.' );
-        $obs = new TEntry('obs');
         $invoice_number = new TEntry('invoice_number');
-        $invoice_serie = new TEntry('invoice_serie');
-        $invoice_coupon = new TEntry('invoice_coupon');
-        $invoice_xml = new TEntry('invoice_xml');
+        $invoiced = new TRadioGroup('invoiced');
+        $status = new TDBCombo('status', 'pos_sale', 'Status', 'id', '{id}','id asc'  );
+        $invoice_ambient = new TRadioGroup('invoice_ambient');
+        $sale_date = new TDateTime('sale_date');
         $payment_method = new TDBCombo('payment_method', 'pos_system', 'PaymentMethod', 'id', '{id}','id asc'  );
-        $store = new TDBCombo('store', 'pos_system', 'Store', 'id', '{social_name}','social_name asc'  );
-        $employee_cashier = new TDBCombo('employee_cashier', 'pos_system', 'User', 'id', '{id}','id asc'  );
+        $store = new TDBCombo('store', 'pos_system', 'Store', 'id', '{fantasy_name}','fantasy_name asc'  );
         $cashier = new TDBCombo('cashier', 'pos_system', 'Cashier', 'id', '{id}','id asc'  );
-        $client = new TDBCombo('client', 'pos_system', 'User', 'id', '{id}','id asc'  );
+        $customer = new TDBCombo('customer', 'pos_system', 'User', 'id', '{id}','id asc'  );
         $salesman = new TDBCombo('salesman', 'pos_system', 'User', 'id', '{id}','id asc'  );
-        $status = new TDBCombo('status', 'pos_sales', 'Status', 'id', '{id}','id asc'  );
+        $employee_cashier = new TDBCombo('employee_cashier', 'pos_system', 'User', 'id', '{id}','id asc'  );
 
 
+        $number->setMaxLength(30);
         $sale_date->setMask('dd/mm/yyyy hh:ii');
         $sale_date->setDatabaseMask('yyyy-mm-dd hh:ii');
         $invoiced->addItems(["1"=>"Sim","2"=>"Não"]);
         $invoice_ambient->addItems(["1"=>"Sim","2"=>"Não"]);
 
-        $invoiced->setLayout('vertical');
-        $invoice_ambient->setLayout('vertical');
+        $invoiced->setLayout('horizontal');
+        $invoice_ambient->setLayout('horizontal');
 
         $invoiced->setBooleanMode();
         $invoice_ambient->setBooleanMode();
 
-        $obs->setMaxLength(400);
-        $number->setMaxLength(30);
-        $invoice_coupon->setMaxLength(500);
-
         $store->enableSearch();
-        $client->enableSearch();
         $status->enableSearch();
         $cashier->enableSearch();
+        $customer->enableSearch();
         $salesman->enableSearch();
         $payment_method->enableSearch();
         $employee_cashier->enableSearch();
 
         $id->setSize(100);
-        $obs->setSize('100%');
         $invoiced->setSize(80);
         $store->setSize('100%');
-        $client->setSize('100%');
         $number->setSize('100%');
         $status->setSize('100%');
-        $sale_date->setSize(150);
         $cashier->setSize('100%');
+        $customer->setSize('100%');
         $salesman->setSize('100%');
+        $sale_date->setSize('100%');
         $invoice_ambient->setSize(80);
-        $total_value->setSize('100%');
-        $invoice_xml->setSize('100%');
-        $discont_value->setSize('100%');
-        $invoice_serie->setSize('100%');
-        $invoice_coupon->setSize('100%');
-        $payment_method->setSize('100%');
-        $payments_value->setSize('100%');
-        $products_value->setSize('100%');
         $invoice_number->setSize('100%');
+        $payment_method->setSize('100%');
         $employee_cashier->setSize('100%');
 
 
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Número:", null, '14px', null, '100%'),$number],[new TLabel("Nº NF:", null, '14px', null, '100%'),$invoice_number],[new TLabel("Com Nf:", null, '14px', null, '100%'),$invoiced],[new TLabel("Status:", null, '14px', null, '100%'),$status],[new TLabel("Ambiente emissão:", null, '14px', null, '100%'),$invoice_ambient]);
+        $row1->layout = [' col-sm-6 col-lg-2',' col-sm-6 col-lg-2',' col-sm-6 col-lg-2',' col-sm-6 col-lg-2',' col-sm-6 col-lg-2',' col-sm-6 col-lg-2'];
 
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Number:", null, '14px', null, '100%'),$number]);
-        $row1->layout = ['col-sm-6','col-sm-6'];
+        $row2 = $this->form->addFields([new TLabel("Data venda (de):", null, '14px', null, '100%'),$sale_date],[new TLabel("Data venda (até):", null, '14px', null, '100%')],[],[new TLabel("Método pagamento:", null, '14px', null, '100%'),$payment_method],[new TLabel("Loja:", null, '14px', null, '100%'),$store],[new TLabel("Loja caixa:", null, '14px', null, '100%'),$cashier]);
+        $row2->layout = [' col-sm-6 col-lg-2','col-sm-2','col-sm-2',' col-sm-6 col-lg-2',' col-sm-6 col-lg-2',' col-sm-6 col-lg-2'];
 
-        $row2 = $this->form->addFields([new TLabel("Products value:", null, '14px', null, '100%'),$products_value],[new TLabel("Payments value:", null, '14px', null, '100%'),$payments_value]);
-        $row2->layout = ['col-sm-6','col-sm-6'];
-
-        $row3 = $this->form->addFields([new TLabel("Valor total:", null, '14px', null, '100%'),$total_value],[new TLabel("Sale date:", null, '14px', null, '100%'),$sale_date]);
-        $row3->layout = ['col-sm-6','col-sm-6'];
-
-        $row4 = $this->form->addFields([new TLabel("Invoiced:", null, '14px', null, '100%'),$invoiced],[new TLabel("Invoice ambient:", null, '14px', null, '100%'),$invoice_ambient]);
-        $row4->layout = ['col-sm-6','col-sm-6'];
-
-        $row5 = $this->form->addFields([new TLabel("Discont value:", null, '14px', null, '100%'),$discont_value],[new TLabel("Observação:", null, '14px', null, '100%'),$obs]);
-        $row5->layout = ['col-sm-6','col-sm-6'];
-
-        $row6 = $this->form->addFields([new TLabel("Invoice number:", null, '14px', null, '100%'),$invoice_number],[new TLabel("Invoice serie:", null, '14px', null, '100%'),$invoice_serie]);
-        $row6->layout = ['col-sm-6','col-sm-6'];
-
-        $row7 = $this->form->addFields([new TLabel("Invoice coupon:", null, '14px', null, '100%'),$invoice_coupon],[new TLabel("Invoice xml:", null, '14px', null, '100%'),$invoice_xml]);
-        $row7->layout = ['col-sm-6','col-sm-6'];
-
-        $row8 = $this->form->addFields([new TLabel("Payment method:", null, '14px', null, '100%'),$payment_method],[new TLabel("Store:", null, '14px', null, '100%'),$store]);
-        $row8->layout = ['col-sm-6','col-sm-6'];
-
-        $row9 = $this->form->addFields([new TLabel("Employee cashier:", null, '14px', null, '100%'),$employee_cashier],[new TLabel("Cashier:", null, '14px', null, '100%'),$cashier]);
-        $row9->layout = ['col-sm-6','col-sm-6'];
-
-        $row10 = $this->form->addFields([new TLabel("Cliente:", null, '14px', null, '100%'),$client],[new TLabel("Salesman:", null, '14px', null, '100%'),$salesman]);
-        $row10->layout = ['col-sm-6','col-sm-6'];
-
-        $row11 = $this->form->addFields([new TLabel("Status:", null, '14px', null, '100%'),$status],[]);
-        $row11->layout = ['col-sm-6','col-sm-6'];
+        $row3 = $this->form->addFields([new TLabel("Cliente:", null, '14px', null, '100%'),$customer],[new TLabel("Vendedor:", null, '14px', null, '100%'),$salesman],[new TLabel("Operador do Caixa:", null, '14px', null, '100%'),$employee_cashier]);
+        $row3->layout = [' col-sm-6 col-lg-4',' col-sm-6 col-lg-4',' col-sm-6 col-lg-4'];
 
         // keep the form filled during navigation with session data
         $this->form->setData( TSession::getValue(__CLASS__.'_filter_data') );
@@ -161,25 +117,13 @@ class SaleList extends TPage
         $this->datagrid->setHeight(320);
 
         $column_id = new TDataGridColumn('id', "Id", 'center' , '70px');
-        $column_number = new TDataGridColumn('number', "Number", 'left');
-        $column_products_value = new TDataGridColumn('products_value', "Products value", 'left');
-        $column_payments_value = new TDataGridColumn('payments_value', "Payments value", 'left');
-        $column_total_value = new TDataGridColumn('total_value', "Valor total", 'left');
-        $column_sale_date = new TDataGridColumn('sale_date', "Sale date", 'left');
-        $column_invoiced = new TDataGridColumn('invoiced', "Invoiced", 'left');
-        $column_invoice_ambient = new TDataGridColumn('invoice_ambient', "Invoice ambient", 'left');
-        $column_discont_value = new TDataGridColumn('discont_value', "Discont value", 'left');
-        $column_obs = new TDataGridColumn('obs', "Observação", 'left');
-        $column_invoice_number = new TDataGridColumn('invoice_number', "Invoice number", 'left');
-        $column_invoice_serie = new TDataGridColumn('invoice_serie', "Invoice serie", 'left');
-        $column_invoice_coupon = new TDataGridColumn('invoice_coupon', "Invoice coupon", 'left');
-        $column_invoice_xml = new TDataGridColumn('invoice_xml', "Invoice xml", 'left');
-        $column_payment_method = new TDataGridColumn('payment_method', "Payment method", 'left');
-        $column_fk_store_social_name = new TDataGridColumn('fk_store->social_name', "Store", 'left');
-        $column_employee_cashier = new TDataGridColumn('employee_cashier', "Employee cashier", 'left');
-        $column_cashier = new TDataGridColumn('cashier', "Cashier", 'left');
-        $column_client = new TDataGridColumn('client', "Cliente", 'left');
-        $column_salesman = new TDataGridColumn('salesman', "Salesman", 'left');
+        $column_number = new TDataGridColumn('number', "Número", 'left');
+        $column_fk_store_fantasy_name = new TDataGridColumn('fk_store->fantasy_name', "Loja", 'left');
+        $column_employee_cashier = new TDataGridColumn('employee_cashier', "Operador do caixa", 'left');
+        $column_payment_method = new TDataGridColumn('payment_method', "Método pagamento:", 'left');
+        $column_invoice_number = new TDataGridColumn('invoice_number', "Nº NF", 'left');
+        $column_total_value = new TDataGridColumn('total_value', "Valor venda", 'left');
+        $column_sale_date = new TDataGridColumn('sale_date', "Data", 'left');
         $column_status = new TDataGridColumn('status', "Status", 'left');
 
         $order_id = new TAction(array($this, 'onReload'));
@@ -188,24 +132,12 @@ class SaleList extends TPage
 
         $this->datagrid->addColumn($column_id);
         $this->datagrid->addColumn($column_number);
-        $this->datagrid->addColumn($column_products_value);
-        $this->datagrid->addColumn($column_payments_value);
+        $this->datagrid->addColumn($column_fk_store_fantasy_name);
+        $this->datagrid->addColumn($column_employee_cashier);
+        $this->datagrid->addColumn($column_payment_method);
+        $this->datagrid->addColumn($column_invoice_number);
         $this->datagrid->addColumn($column_total_value);
         $this->datagrid->addColumn($column_sale_date);
-        $this->datagrid->addColumn($column_invoiced);
-        $this->datagrid->addColumn($column_invoice_ambient);
-        $this->datagrid->addColumn($column_discont_value);
-        $this->datagrid->addColumn($column_obs);
-        $this->datagrid->addColumn($column_invoice_number);
-        $this->datagrid->addColumn($column_invoice_serie);
-        $this->datagrid->addColumn($column_invoice_coupon);
-        $this->datagrid->addColumn($column_invoice_xml);
-        $this->datagrid->addColumn($column_payment_method);
-        $this->datagrid->addColumn($column_fk_store_social_name);
-        $this->datagrid->addColumn($column_employee_cashier);
-        $this->datagrid->addColumn($column_cashier);
-        $this->datagrid->addColumn($column_client);
-        $this->datagrid->addColumn($column_salesman);
         $this->datagrid->addColumn($column_status);
 
         $action_onEdit = new TDataGridAction(array('SaleForm', 'onEdit'));
@@ -260,7 +192,7 @@ class SaleList extends TPage
 
         $panel->getBody()->insert(0, $headerActions);
 
-        $dropdown_button_exportar = new TDropDown("Exportar", 'fas:file-export #2d3436');
+        $dropdown_button_exportar = new TDropDown("Exportar", 'fas:file-export #FFFFFF');
         $dropdown_button_exportar->setPullSide('right');
         $dropdown_button_exportar->setButtonClass('btn btn-default waves-effect dropdown-toggle');
         $dropdown_button_exportar->addPostAction( "CSV", new TAction(['SaleList', 'onExportCsv'],['static' => 1]), 'datagrid_'.self::$formName, 'fas:file-csv #00b894' );
@@ -608,28 +540,10 @@ class SaleList extends TPage
             $filters[] = new TFilter('number', 'like', "%{$data->number}%");// create the filter 
         }
 
-        if (isset($data->products_value) AND ( (is_scalar($data->products_value) AND $data->products_value !== '') OR (is_array($data->products_value) AND (!empty($data->products_value)) )) )
+        if (isset($data->invoice_number) AND ( (is_scalar($data->invoice_number) AND $data->invoice_number !== '') OR (is_array($data->invoice_number) AND (!empty($data->invoice_number)) )) )
         {
 
-            $filters[] = new TFilter('products_value', '=', $data->products_value);// create the filter 
-        }
-
-        if (isset($data->payments_value) AND ( (is_scalar($data->payments_value) AND $data->payments_value !== '') OR (is_array($data->payments_value) AND (!empty($data->payments_value)) )) )
-        {
-
-            $filters[] = new TFilter('payments_value', '=', $data->payments_value);// create the filter 
-        }
-
-        if (isset($data->total_value) AND ( (is_scalar($data->total_value) AND $data->total_value !== '') OR (is_array($data->total_value) AND (!empty($data->total_value)) )) )
-        {
-
-            $filters[] = new TFilter('total_value', '=', $data->total_value);// create the filter 
-        }
-
-        if (isset($data->sale_date) AND ( (is_scalar($data->sale_date) AND $data->sale_date !== '') OR (is_array($data->sale_date) AND (!empty($data->sale_date)) )) )
-        {
-
-            $filters[] = new TFilter('sale_date', '=', $data->sale_date);// create the filter 
+            $filters[] = new TFilter('invoice_number', '=', $data->invoice_number);// create the filter 
         }
 
         if (isset($data->invoiced) AND ( (is_scalar($data->invoiced) AND $data->invoiced !== '') OR (is_array($data->invoiced) AND (!empty($data->invoiced)) )) )
@@ -638,46 +552,22 @@ class SaleList extends TPage
             $filters[] = new TFilter('invoiced', '=', $data->invoiced);// create the filter 
         }
 
+        if (isset($data->status) AND ( (is_scalar($data->status) AND $data->status !== '') OR (is_array($data->status) AND (!empty($data->status)) )) )
+        {
+
+            $filters[] = new TFilter('status', '=', $data->status);// create the filter 
+        }
+
         if (isset($data->invoice_ambient) AND ( (is_scalar($data->invoice_ambient) AND $data->invoice_ambient !== '') OR (is_array($data->invoice_ambient) AND (!empty($data->invoice_ambient)) )) )
         {
 
             $filters[] = new TFilter('invoice_ambient', '=', $data->invoice_ambient);// create the filter 
         }
 
-        if (isset($data->discont_value) AND ( (is_scalar($data->discont_value) AND $data->discont_value !== '') OR (is_array($data->discont_value) AND (!empty($data->discont_value)) )) )
+        if (isset($data->sale_date) AND ( (is_scalar($data->sale_date) AND $data->sale_date !== '') OR (is_array($data->sale_date) AND (!empty($data->sale_date)) )) )
         {
 
-            $filters[] = new TFilter('discont_value', '=', $data->discont_value);// create the filter 
-        }
-
-        if (isset($data->obs) AND ( (is_scalar($data->obs) AND $data->obs !== '') OR (is_array($data->obs) AND (!empty($data->obs)) )) )
-        {
-
-            $filters[] = new TFilter('obs', 'like', "%{$data->obs}%");// create the filter 
-        }
-
-        if (isset($data->invoice_number) AND ( (is_scalar($data->invoice_number) AND $data->invoice_number !== '') OR (is_array($data->invoice_number) AND (!empty($data->invoice_number)) )) )
-        {
-
-            $filters[] = new TFilter('invoice_number', '=', $data->invoice_number);// create the filter 
-        }
-
-        if (isset($data->invoice_serie) AND ( (is_scalar($data->invoice_serie) AND $data->invoice_serie !== '') OR (is_array($data->invoice_serie) AND (!empty($data->invoice_serie)) )) )
-        {
-
-            $filters[] = new TFilter('invoice_serie', '=', $data->invoice_serie);// create the filter 
-        }
-
-        if (isset($data->invoice_coupon) AND ( (is_scalar($data->invoice_coupon) AND $data->invoice_coupon !== '') OR (is_array($data->invoice_coupon) AND (!empty($data->invoice_coupon)) )) )
-        {
-
-            $filters[] = new TFilter('invoice_coupon', 'like', "%{$data->invoice_coupon}%");// create the filter 
-        }
-
-        if (isset($data->invoice_xml) AND ( (is_scalar($data->invoice_xml) AND $data->invoice_xml !== '') OR (is_array($data->invoice_xml) AND (!empty($data->invoice_xml)) )) )
-        {
-
-            $filters[] = new TFilter('invoice_xml', 'like', "%{$data->invoice_xml}%");// create the filter 
+            $filters[] = new TFilter('sale_date', '>=', $data->sale_date);// create the filter 
         }
 
         if (isset($data->payment_method) AND ( (is_scalar($data->payment_method) AND $data->payment_method !== '') OR (is_array($data->payment_method) AND (!empty($data->payment_method)) )) )
@@ -692,22 +582,16 @@ class SaleList extends TPage
             $filters[] = new TFilter('store', '=', $data->store);// create the filter 
         }
 
-        if (isset($data->employee_cashier) AND ( (is_scalar($data->employee_cashier) AND $data->employee_cashier !== '') OR (is_array($data->employee_cashier) AND (!empty($data->employee_cashier)) )) )
-        {
-
-            $filters[] = new TFilter('employee_cashier', '=', $data->employee_cashier);// create the filter 
-        }
-
         if (isset($data->cashier) AND ( (is_scalar($data->cashier) AND $data->cashier !== '') OR (is_array($data->cashier) AND (!empty($data->cashier)) )) )
         {
 
             $filters[] = new TFilter('cashier', '=', $data->cashier);// create the filter 
         }
 
-        if (isset($data->client) AND ( (is_scalar($data->client) AND $data->client !== '') OR (is_array($data->client) AND (!empty($data->client)) )) )
+        if (isset($data->customer) AND ( (is_scalar($data->customer) AND $data->customer !== '') OR (is_array($data->customer) AND (!empty($data->customer)) )) )
         {
 
-            $filters[] = new TFilter('client', '=', $data->client);// create the filter 
+            $filters[] = new TFilter('customer', '=', $data->customer);// create the filter 
         }
 
         if (isset($data->salesman) AND ( (is_scalar($data->salesman) AND $data->salesman !== '') OR (is_array($data->salesman) AND (!empty($data->salesman)) )) )
@@ -716,10 +600,10 @@ class SaleList extends TPage
             $filters[] = new TFilter('salesman', '=', $data->salesman);// create the filter 
         }
 
-        if (isset($data->status) AND ( (is_scalar($data->status) AND $data->status !== '') OR (is_array($data->status) AND (!empty($data->status)) )) )
+        if (isset($data->employee_cashier) AND ( (is_scalar($data->employee_cashier) AND $data->employee_cashier !== '') OR (is_array($data->employee_cashier) AND (!empty($data->employee_cashier)) )) )
         {
 
-            $filters[] = new TFilter('status', '=', $data->status);// create the filter 
+            $filters[] = new TFilter('employee_cashier', '=', $data->employee_cashier);// create the filter 
         }
 
         // fill the form with data again
@@ -739,7 +623,7 @@ class SaleList extends TPage
     {
         try
         {
-            // open a transaction with database 'pos_sales'
+            // open a transaction with database 'pos_sale'
             TTransaction::open(self::$database);
 
             // creates a repository for Sale

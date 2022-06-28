@@ -31,7 +31,7 @@ class DepositList extends TPage
         $this->form = new BootstrapFormBuilder(self::$formName);
 
         // define the form title
-        $this->form->setFormTitle("Listagem de deposits");
+        $this->form->setFormTitle("Listagem de depósitos");
         $this->limit = 20;
 
         $id = new TEntry('id');
@@ -45,11 +45,8 @@ class DepositList extends TPage
         $name->setSize('100%');
         $store->setSize('100%');
 
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Name:", null, '14px', null, '100%'),$name]);
-        $row1->layout = ['col-sm-6','col-sm-6'];
-
-        $row2 = $this->form->addFields([new TLabel("Store:", null, '14px', null, '100%'),$store],[]);
-        $row2->layout = ['col-sm-6','col-sm-6'];
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Nome:", null, '14px', null, '100%'),$name],[new TLabel("Loja:", null, '14px', null, '100%'),$store]);
+        $row1->layout = [' col-sm-6 col-lg-2',' col-sm-6 col-lg-5',' col-sm-6 col-lg-5'];
 
         // keep the form filled during navigation with session data
         $this->form->setData( TSession::getValue(__CLASS__.'_filter_data') );
@@ -75,8 +72,8 @@ class DepositList extends TPage
         $this->datagrid->setHeight(320);
 
         $column_id = new TDataGridColumn('id', "Id", 'center' , '70px');
-        $column_name = new TDataGridColumn('name', "Name", 'left');
-        $column_fk_store_social_name = new TDataGridColumn('fk_store->social_name', "Store", 'left');
+        $column_name = new TDataGridColumn('name', "Nome", 'left');
+        $column_fk_store_social_name = new TDataGridColumn('fk_store->social_name', "Loja", 'left');
 
         $order_id = new TAction(array($this, 'onReload'));
         $order_id->setParameter('order', 'id');

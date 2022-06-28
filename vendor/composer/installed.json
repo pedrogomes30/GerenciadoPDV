@@ -210,6 +210,55 @@
             "install-path": "../dompdf/dompdf"
         },
         {
+            "name": "enotas/php-client-v2",
+            "version": "v1.0.1",
+            "version_normalized": "1.0.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eNotasGW/php-client-v2.git",
+                "reference": "4c69e27047b991863978aacebc4766f1bd90cf89"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eNotasGW/php-client-v2/zipball/4c69e27047b991863978aacebc4766f1bd90cf89",
+                "reference": "4c69e27047b991863978aacebc4766f1bd90cf89",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "time": "2019-01-10T17:17:52+00:00",
+            "type": "library",
+            "installation-source": "dist",
+            "autoload": {
+                "psr-4": {
+                    "eNotasGW\\Api\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "eNotas Gateway",
+                    "email": "suporte@enotasgw.com.br"
+                }
+            ],
+            "description": "eNotas GW API client for PHP v2",
+            "homepage": "https://github.com/eNotasGW/php-client-v2",
+            "keywords": [
+                "NF-e",
+                "NFC-e",
+                "eNotas"
+            ],
+            "support": {
+                "issues": "https://github.com/eNotasGW/php-client-v2/issues",
+                "source": "https://github.com/eNotasGW/php-client-v2/tree/master"
+            },
+            "install-path": "../enotas/php-client-v2"
+        },
+        {
             "name": "firebase/php-jwt",
             "version": "v5.5.1",
             "version_normalized": "5.5.1.0",

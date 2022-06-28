@@ -25,7 +25,7 @@ class DepositForm extends TPage
         // creates the form
         $this->form = new BootstrapFormBuilder(self::$formName);
         // define the form title
-        $this->form->setFormTitle("Cadastro de deposit");
+        $this->form->setFormTitle("Cadastro de depósito");
 
 
         $id = new TEntry('id');
@@ -41,11 +41,8 @@ class DepositForm extends TPage
         $name->setSize('100%');
         $store->setSize('100%');
 
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Name:", '#ff0000', '14px', null, '100%'),$name]);
-        $row1->layout = ['col-sm-6','col-sm-6'];
-
-        $row2 = $this->form->addFields([new TLabel("Store:", null, '14px', null, '100%'),$store],[]);
-        $row2->layout = ['col-sm-6','col-sm-6'];
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Nome:", null, '14px', null, '100%'),$name],[new TLabel("Loja:", null, '14px', null, '100%'),$store]);
+        $row1->layout = [' col-sm-6 col-lg-2',' col-sm-6 col-lg-5',' col-sm-6 col-lg-5'];
 
         // create the form actions
         $btn_onsave = $this->form->addAction("Salvar", new TAction([$this, 'onSave']), 'fas:save #ffffff');
@@ -58,17 +55,18 @@ class DepositForm extends TPage
         $btn_onshow = $this->form->addAction("Voltar", new TAction(['DepositList', 'onShow']), 'fas:arrow-left #000000');
         $this->btn_onshow = $btn_onshow;
 
-        // vertical box container
-        $container = new TVBox;
-        $container->style = 'width: 100%';
-        $container->class = 'form-container';
-        if(empty($param['target_container']))
-        {
-            $container->add(TBreadCrumb::create(["Estoque","Cadastro de deposit"]));
-        }
-        $container->add($this->form);
+        parent::setTargetContainer('adianti_right_panel');
 
-        parent::add($container);
+        $btnClose = new TButton('closeCurtain');
+        $btnClose->class = 'btn btn-sm btn-default';
+        $btnClose->style = 'margin-right:10px;';
+        $btnClose->onClick = "Template.closeRightPanel();";
+        $btnClose->setLabel("Fechar");
+        $btnClose->setImage('fas:times');
+
+        $this->form->addHeaderWidget($btnClose);
+
+        parent::add($this->form);
 
     }
 
@@ -105,6 +103,7 @@ class DepositForm extends TPage
             TToast::show('success', "Registro salvo", 'topRight', 'far:check-circle');
             TApplication::loadPage('DepositList', 'onShow', $loadPageParam); 
 
+                        TScript::create("Template.closeRightPanel();"); 
         }
         catch (Exception $e) // in case of exception
         {

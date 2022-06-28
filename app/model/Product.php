@@ -10,6 +10,8 @@ class Product extends TRecord
     private $fk_brand;
     private $fk_provider;
     private $fk_cest_ncm;
+    private $fk_status;
+    private $fk_type;
 
     
 
@@ -22,9 +24,8 @@ class Product extends TRecord
         parent::addAttribute('description');
         parent::addAttribute('sku');
         parent::addAttribute('unity');
-        parent::addAttribute('type');
-        parent::addAttribute('status');
         parent::addAttribute('dt_created');
+        parent::addAttribute('dt_modify');
         parent::addAttribute('description_variation');
         parent::addAttribute('reference');
         parent::addAttribute('barcode');
@@ -32,6 +33,7 @@ class Product extends TRecord
         parent::addAttribute('obs');
         parent::addAttribute('website');
         parent::addAttribute('origin');
+        parent::addAttribute('cfop');
         parent::addAttribute('tribute_situation');
         parent::addAttribute('cest');
         parent::addAttribute('ncm');
@@ -39,6 +41,8 @@ class Product extends TRecord
         parent::addAttribute('cest_ncm');
         parent::addAttribute('provider');
         parent::addAttribute('brand');
+        parent::addAttribute('type');
+        parent::addAttribute('status');
         parent::addAttribute('category');
             
     }
@@ -146,6 +150,58 @@ class Product extends TRecord
     
         // returns the associated object
         return $this->fk_cest_ncm;
+    }
+    /**
+     * Method set_product_status
+     * Sample of usage: $var->product_status = $object;
+     * @param $object Instance of ProductStatus
+     */
+    public function set_fk_status(ProductStatus $object)
+    {
+        $this->fk_status = $object;
+        $this->status = $object->id;
+    }
+
+    /**
+     * Method get_fk_status
+     * Sample of usage: $var->fk_status->attribute;
+     * @returns ProductStatus instance
+     */
+    public function get_fk_status()
+    {
+    
+        // loads the associated object
+        if (empty($this->fk_status))
+            $this->fk_status = new ProductStatus($this->status);
+    
+        // returns the associated object
+        return $this->fk_status;
+    }
+    /**
+     * Method set_product_type
+     * Sample of usage: $var->product_type = $object;
+     * @param $object Instance of ProductType
+     */
+    public function set_fk_type(ProductType $object)
+    {
+        $this->fk_type = $object;
+        $this->type = $object->id;
+    }
+
+    /**
+     * Method get_fk_type
+     * Sample of usage: $var->fk_type->attribute;
+     * @returns ProductType instance
+     */
+    public function get_fk_type()
+    {
+    
+        // loads the associated object
+        if (empty($this->fk_type))
+            $this->fk_type = new ProductType($this->type);
+    
+        // returns the associated object
+        return $this->fk_type;
     }
 
     /**
@@ -402,29 +458,29 @@ class Product extends TRecord
         return implode(', ', $values);
     }
 
-    public function set_price_fk_list_price_to_string($price_fk_list_price_to_string)
+    public function set_price_fk_price_list_to_string($price_fk_price_list_to_string)
     {
-        if(is_array($price_fk_list_price_to_string))
+        if(is_array($price_fk_price_list_to_string))
         {
-            $values = PriceList::where('id', 'in', $price_fk_list_price_to_string)->getIndexedArray('name', 'name');
-            $this->price_fk_list_price_to_string = implode(', ', $values);
+            $values = PriceList::where('id', 'in', $price_fk_price_list_to_string)->getIndexedArray('name', 'name');
+            $this->price_fk_price_list_to_string = implode(', ', $values);
         }
         else
         {
-            $this->price_fk_list_price_to_string = $price_fk_list_price_to_string;
+            $this->price_fk_price_list_to_string = $price_fk_price_list_to_string;
         }
 
-        $this->vdata['price_fk_list_price_to_string'] = $this->price_fk_list_price_to_string;
+        $this->vdata['price_fk_price_list_to_string'] = $this->price_fk_price_list_to_string;
     }
 
-    public function get_price_fk_list_price_to_string()
+    public function get_price_fk_price_list_to_string()
     {
-        if(!empty($this->price_fk_list_price_to_string))
+        if(!empty($this->price_fk_price_list_to_string))
         {
-            return $this->price_fk_list_price_to_string;
+            return $this->price_fk_price_list_to_string;
         }
     
-        $values = Price::where('product', '=', $this->id)->getIndexedArray('list_price','{fk_list_price->name}');
+        $values = Price::where('product', '=', $this->id)->getIndexedArray('price_list','{fk_price_list->name}');
         return implode(', ', $values);
     }
 

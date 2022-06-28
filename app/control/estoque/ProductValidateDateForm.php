@@ -29,29 +29,26 @@ class ProductValidateDateForm extends TPage
 
 
         $id = new TEntry('id');
-        $lote = new TEntry('lote');
         $dt_validate = new TDate('dt_validate');
+        $lote = new TEntry('lote');
         $product = new TDBCombo('product', 'pos_product', 'Product', 'id', '{description}','description asc'  );
 
         $dt_validate->addValidation("Dt validate", new TRequiredValidator()); 
         $product->addValidation("Product", new TRequiredValidator()); 
 
         $id->setEditable(false);
-        $lote->setMaxLength(50);
         $dt_validate->setMask('dd/mm/yyyy');
         $dt_validate->setDatabaseMask('yyyy-mm-dd');
+        $lote->setMaxLength(50);
         $product->enableSearch();
         $id->setSize(100);
         $lote->setSize('100%');
         $product->setSize('100%');
-        $dt_validate->setSize(110);
+        $dt_validate->setSize('100%');
 
 
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Lote:", null, '14px', null, '100%'),$lote]);
-        $row1->layout = ['col-sm-6','col-sm-6'];
-
-        $row2 = $this->form->addFields([new TLabel("Dt validate:", '#ff0000', '14px', null, '100%'),$dt_validate],[new TLabel("Product:", '#ff0000', '14px', null, '100%'),$product]);
-        $row2->layout = ['col-sm-6','col-sm-6'];
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Data de validade:", null, '14px', null, '100%'),$dt_validate],[new TLabel("Lote:", null, '14px', null, '100%'),$lote],[new TLabel("Produto:", null, '14px', null, '100%'),$product]);
+        $row1->layout = [' col-sm-6 col-lg-2',' col-sm-6 col-lg-3',' col-sm-6 col-lg-3',' col-sm-6 col-lg-4'];
 
         // create the form actions
         $btn_onsave = $this->form->addAction("Salvar", new TAction([$this, 'onSave']), 'fas:save #ffffff');
@@ -64,17 +61,18 @@ class ProductValidateDateForm extends TPage
         $btn_onshow = $this->form->addAction("Voltar", new TAction(['ProductValidateDateList', 'onShow']), 'fas:arrow-left #000000');
         $this->btn_onshow = $btn_onshow;
 
-        // vertical box container
-        $container = new TVBox;
-        $container->style = 'width: 100%';
-        $container->class = 'form-container';
-        if(empty($param['target_container']))
-        {
-            $container->add(TBreadCrumb::create(["Estoque","Cadastro de product validate date"]));
-        }
-        $container->add($this->form);
+        parent::setTargetContainer('adianti_right_panel');
 
-        parent::add($container);
+        $btnClose = new TButton('closeCurtain');
+        $btnClose->class = 'btn btn-sm btn-default';
+        $btnClose->style = 'margin-right:10px;';
+        $btnClose->onClick = "Template.closeRightPanel();";
+        $btnClose->setLabel("Fechar");
+        $btnClose->setImage('fas:times');
+
+        $this->form->addHeaderWidget($btnClose);
+
+        parent::add($this->form);
 
     }
 
@@ -111,6 +109,7 @@ class ProductValidateDateForm extends TPage
             TToast::show('success', "Registro salvo", 'topRight', 'far:check-circle');
             TApplication::loadPage('ProductValidateDateList', 'onShow', $loadPageParam); 
 
+                        TScript::create("Template.closeRightPanel();"); 
         }
         catch (Exception $e) // in case of exception
         {

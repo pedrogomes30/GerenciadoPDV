@@ -43,7 +43,7 @@ class ProductForm extends TPage
         $brand = new TDBCombo('brand', 'pos_product', 'Brand', 'id', '{name}','name asc'  );
         $category = new TDBCombo('category', 'pos_product', 'Category', 'id', '{name}','name asc'  );
         $website = new TEntry('website');
-        $type = new TDBCombo('type', 'pos_product', 'TipoCadastro', 'id', '{descricao}','descricao asc'  );
+        $type = new TDBCombo('type', 'pos_product', 'ProductType', 'id', '{description}','description asc'  );
         $status = new TEntry('status');
         $unity = new TEntry('unity');
         $obs = new TEntry('obs');
@@ -51,10 +51,10 @@ class ProductForm extends TPage
         $tribute_situation = new TEntry('tribute_situation');
         $cest = new TDBCombo('cest', 'pos_product', 'Cest', 'number', '{number}  - {description} ','id asc'  );
         $ncm = new TDBCombo('ncm', 'pos_product', 'Ncm', 'number', '{number}','id asc'  );
-        $price_fk_product_list_price = new TDBCombo('price_fk_product_list_price', 'pos_product', 'PriceList', 'id', '{name}','name asc'  );
+        $price_fk_product_price_list = new TDBCombo('price_fk_product_price_list', 'pos_product', 'PriceList', 'id', '{name}','name asc'  );
         $price_fk_product_id = new THidden('price_fk_product_id');
         $price_fk_product_sell_price = new TNumeric('price_fk_product_sell_price', '2', ',', '.' );
-        $price_fk_product_cust_price = new TNumeric('price_fk_product_cust_price', '2', ',', '.' );
+        $price_fk_product_cost_price = new TNumeric('price_fk_product_cost_price', '2', ',', '.' );
         $button_adicionar_price_fk_product = new TButton('button_adicionar_price_fk_product');
         $product_storage_fk_product_deposit = new TDBCombo('product_storage_fk_product_deposit', 'pos_product', 'Deposit', 'id', '{name}','name asc'  );
         $product_storage_fk_product_id = new THidden('product_storage_fk_product_id');
@@ -106,7 +106,7 @@ class ProductForm extends TPage
         $provider->enableSearch();
         $category->enableSearch();
         $is_variation->enableSearch();
-        $price_fk_product_list_price->enableSearch();
+        $price_fk_product_price_list->enableSearch();
         $product_storage_fk_product_deposit->enableSearch();
 
         $obs->setMaxLength(60);
@@ -145,9 +145,9 @@ class ProductForm extends TPage
         $tribute_situation->setSize('100%');
         $description_variation->setSize('100%');
         $product_storage_fk_product_id->setSize(200);
-        $price_fk_product_list_price->setSize('100%');
+        $price_fk_product_price_list->setSize('100%');
         $price_fk_product_sell_price->setSize('100%');
-        $price_fk_product_cust_price->setSize('100%');
+        $price_fk_product_cost_price->setSize('100%');
         $product_storage_fk_product_deposit->setSize('100%');
         $product_storage_fk_product_quantity->setSize('100%');
         $product_storage_fk_product_min_storage->setSize('100%');
@@ -192,7 +192,7 @@ class ProductForm extends TPage
 
         $this->detailFormPriceFkProduct->setProperty('class', 'form-horizontal builder-detail-form');
 
-        $row8 = $this->detailFormPriceFkProduct->addFields([new TLabel("Lista Preço", null, '14px', null, '100%'),$price_fk_product_list_price,$price_fk_product_id],[new TLabel("Preço Venda:", null, '14px', null, '100%'),$price_fk_product_sell_price],[new TLabel("Preço Custo:", null, '14px', null, '100%'),$price_fk_product_cust_price]);
+        $row8 = $this->detailFormPriceFkProduct->addFields([new TLabel("Lista Preço", null, '14px', null, '100%'),$price_fk_product_price_list,$price_fk_product_id],[new TLabel("Preço Venda:", null, '14px', null, '100%'),$price_fk_product_sell_price],[new TLabel("Preço Custo:", null, '14px', null, '100%'),$price_fk_product_cost_price]);
         $row8->layout = ['col-sm-6',' col-sm-2 col-lg-3',' col-sm-6 col-lg-3'];
 
         $row9 = $this->detailFormPriceFkProduct->addFields([$button_adicionar_price_fk_product]);
@@ -209,9 +209,9 @@ class ProductForm extends TPage
         $this->price_fk_product_list->style = 'width:100%';
         $this->price_fk_product_list->class .= ' table-bordered';
 
-        $column_price_fk_product_fk_list_price_name = new TDataGridColumn('fk_list_price->name', "Lista de Preço", 'left');
+        $column_price_fk_product_fk_price_list_name = new TDataGridColumn('fk_price_list->name', "Lista de Preço", 'left');
         $column_price_fk_product_sell_price = new TDataGridColumn('sell_price', "Preço de Venda", 'left');
-        $column_price_fk_product_cust_price = new TDataGridColumn('cust_price', "Preço de Custo", 'left');
+        $column_price_fk_product_cost_price = new TDataGridColumn('cost_price', "Preço de Custo", 'left');
 
         $column_price_fk_product__row__data = new TDataGridColumn('__row__data', '', 'center');
         $column_price_fk_product__row__data->setVisibility(false);
@@ -233,9 +233,9 @@ class ProductForm extends TPage
 
         $this->price_fk_product_list->addAction($action_onDeleteDetailPrice);
 
-        $this->price_fk_product_list->addColumn($column_price_fk_product_fk_list_price_name);
+        $this->price_fk_product_list->addColumn($column_price_fk_product_fk_price_list_name);
         $this->price_fk_product_list->addColumn($column_price_fk_product_sell_price);
-        $this->price_fk_product_list->addColumn($column_price_fk_product_cust_price);
+        $this->price_fk_product_list->addColumn($column_price_fk_product_cost_price);
 
         $this->price_fk_product_list->addColumn($column_price_fk_product__row__data);
 
@@ -321,9 +321,6 @@ class ProductForm extends TPage
         $btn_onclear = $this->form->addAction("Limpar formulário", new TAction([$this, 'onClear']), 'fas:eraser #dd5a43');
         $this->btn_onclear = $btn_onclear;
 
-        $btn_onshow = $this->form->addAction("Voltar", new TAction(['ProductList', 'onShow']), 'fas:arrow-left #000000');
-        $this->btn_onshow = $btn_onshow;
-
         // vertical box container
         $container = new TVBox;
         $container->style = 'width: 100%';
@@ -346,9 +343,9 @@ class ProductForm extends TPage
 
                 $errors = [];
                 $requiredFields = [];
-                $requiredFields[] = ['label'=>"List price", 'name'=>"price_fk_product_list_price", 'class'=>'TRequiredValidator', 'value'=>[]];
+                $requiredFields[] = ['label'=>"List price", 'name'=>"price_fk_product_price_list", 'class'=>'TRequiredValidator', 'value'=>[]];
                 $requiredFields[] = ['label'=>"Sell price", 'name'=>"price_fk_product_sell_price", 'class'=>'TRequiredValidator', 'value'=>[]];
-                $requiredFields[] = ['label'=>"Cust price", 'name'=>"price_fk_product_cust_price", 'class'=>'TRequiredValidator', 'value'=>[]];
+                $requiredFields[] = ['label'=>"Cust price", 'name'=>"price_fk_product_cost_price", 'class'=>'TRequiredValidator', 'value'=>[]];
                 foreach($requiredFields as $requiredField)
                 {
                     try
@@ -371,17 +368,17 @@ class ProductForm extends TPage
 
                 $grid_data = new Price();
                 $grid_data->__row__id = $__row__id;
-                $grid_data->list_price = $data->price_fk_product_list_price;
+                $grid_data->price_list = $data->price_fk_product_price_list;
                 $grid_data->id = $data->price_fk_product_id;
                 $grid_data->sell_price = $data->price_fk_product_sell_price;
-                $grid_data->cust_price = $data->price_fk_product_cust_price;
+                $grid_data->cost_price = $data->price_fk_product_cost_price;
 
                 $__row__data = array_merge($grid_data->toArray(), (array)$grid_data->getVirtualData());
                 $__row__data['__row__id'] = $__row__id;
-                $__row__data['__display__']['list_price'] =  $param['price_fk_product_list_price'] ?? null;
+                $__row__data['__display__']['price_list'] =  $param['price_fk_product_price_list'] ?? null;
                 $__row__data['__display__']['id'] =  $param['price_fk_product_id'] ?? null;
                 $__row__data['__display__']['sell_price'] =  $param['price_fk_product_sell_price'] ?? null;
-                $__row__data['__display__']['cust_price'] =  $param['price_fk_product_cust_price'] ?? null;
+                $__row__data['__display__']['cost_price'] =  $param['price_fk_product_cost_price'] ?? null;
 
                 $grid_data->__row__data = base64_encode(serialize((object)$__row__data));
                 $row = $this->price_fk_product_list->addItem($grid_data);
@@ -392,10 +389,10 @@ class ProductForm extends TPage
                 TTransaction::close();
 
                 $data = new stdClass;
-                $data->price_fk_product_list_price = '';
+                $data->price_fk_product_price_list = '';
                 $data->price_fk_product_id = '';
                 $data->price_fk_product_sell_price = '';
-                $data->price_fk_product_cust_price = '';
+                $data->price_fk_product_cost_price = '';
                 $data->price_fk_product__row__id = '';
 
                 TForm::sendData(self::$formName, $data);
@@ -505,10 +502,10 @@ class ProductForm extends TPage
                 $__row__data->__display__ = is_array($__row__data->__display__) ? (object) $__row__data->__display__ : $__row__data->__display__;
 
                 $data = new stdClass;
-                $data->price_fk_product_list_price = $__row__data->__display__->list_price ?? null;
+                $data->price_fk_product_price_list = $__row__data->__display__->price_list ?? null;
                 $data->price_fk_product_id = $__row__data->__display__->id ?? null;
                 $data->price_fk_product_sell_price = $__row__data->__display__->sell_price ?? null;
-                $data->price_fk_product_cust_price = $__row__data->__display__->cust_price ?? null;
+                $data->price_fk_product_cost_price = $__row__data->__display__->cost_price ?? null;
                 $data->price_fk_product__row__id = $__row__data->__row__id;
 
                 TForm::sendData(self::$formName, $data);
@@ -538,10 +535,10 @@ class ProductForm extends TPage
                 $__row__data = unserialize(base64_decode($param['__row__data']));
 
                 $data = new stdClass;
-                $data->price_fk_product_list_price = '';
+                $data->price_fk_product_price_list = '';
                 $data->price_fk_product_id = '';
                 $data->price_fk_product_sell_price = '';
-                $data->price_fk_product_cust_price = '';
+                $data->price_fk_product_cost_price = '';
                 $data->price_fk_product__row__id = '';
 
                 TForm::sendData(self::$formName, $data);

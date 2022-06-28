@@ -439,7 +439,7 @@ input
     content: "\f107" !important;
     margin-left: auto;
 }
-.container-submenu ul li a::after
+.container-submenu ul li a.sub::after
 {
     font-family: "Font Awesome 5 Free";
     font-weight: 600;
@@ -658,7 +658,9 @@ input
     background: var(--field-background);
     border-radius: var(--field-border-radius);
 }
-.form-control:disabled, .form-control[readonly]
+.tselect_disabled,.tfield_disabled,.note-editor.note-frame .note-editing-area .note-editable[contenteditable=false], .note-editor.note-airframe .note-editing-area .note-editable[contenteditable=false],
+.tfield_disabled+.pickr>button, .tfield_disabled[widget="tpassword"]+button,.tfield_disabled+.input-group-addon,
+.select2-disable,.tcombo_disabled,.form-control:disabled, .form-control[readonly]
 {
     background: var(--content-border-color) !important;
     border-color: var(--content-border-color) !important;
@@ -685,6 +687,7 @@ ol.tbreadcrumb li:not(.home) a:after
     text-transform: none;
     font-weight: 400;
     font-size: var(--font-size);
+    font-family: unset;
 }
 ol.tbreadcrumb li.home a:after
 {
@@ -2746,6 +2749,10 @@ div#adianti_tab_content:empty + div.adianti_tab_content_actions
 .tfullcalendar 
 {
     margin-top: 20px;
+    background-color: var(--panel-background);
+}
+.tfullcalendar .fc-header-toolbar{
+    margin: 1em;
 }
 .table-bordered
 {
@@ -4114,7 +4121,37 @@ ul.nav.nav-tabs.beditorcss {
 .editor-css .nav-link.active {
     border-color: #5a6571 !important;
 }
-.header-box:before { background-image: url('../../../app/images/builderLayoutIcon.png'); background-position: center; background-size: contain; background-repeat: no-repeat; color: transparent; content: ''; width: calc( 100% - (var(--header-box-padding-horizontal) * 2)); height: calc( 100% - (var(--header-box-padding-vertical) * 2 )); position: absolute; }
+
+.bContainer-fieldset{
+    margin-top: 20px;
+}
+
+.bContainer-fieldset .bContainer-title{
+    position: absolute;
+    margin-left: 15px;
+    width: fit-content;
+    margin-top: -15px;
+    padding: 0px 5px 0px 5px;
+}
+
+.bContainer-fieldset .panel-body{
+    padding: 0px 5px 0px 5px;
+}
+
+.card-body [widget="bootstrapformbuilder"]:not(.bContainer-fieldset) .card-body{
+    padding: 0px;
+}
+
+.card [widget="bootstrapformbuilder"]:not(.bContainer-fieldset) .card{
+    padding: 0px;
+    box-shadow: none;
+    margin: 0px;
+    border: none;
+}
+
+.card-body [widget="bootstrapformbuilder"]:not(.bContainer-fieldset) .card-body .tab-pane{
+    padding:10px !important;
+}
 
 
 

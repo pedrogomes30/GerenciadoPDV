@@ -1,7 +1,7 @@
 <?php 
 return[
     'host' => "127.0.0.1",
-    'name' => "pos_customers_communication",
+    'name' => "pos_customer_communication",
     'user' => "",
     'pass' => "",
     'type' => "mysql",

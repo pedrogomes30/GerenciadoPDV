@@ -152,10 +152,10 @@ class User extends TRecord
     /**
      * Method getSales
      */
-    public function getSalesByFkClients()
+    public function getSalesByFkCustomers()
     {
         $criteria = new TCriteria;
-        $criteria->add(new TFilter('client', '=', $this->id));
+        $criteria->add(new TFilter('customer', '=', $this->id));
         return Sale::getObjects( $criteria );
     }
     /**
@@ -243,7 +243,7 @@ class User extends TRecord
     {
         if(is_array($cashier_fk_store_to_string))
         {
-            $values = Store::where('id', 'in', $cashier_fk_store_to_string)->getIndexedArray('social_name', 'social_name');
+            $values = Store::where('id', 'in', $cashier_fk_store_to_string)->getIndexedArray('fantasy_name', 'fantasy_name');
             $this->cashier_fk_store_to_string = implode(', ', $values);
         }
         else
@@ -261,7 +261,7 @@ class User extends TRecord
             return $this->cashier_fk_store_to_string;
         }
     
-        $values = Cashier::where('user_authenticated', '=', $this->id)->getIndexedArray('store','{fk_store->social_name}');
+        $values = Cashier::where('user_authenticated', '=', $this->id)->getIndexedArray('store','{fk_store->fantasy_name}');
         return implode(', ', $values);
     }
 
@@ -451,7 +451,7 @@ class User extends TRecord
     {
         if(is_array($user_store_transfer_fk_store_origin_to_string))
         {
-            $values = Store::where('id', 'in', $user_store_transfer_fk_store_origin_to_string)->getIndexedArray('social_name', 'social_name');
+            $values = Store::where('id', 'in', $user_store_transfer_fk_store_origin_to_string)->getIndexedArray('fantasy_name', 'fantasy_name');
             $this->user_store_transfer_fk_store_origin_to_string = implode(', ', $values);
         }
         else
@@ -469,7 +469,7 @@ class User extends TRecord
             return $this->user_store_transfer_fk_store_origin_to_string;
         }
     
-        $values = UserStoreTransfer::where('user', '=', $this->id)->getIndexedArray('store_origin','{fk_store_origin->social_name}');
+        $values = UserStoreTransfer::where('user', '=', $this->id)->getIndexedArray('store_origin','{fk_store_origin->fantasy_name}');
         return implode(', ', $values);
     }
 
@@ -477,7 +477,7 @@ class User extends TRecord
     {
         if(is_array($user_store_transfer_fk_store_destiny_to_string))
         {
-            $values = Store::where('id', 'in', $user_store_transfer_fk_store_destiny_to_string)->getIndexedArray('social_name', 'social_name');
+            $values = Store::where('id', 'in', $user_store_transfer_fk_store_destiny_to_string)->getIndexedArray('fantasy_name', 'fantasy_name');
             $this->user_store_transfer_fk_store_destiny_to_string = implode(', ', $values);
         }
         else
@@ -495,7 +495,7 @@ class User extends TRecord
             return $this->user_store_transfer_fk_store_destiny_to_string;
         }
     
-        $values = UserStoreTransfer::where('user', '=', $this->id)->getIndexedArray('store_destiny','{fk_store_destiny->social_name}');
+        $values = UserStoreTransfer::where('user', '=', $this->id)->getIndexedArray('store_destiny','{fk_store_destiny->fantasy_name}');
         return implode(', ', $values);
     }
 

@@ -1541,6 +1541,10 @@ ul.nav.nav-pills.nav-stacked li {
 .card-body [widget="bootstrapformbuilder"]:not(.bContainer-fieldset) .card-body .tab-pane{
     padding:10px !important;
 }
+
+.tfullcalendar{
+    background-color: #ffffff;
+}
 @media (max-width: 576px) {
     #adianti_right_panel.right-panel {
     width: 100% !important;
@@ -1923,19 +1927,3 @@ border-color: #d58512;
     display: none;
 }
 
-.builder-template-layout.sidebar-collapse .main-sidebar .brand-link {
-    background: url('../../../app/images/builderLayoutIcon.png');
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: cover;
-    color: transparent;
-    border: transparent;
-    width: 42px !important;
-    height: 42px !important;
-    margin-top: 7px;
-    margin-left: 15px;
-}
-
-.brand-logo {
-    display: none;
-  }

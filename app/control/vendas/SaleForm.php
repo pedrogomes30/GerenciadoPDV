@@ -1,10 +1,10 @@
 <?php
 
-class SaleForm extends TPage
+class SaleForm extends TWindow
 {
     protected $form;
     private $formFields = [];
-    private static $database = 'pos_sales';
+    private static $database = 'pos_sale';
     private static $activeRecord = 'Sale';
     private static $primaryKey = 'id';
     private static $formName = 'form_SaleForm';
@@ -16,6 +16,9 @@ class SaleForm extends TPage
     public function __construct( $param )
     {
         parent::__construct();
+        parent::setSize(0.8, null);
+        parent::setTitle("Venda");
+        parent::setProperty('class', 'window_modal');
 
         if(!empty($param['target_container']))
         {
@@ -25,7 +28,7 @@ class SaleForm extends TPage
         // creates the form
         $this->form = new BootstrapFormBuilder(self::$formName);
         // define the form title
-        $this->form->setFormTitle("Cadastro de Venda");
+        $this->form->setFormTitle("Venda");
 
 
         $id = new TEntry('id');
@@ -43,12 +46,12 @@ class SaleForm extends TPage
         $invoice_coupon = new TEntry('invoice_coupon');
         $invoice_xml = new TEntry('invoice_xml');
         $payment_method = new TDBCombo('payment_method', 'pos_system', 'PaymentMethod', 'id', '{id}','id asc'  );
-        $store = new TDBCombo('store', 'pos_system', 'Store', 'id', '{social_name}','social_name asc'  );
+        $store = new TDBCombo('store', 'pos_system', 'Store', 'id', '{fantasy_name}','fantasy_name asc'  );
         $employee_cashier = new TDBCombo('employee_cashier', 'pos_system', 'User', 'id', '{id}','id asc'  );
         $cashier = new TDBCombo('cashier', 'pos_system', 'Cashier', 'id', '{id}','id asc'  );
-        $client = new TDBCombo('client', 'pos_system', 'User', 'id', '{id}','id asc'  );
+        $customer = new TDBCombo('customer', 'pos_system', 'User', 'id', '{id}','id asc'  );
         $salesman = new TDBCombo('salesman', 'pos_system', 'User', 'id', '{id}','id asc'  );
-        $status = new TDBCombo('status', 'pos_sales', 'Status', 'id', '{id}','id asc'  );
+        $status = new TDBCombo('status', 'pos_sale', 'Status', 'id', '{id}','id asc'  );
 
         $number->addValidation("Number", new TRequiredValidator()); 
         $products_value->addValidation("Products value", new TRequiredValidator()); 
@@ -69,8 +72,8 @@ class SaleForm extends TPage
         $invoiced->addItems(["1"=>"Sim","2"=>"Não"]);
         $invoice_ambient->addItems(["1"=>"Sim","2"=>"Não"]);
 
-        $invoiced->setLayout('vertical');
-        $invoice_ambient->setLayout('vertical');
+        $invoiced->setLayout('horizontal');
+        $invoice_ambient->setLayout('horizontal');
 
         $invoiced->setBooleanMode();
         $invoice_ambient->setBooleanMode();
@@ -84,9 +87,9 @@ class SaleForm extends TPage
         $invoice_ambient->setValue('false');
 
         $store->enableSearch();
-        $client->enableSearch();
         $status->enableSearch();
         $cashier->enableSearch();
+        $customer->enableSearch();
         $salesman->enableSearch();
         $payment_method->enableSearch();
         $employee_cashier->enableSearch();
@@ -95,20 +98,20 @@ class SaleForm extends TPage
         $obs->setSize('100%');
         $invoiced->setSize(80);
         $store->setSize('100%');
-        $client->setSize('100%');
         $number->setSize('100%');
         $status->setSize('100%');
         $sale_date->setSize(150);
         $cashier->setSize('100%');
+        $customer->setSize('100%');
         $salesman->setSize('100%');
         $invoice_ambient->setSize(80);
         $total_value->setSize('100%');
         $invoice_xml->setSize('100%');
         $discont_value->setSize('100%');
         $invoice_serie->setSize('100%');
+        $payments_value->setSize('100%');
         $invoice_coupon->setSize('100%');
         $payment_method->setSize('100%');
-        $payments_value->setSize('100%');
         $products_value->setSize('100%');
         $invoice_number->setSize('100%');
         $employee_cashier->setSize('100%');
@@ -143,7 +146,7 @@ class SaleForm extends TPage
         $row9 = $this->form->addFields([new TLabel("Employee cashier:", '#ff0000', '14px', null, '100%'),$employee_cashier],[new TLabel("Cashier:", '#ff0000', '14px', null, '100%'),$cashier]);
         $row9->layout = ['col-sm-6','col-sm-6'];
 
-        $row10 = $this->form->addFields([new TLabel("Cliente:", null, '14px', null, '100%'),$client],[new TLabel("Salesman:", null, '14px', null, '100%'),$salesman]);
+        $row10 = $this->form->addFields([new TLabel("Cliente:", null, '14px', null, '100%'),$customer],[new TLabel("Salesman:", null, '14px', null, '100%'),$salesman]);
         $row10->layout = ['col-sm-6','col-sm-6'];
 
         $row11 = $this->form->addFields([new TLabel("Status:", '#ff0000', '14px', null, '100%'),$status],[]);
@@ -157,20 +160,7 @@ class SaleForm extends TPage
         $btn_onclear = $this->form->addAction("Limpar formulário", new TAction([$this, 'onClear']), 'fas:eraser #dd5a43');
         $this->btn_onclear = $btn_onclear;
 
-        $btn_onshow = $this->form->addAction("Voltar", new TAction(['SaleList', 'onShow']), 'fas:arrow-left #000000');
-        $this->btn_onshow = $btn_onshow;
-
-        // vertical box container
-        $container = new TVBox;
-        $container->style = 'width: 100%';
-        $container->class = 'form-container';
-        if(empty($param['target_container']))
-        {
-            $container->add(TBreadCrumb::create(["Vendas","Cadastro de Venda"]));
-        }
-        $container->add($this->form);
-
-        parent::add($container);
+        parent::add($this->form);
 
     }
 
@@ -191,22 +181,15 @@ class SaleForm extends TPage
 
             $object->store(); // save the object 
 
-            $loadPageParam = [];
-
-            if(!empty($param['target_container']))
-            {
-                $loadPageParam['target_container'] = $param['target_container'];
-            }
-
             // get the generated {PRIMARY_KEY}
             $data->id = $object->id; 
 
             $this->form->setData($data); // fill form data
             TTransaction::close(); // close the transaction
 
-            TToast::show('success', "Registro salvo", 'topRight', 'far:check-circle');
-            TApplication::loadPage('SaleList', 'onShow', $loadPageParam); 
+            new TMessage('info', "Registro salvo", $messageAction); 
 
+                TWindow::closeWindow(parent::getId()); 
         }
         catch (Exception $e) // in case of exception
         {

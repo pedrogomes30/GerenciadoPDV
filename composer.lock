@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5c331a964051ab587b8cd3d732f3976d",
+    "content-hash": "bc9d8d708f4e1446ad460c9537226695",
     "packages": [
         {
             "name": "adianti/pdfdesigner",
@@ -206,6 +206,52 @@
                 "source": "https://github.com/dompdf/dompdf/tree/v1.1.1"
             },
             "time": "2021-11-24T00:45:04+00:00"
+        },
+        {
+            "name": "enotas/php-client-v2",
+            "version": "v1.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/eNotasGW/php-client-v2.git",
+                "reference": "4c69e27047b991863978aacebc4766f1bd90cf89"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/eNotasGW/php-client-v2/zipball/4c69e27047b991863978aacebc4766f1bd90cf89",
+                "reference": "4c69e27047b991863978aacebc4766f1bd90cf89",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "eNotasGW\\Api\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "eNotas Gateway",
+                    "email": "suporte@enotasgw.com.br"
+                }
+            ],
+            "description": "eNotas GW API client for PHP v2",
+            "homepage": "https://github.com/eNotasGW/php-client-v2",
+            "keywords": [
+                "NF-e",
+                "NFC-e",
+                "eNotas"
+            ],
+            "support": {
+                "issues": "https://github.com/eNotasGW/php-client-v2/issues",
+                "source": "https://github.com/eNotasGW/php-client-v2/tree/master"
+            },
+            "time": "2019-01-10T17:17:52+00:00"
         },
         {
             "name": "firebase/php-jwt",

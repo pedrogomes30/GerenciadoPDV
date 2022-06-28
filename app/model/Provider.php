@@ -119,6 +119,58 @@ class Provider extends TRecord
         return implode(', ', $values);
     }
 
+    public function set_product_fk_type_to_string($product_fk_type_to_string)
+    {
+        if(is_array($product_fk_type_to_string))
+        {
+            $values = ProductType::where('id', 'in', $product_fk_type_to_string)->getIndexedArray('description', 'description');
+            $this->product_fk_type_to_string = implode(', ', $values);
+        }
+        else
+        {
+            $this->product_fk_type_to_string = $product_fk_type_to_string;
+        }
+
+        $this->vdata['product_fk_type_to_string'] = $this->product_fk_type_to_string;
+    }
+
+    public function get_product_fk_type_to_string()
+    {
+        if(!empty($this->product_fk_type_to_string))
+        {
+            return $this->product_fk_type_to_string;
+        }
+    
+        $values = Product::where('provider', '=', $this->id)->getIndexedArray('type','{fk_type->description}');
+        return implode(', ', $values);
+    }
+
+    public function set_product_fk_status_to_string($product_fk_status_to_string)
+    {
+        if(is_array($product_fk_status_to_string))
+        {
+            $values = ProductStatus::where('id', 'in', $product_fk_status_to_string)->getIndexedArray('status', 'status');
+            $this->product_fk_status_to_string = implode(', ', $values);
+        }
+        else
+        {
+            $this->product_fk_status_to_string = $product_fk_status_to_string;
+        }
+
+        $this->vdata['product_fk_status_to_string'] = $this->product_fk_status_to_string;
+    }
+
+    public function get_product_fk_status_to_string()
+    {
+        if(!empty($this->product_fk_status_to_string))
+        {
+            return $this->product_fk_status_to_string;
+        }
+    
+        $values = Product::where('provider', '=', $this->id)->getIndexedArray('status','{fk_status->status}');
+        return implode(', ', $values);
+    }
+
     public function set_product_fk_category_to_string($product_fk_category_to_string)
     {
         if(is_array($product_fk_category_to_string))

@@ -1,65 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu>
   <menuitem label="Vendas">
-    <icon>fas:cart-arrow-down fa-fw #FFFFFF</icon>
+    <icon>fas:cart-arrow-down fa-fw </icon>
     <menu>
       <menuitem label="Fechamentos de Caixa">
         <icon>fas:cart-arrow-down fa-fw </icon>
         <action>ClosureList#method=onShow</action>
       </menuitem>
+      <menuitem label="Vendas">
+        <icon>far:circle fa-fw </icon>
+        <action>SaleList#method=onShow</action>
+      </menuitem>
     </menu>
   </menuitem>
   <menuitem label="Estoque">
-    <icon>fas:boxes fa-fw #FFFFFF</icon>
+    <icon>fas:boxes fa-fw </icon>
     <menu>
-      <menuitem label="Status produtos">
-        <icon>fas:signal fa-fw </icon>
-        <action>StatusProdutoList#method=onShow</action>
-      </menuitem>
-      <menuitem label="Categorias Produto">
-        <icon>far:list-alt fa-fw </icon>
-        <action>CategoryList#method=onShow</action>
-      </menuitem>
-      <menuitem label="Tipo cadastros">
-        <icon>fas:filter fa-fw </icon>
-        <action>TipoCadastroList#method=onShow</action>
-      </menuitem>
-      <menuitem label="Listas de preços">
-        <icon>fas:dollar-sign fa-fw </icon>
-        <action>PriceListList#method=onShow</action>
-      </menuitem>
-      <menuitem label="Depositos">
-        <icon>fas:warehouse fa-fw </icon>
-        <action>DepositList#method=onShow</action>
-      </menuitem>
       <menuitem label="Fornecedores">
         <icon>fas:truck fa-fw </icon>
         <action>ProviderList#method=onShow</action>
-      </menuitem>
-      <menuitem label="Marcas">
-        <icon>far:copyright fa-fw </icon>
-        <action>BrandList#method=onShow</action>
-      </menuitem>
-      <menuitem label="Cest ncms">
-        <icon>fas:coins fa-fw </icon>
-        <action>CestNcmList#method=onShow</action>
-      </menuitem>
-      <menuitem label="Produtos">
-        <icon>fas:boxes fa-fw </icon>
-        <action>ProductList#method=onShow</action>
-      </menuitem>
-      <menuitem label="Transferências de produtos">
-        <icon>fas:exchange-alt fa-fw </icon>
-        <action>ProductTransferList#method=onShow</action>
       </menuitem>
       <menuitem label="Datas de validade">
         <icon>far:calendar-alt fa-fw </icon>
         <action>ProductValidateDateList#method=onShow</action>
       </menuitem>
+      <menuitem label="Status Produto">
+        <icon>fas:filter fa-fw </icon>
+        <action>StatusProdutoFormList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Tipo cadastros">
+        <icon>fas:list-ol fa-fw </icon>
+        <action>TipoCadastroList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Marcas">
+        <icon>far:copyright fa-fw </icon>
+        <action>BrandList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Transferências de produtos">
+        <icon>fas:exchange-alt fa-fw </icon>
+        <action>ProductTransferList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Produtos">
+        <icon>fas:boxes fa-fw </icon>
+        <action>ProductList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Categorias Produto">
+        <icon>far:list-alt fa-fw </icon>
+        <action>CategoryList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Depositos">
+        <icon>fas:warehouse fa-fw </icon>
+        <action>DepositList#method=onShow</action>
+      </menuitem>
     </menu>
   </menuitem>
   <menuitem label="Sistema">
-    <icon>fas:wrench fa-fw #FFFFFF</icon>
+    <icon>fas:wrench fa-fw </icon>
     <menu>
       <menuitem label="Grupo de Lojas">
         <icon>fab:houzz fa-fw </icon>
@@ -89,15 +85,19 @@
         <icon>far:money-bill-alt fa-fw </icon>
         <action>PaymentMethodList#method=onShow</action>
       </menuitem>
+      <menuitem label="Importador">
+        <icon>fas:angle-double-down fa-fw #3F51B5</icon>
+        <action>importControl#method=onShow</action>
+      </menuitem>
     </menu>
   </menuitem>
   <menuitem label="Clientes">
-    <icon>fas:users fa-fw #FFFFFF</icon>
+    <icon>fas:users fa-fw </icon>
     <menu>  
 </menu>
   </menuitem>
   <menuitem label="Api">
-    <icon>fab:cloudsmith fa-fw #FFFFFF</icon>
+    <icon>fab:cloudsmith fa-fw </icon>
     <menu>  
 </menu>
   </menuitem>

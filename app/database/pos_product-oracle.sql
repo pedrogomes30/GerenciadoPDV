@@ -7,13 +7,15 @@ CREATE TABLE brand(
 CREATE TABLE category( 
       id number(10)    NOT NULL , 
       name varchar  (50)    NOT NULL , 
-      cest_ncm_default number(10)    NOT NULL , 
+      color varchar  (30)    DEFAULT '#FD03BE'  NOT NULL , 
+      multiply binary_double    DEFAULT 1  NOT NULL , 
       icon_category varchar  (400)   , 
+      cest_ncm_default number(10)    NOT NULL , 
  PRIMARY KEY (id)) ; 
 
 CREATE TABLE cest( 
       id number(10)    NOT NULL , 
-      description varchar  (200)    NOT NULL , 
+      description varchar  (255)    NOT NULL , 
       number varchar  (10)    NOT NULL , 
  PRIMARY KEY (id)) ; 
 
@@ -31,21 +33,21 @@ CREATE TABLE deposit(
 
 CREATE TABLE ncm( 
       id number(10)    NOT NULL , 
-      description varchar  (200)    NOT NULL , 
+      description varchar  (255)    NOT NULL , 
       number varchar  (10)    NOT NULL , 
  PRIMARY KEY (id)) ; 
 
 CREATE TABLE price( 
       id number(10)    NOT NULL , 
       sell_price binary_double    NOT NULL , 
-      cust_price binary_double    NOT NULL , 
+      cost_price binary_double   , 
       product number(10)    NOT NULL , 
-      list_price number(10)    NOT NULL , 
+      price_list number(10)    NOT NULL , 
  PRIMARY KEY (id)) ; 
 
 CREATE TABLE price_list( 
       id number(10)    NOT NULL , 
-      name varchar  (30)   , 
+      name varchar  (30)    NOT NULL , 
       store number(10)   , 
  PRIMARY KEY (id)) ; 
 
@@ -54,24 +56,31 @@ CREATE TABLE product(
       description varchar  (60)    NOT NULL , 
       sku varchar  (20)    NOT NULL , 
       unity varchar  (2)    DEFAULT 'UN'  NOT NULL , 
-      type number(10)    DEFAULT 1  NOT NULL , 
-      status varchar  (15)    DEFAULT 'Ok'  NOT NULL , 
       dt_created timestamp(0)    NOT NULL , 
+      dt_modify timestamp(0)   , 
       description_variation varchar  (50)   , 
       reference varchar  (30)   , 
       barcode varchar  (20)   , 
       family_id number(10)   , 
       obs varchar  (60)   , 
       website varchar  (100)   , 
-      origin varchar  (100)   , 
-      tribute_situation varchar  (20)   , 
+      origin varchar  (10)    NOT NULL , 
+      cfop number(10)    DEFAULT 504  NOT NULL , 
+      tribute_situation varchar  (20)    NOT NULL , 
       cest varchar  (20)   , 
-      ncm varchar  (20)   , 
+      ncm varchar  (20)    NOT NULL , 
       is_variation char(1)    DEFAULT false  NOT NULL , 
       cest_ncm number(10)   , 
       provider number(10)   , 
       brand number(10)   , 
+      type number(10)    DEFAULT 1  NOT NULL , 
+      status number(10)    DEFAULT 1  NOT NULL , 
       category number(10)    NOT NULL , 
+ PRIMARY KEY (id)) ; 
+
+CREATE TABLE product_status( 
+      id number(10)    NOT NULL , 
+      status varchar  (30)    NOT NULL , 
  PRIMARY KEY (id)) ; 
 
 CREATE TABLE product_storage( 
@@ -81,6 +90,7 @@ CREATE TABLE product_storage(
       max_storage number(10)   , 
       deposit number(10)    NOT NULL , 
       product number(10)    NOT NULL , 
+      store number(10)   , 
  PRIMARY KEY (id)) ; 
 
 CREATE TABLE product_transfer( 
@@ -94,6 +104,11 @@ CREATE TABLE product_transfer(
       deposit_destiny number(10)    NOT NULL , 
       product_storage_destiny number(10)    NOT NULL , 
       product number(10)    NOT NULL , 
+ PRIMARY KEY (id)) ; 
+
+CREATE TABLE product_type( 
+      id number(10)    NOT NULL , 
+      description varchar  (200)    NOT NULL , 
  PRIMARY KEY (id)) ; 
 
 CREATE TABLE product_validate_date( 
@@ -110,16 +125,6 @@ CREATE TABLE provider(
       fantasy_name varchar  (50)   , 
  PRIMARY KEY (id)) ; 
 
-CREATE TABLE status_produto( 
-      id number(10)    NOT NULL , 
-      status varchar  (30)   , 
- PRIMARY KEY (id)) ; 
-
-CREATE TABLE tipo_cadastro( 
-      id number(10)    NOT NULL , 
-      descricao varchar  (200)    NOT NULL , 
- PRIMARY KEY (id)) ; 
-
  
  ALTER TABLE product ADD UNIQUE (sku);
   
@@ -127,12 +132,14 @@ CREATE TABLE tipo_cadastro(
 ALTER TABLE category ADD CONSTRAINT fk_category_cest_ncm FOREIGN KEY (cest_ncm_default) references cest_ncm(id); 
 ALTER TABLE cest_ncm ADD CONSTRAINT fk_cest_ncm_cest FOREIGN KEY (cest) references cest(id); 
 ALTER TABLE cest_ncm ADD CONSTRAINT fk_cest_ncm_ncm FOREIGN KEY (ncm) references ncm(id); 
-ALTER TABLE price ADD CONSTRAINT fk_price_list_price FOREIGN KEY (list_price) references price_list(id); 
+ALTER TABLE price ADD CONSTRAINT fk_price_list_price FOREIGN KEY (price_list) references price_list(id); 
 ALTER TABLE price ADD CONSTRAINT fk_price_product FOREIGN KEY (product) references product(id); 
 ALTER TABLE product ADD CONSTRAINT fk_product_category FOREIGN KEY (category) references category(id); 
 ALTER TABLE product ADD CONSTRAINT fk_product_brand FOREIGN KEY (brand) references brand(id); 
 ALTER TABLE product ADD CONSTRAINT fk_product_provider FOREIGN KEY (provider) references provider(id); 
 ALTER TABLE product ADD CONSTRAINT fk_product_ncm_cest FOREIGN KEY (cest_ncm) references cest_ncm(id); 
+ALTER TABLE product ADD CONSTRAINT fk_product_status FOREIGN KEY (status) references product_status(id); 
+ALTER TABLE product ADD CONSTRAINT fk_product_type FOREIGN KEY (type) references product_type(id); 
 ALTER TABLE product_storage ADD CONSTRAINT fk_product_storage_deposit FOREIGN KEY (deposit) references deposit(id); 
 ALTER TABLE product_storage ADD CONSTRAINT fk_product_storage_product FOREIGN KEY (product) references product(id); 
 ALTER TABLE product_transfer ADD CONSTRAINT fk_product_transfer_deposit_origin FOREIGN KEY (deposit_origin) references deposit(id); 
@@ -276,6 +283,21 @@ BEGIN
 SELECT product_id_seq.NEXTVAL INTO :NEW.id FROM DUAL; 
 
 END;
+CREATE SEQUENCE product_status_id_seq START WITH 1 INCREMENT BY 1; 
+
+CREATE OR REPLACE TRIGGER product_status_id_seq_tr 
+
+BEFORE INSERT ON product_status FOR EACH ROW 
+
+WHEN 
+
+(NEW.id IS NULL) 
+
+BEGIN 
+
+SELECT product_status_id_seq.NEXTVAL INTO :NEW.id FROM DUAL; 
+
+END;
 CREATE SEQUENCE product_storage_id_seq START WITH 1 INCREMENT BY 1; 
 
 CREATE OR REPLACE TRIGGER product_storage_id_seq_tr 
@@ -306,6 +328,21 @@ BEGIN
 SELECT product_transfer_id_seq.NEXTVAL INTO :NEW.id FROM DUAL; 
 
 END;
+CREATE SEQUENCE product_type_id_seq START WITH 1 INCREMENT BY 1; 
+
+CREATE OR REPLACE TRIGGER product_type_id_seq_tr 
+
+BEFORE INSERT ON product_type FOR EACH ROW 
+
+WHEN 
+
+(NEW.id IS NULL) 
+
+BEGIN 
+
+SELECT product_type_id_seq.NEXTVAL INTO :NEW.id FROM DUAL; 
+
+END;
 CREATE SEQUENCE product_validate_date_id_seq START WITH 1 INCREMENT BY 1; 
 
 CREATE OR REPLACE TRIGGER product_validate_date_id_seq_tr 
@@ -334,36 +371,6 @@ WHEN
 BEGIN 
 
 SELECT provider_id_seq.NEXTVAL INTO :NEW.id FROM DUAL; 
-
-END;
-CREATE SEQUENCE status_produto_id_seq START WITH 1 INCREMENT BY 1; 
-
-CREATE OR REPLACE TRIGGER status_produto_id_seq_tr 
-
-BEFORE INSERT ON status_produto FOR EACH ROW 
-
-WHEN 
-
-(NEW.id IS NULL) 
-
-BEGIN 
-
-SELECT status_produto_id_seq.NEXTVAL INTO :NEW.id FROM DUAL; 
-
-END;
-CREATE SEQUENCE tipo_cadastro_id_seq START WITH 1 INCREMENT BY 1; 
-
-CREATE OR REPLACE TRIGGER tipo_cadastro_id_seq_tr 
-
-BEFORE INSERT ON tipo_cadastro FOR EACH ROW 
-
-WHEN 
-
-(NEW.id IS NULL) 
-
-BEGIN 
-
-SELECT tipo_cadastro_id_seq.NEXTVAL INTO :NEW.id FROM DUAL; 
 
 END;
  

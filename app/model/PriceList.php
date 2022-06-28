@@ -56,7 +56,7 @@ class PriceList extends TRecord
     public function getPrices()
     {
         $criteria = new TCriteria;
-        $criteria->add(new TFilter('list_price', '=', $this->id));
+        $criteria->add(new TFilter('price_list', '=', $this->id));
         return Price::getObjects( $criteria );
     }
 
@@ -82,33 +82,33 @@ class PriceList extends TRecord
             return $this->price_fk_product_to_string;
         }
     
-        $values = Price::where('list_price', '=', $this->id)->getIndexedArray('product','{fk_product->description}');
+        $values = Price::where('price_list', '=', $this->id)->getIndexedArray('product','{fk_product->description}');
         return implode(', ', $values);
     }
 
-    public function set_price_fk_list_price_to_string($price_fk_list_price_to_string)
+    public function set_price_fk_price_list_to_string($price_fk_price_list_to_string)
     {
-        if(is_array($price_fk_list_price_to_string))
+        if(is_array($price_fk_price_list_to_string))
         {
-            $values = PriceList::where('id', 'in', $price_fk_list_price_to_string)->getIndexedArray('name', 'name');
-            $this->price_fk_list_price_to_string = implode(', ', $values);
+            $values = PriceList::where('id', 'in', $price_fk_price_list_to_string)->getIndexedArray('name', 'name');
+            $this->price_fk_price_list_to_string = implode(', ', $values);
         }
         else
         {
-            $this->price_fk_list_price_to_string = $price_fk_list_price_to_string;
+            $this->price_fk_price_list_to_string = $price_fk_price_list_to_string;
         }
 
-        $this->vdata['price_fk_list_price_to_string'] = $this->price_fk_list_price_to_string;
+        $this->vdata['price_fk_price_list_to_string'] = $this->price_fk_price_list_to_string;
     }
 
-    public function get_price_fk_list_price_to_string()
+    public function get_price_fk_price_list_to_string()
     {
-        if(!empty($this->price_fk_list_price_to_string))
+        if(!empty($this->price_fk_price_list_to_string))
         {
-            return $this->price_fk_list_price_to_string;
+            return $this->price_fk_price_list_to_string;
         }
     
-        $values = Price::where('list_price', '=', $this->id)->getIndexedArray('list_price','{fk_list_price->name}');
+        $values = Price::where('price_list', '=', $this->id)->getIndexedArray('price_list','{fk_price_list->name}');
         return implode(', ', $values);
     }
 

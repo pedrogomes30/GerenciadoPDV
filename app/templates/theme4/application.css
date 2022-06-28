@@ -1589,6 +1589,14 @@ div#adianti_tab_content:empty {
 .card-body [widget="bootstrapformbuilder"]:not(.bContainer-fieldset) .card-body .tab-pane{
     padding:10px !important;
 }
+
+.tfullcalendar{
+    background-color: #ffffff;
+}
+
+.inner-icon-container {
+    position: relative;
+}
 @media (max-width: 576px) {
     #adianti_right_panel.right-panel {
     width: 100% !important;
@@ -1861,17 +1869,6 @@ hr.tseparator-divisor{
 
 
 
-.user-info .image img { display: none; }
-.user-info .image {
-    background: url('../../../app/images/builderLayoutIcon.png');
-    color: transparent;
-    border-radius: 50%;
-    height: 42px;
-    width: 42px;
-    background-position: center;
-    background-size: cover;
-    background-repeat: no-repeat;
-}
 
 .builder-template-layout .user-info .image img { display: none; }
 .builder-template-layout .user-info .image {

@@ -37,24 +37,29 @@ class ProductValidateDateList extends TPage
         $id = new TEntry('id');
         $lote = new TEntry('lote');
         $dt_validate = new TDate('dt_validate');
-        $product = new TDBCombo('product', 'pos_product', 'Product', 'id', '{description}','description asc'  );
+        $dt_validate_to = new TDate('dt_validate_to');
+        $product = new TDBCombo('product', 'pos_product', 'Product', 'id', '{sku} {description} {description_variation} {reference} ','description asc'  );
 
 
         $lote->setMaxLength(50);
-        $dt_validate->setMask('dd/mm/yyyy');
-        $dt_validate->setDatabaseMask('yyyy-mm-dd');
         $product->enableSearch();
+        $dt_validate->setMask('dd/mm/yyyy');
+        $dt_validate_to->setMask('dd/mm/yyyy');
+
+        $dt_validate->setDatabaseMask('yyyy-mm-dd');
+        $dt_validate_to->setDatabaseMask('yyyy-mm-dd');
+
         $id->setSize(100);
         $lote->setSize('100%');
         $product->setSize('100%');
-        $dt_validate->setSize(110);
+        $dt_validate->setSize('100%');
+        $dt_validate_to->setSize('100%');
 
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Lote:", null, '14px', null, '100%'),$lote],[new TLabel("Data validade (de):", null, '14px', null, '100%'),$dt_validate],[new TLabel("Data validade (até):", null, '14px', null, '100%'),$dt_validate_to]);
+        $row1->layout = [' col-sm-6 col-lg-2',' col-sm-6 col-lg-4',' col-sm-6 col-lg-3',' col-sm-2 col-lg-3'];
 
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Lote:", null, '14px', null, '100%'),$lote]);
-        $row1->layout = ['col-sm-6','col-sm-6'];
-
-        $row2 = $this->form->addFields([new TLabel("Dt validate:", null, '14px', null, '100%'),$dt_validate],[new TLabel("Product:", null, '14px', null, '100%'),$product]);
-        $row2->layout = ['col-sm-6','col-sm-6'];
+        $row2 = $this->form->addFields([new TLabel("Produto:", null, '14px', null, '100%'),$product]);
+        $row2->layout = [' col-sm-6 col-lg-12'];
 
         // keep the form filled during navigation with session data
         $this->form->setData( TSession::getValue(__CLASS__.'_filter_data') );
@@ -80,18 +85,18 @@ class ProductValidateDateList extends TPage
         $this->datagrid->setHeight(320);
 
         $column_id = new TDataGridColumn('id', "Id", 'center' , '70px');
+        $column_fk_product_sku_fk_product_description_fk_product_description_variation_fk_product_reference = new TDataGridColumn('{fk_product->sku} {fk_product->description} {fk_product->description_variation} {fk_product->reference}', "Produto", 'left');
         $column_lote = new TDataGridColumn('lote', "Lote", 'left');
-        $column_dt_validate = new TDataGridColumn('dt_validate', "Dt validate", 'left');
-        $column_fk_product_description = new TDataGridColumn('fk_product->description', "Product", 'left');
+        $column_dt_validate = new TDataGridColumn('dt_validate', "Validade", 'left');
 
         $order_id = new TAction(array($this, 'onReload'));
         $order_id->setParameter('order', 'id');
         $column_id->setAction($order_id);
 
         $this->datagrid->addColumn($column_id);
+        $this->datagrid->addColumn($column_fk_product_sku_fk_product_description_fk_product_description_variation_fk_product_reference);
         $this->datagrid->addColumn($column_lote);
         $this->datagrid->addColumn($column_dt_validate);
-        $this->datagrid->addColumn($column_fk_product_description);
 
         $action_onEdit = new TDataGridAction(array('ProductValidateDateForm', 'onEdit'));
         $action_onEdit->setUseButton(false);
@@ -496,7 +501,13 @@ class ProductValidateDateList extends TPage
         if (isset($data->dt_validate) AND ( (is_scalar($data->dt_validate) AND $data->dt_validate !== '') OR (is_array($data->dt_validate) AND (!empty($data->dt_validate)) )) )
         {
 
-            $filters[] = new TFilter('dt_validate', '=', $data->dt_validate);// create the filter 
+            $filters[] = new TFilter('dt_validate', '>=', $data->dt_validate);// create the filter 
+        }
+
+        if (isset($data->dt_validate_to) AND ( (is_scalar($data->dt_validate_to) AND $data->dt_validate_to !== '') OR (is_array($data->dt_validate_to) AND (!empty($data->dt_validate_to)) )) )
+        {
+
+            $filters[] = new TFilter('dt_validate', '<=', $data->dt_validate_to);// create the filter 
         }
 
         if (isset($data->product) AND ( (is_scalar($data->product) AND $data->product !== '') OR (is_array($data->product) AND (!empty($data->product)) )) )

@@ -1004,3 +1004,7 @@ div#adianti_tab_content:empty {
     margin: 0 26px 14px 26px;
     width: 100%;
 }
+
+.inner-icon-container {
+    position: relative;
+}

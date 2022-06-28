@@ -8,6 +8,7 @@ class ProductStorage extends TRecord
 
     private $fk_deposit;
     private $fk_product;
+    private $fk_store;
 
     
 
@@ -22,6 +23,7 @@ class ProductStorage extends TRecord
         parent::addAttribute('max_storage');
         parent::addAttribute('deposit');
         parent::addAttribute('product');
+        parent::addAttribute('store');
             
     }
 
@@ -76,6 +78,32 @@ class ProductStorage extends TRecord
     
         // returns the associated object
         return $this->fk_product;
+    }
+    /**
+     * Method set_store
+     * Sample of usage: $var->store = $object;
+     * @param $object Instance of Store
+     */
+    public function set_fk_store(Store $object)
+    {
+        $this->fk_store = $object;
+        $this->store = $object->id;
+    }
+
+    /**
+     * Method get_fk_store
+     * Sample of usage: $var->fk_store->attribute;
+     * @returns Store instance
+     */
+    public function get_fk_store()
+    {
+        TTransaction::open('pos_system');
+        // loads the associated object
+        if (empty($this->fk_store))
+            $this->fk_store = new Store($this->store);
+        TTransaction::close();
+        // returns the associated object
+        return $this->fk_store;
     }
 
     /**

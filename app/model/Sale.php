@@ -9,7 +9,7 @@ class Sale extends TRecord
     private $fk_store;
     private $fk_employee_cashier;
     private $fk_cashier;
-    private $fk_client;
+    private $fk_customer;
     private $fk_salesman;
     private $fk_payment_method;
     private $fk_status;
@@ -25,11 +25,12 @@ class Sale extends TRecord
         parent::addAttribute('number');
         parent::addAttribute('products_value');
         parent::addAttribute('payments_value');
+        parent::addAttribute('discont_value');
         parent::addAttribute('total_value');
+        parent::addAttribute('employee_sale');
         parent::addAttribute('sale_date');
         parent::addAttribute('invoiced');
         parent::addAttribute('invoice_ambient');
-        parent::addAttribute('discont_value');
         parent::addAttribute('obs');
         parent::addAttribute('invoice_number');
         parent::addAttribute('invoice_serie');
@@ -39,7 +40,7 @@ class Sale extends TRecord
         parent::addAttribute('store');
         parent::addAttribute('employee_cashier');
         parent::addAttribute('cashier');
-        parent::addAttribute('client');
+        parent::addAttribute('customer');
         parent::addAttribute('salesman');
         parent::addAttribute('status');
             
@@ -128,26 +129,26 @@ class Sale extends TRecord
      * Sample of usage: $var->user = $object;
      * @param $object Instance of User
      */
-    public function set_fk_client(User $object)
+    public function set_fk_customer(User $object)
     {
-        $this->fk_client = $object;
-        $this->client = $object->id;
+        $this->fk_customer = $object;
+        $this->customer = $object->id;
     }
 
     /**
-     * Method get_fk_client
-     * Sample of usage: $var->fk_client->attribute;
+     * Method get_fk_customer
+     * Sample of usage: $var->fk_customer->attribute;
      * @returns User instance
      */
-    public function get_fk_client()
+    public function get_fk_customer()
     {
         TTransaction::open('pos_system');
         // loads the associated object
-        if (empty($this->fk_client))
-            $this->fk_client = new User($this->client);
+        if (empty($this->fk_customer))
+            $this->fk_customer = new User($this->customer);
         TTransaction::close();
         // returns the associated object
-        return $this->fk_client;
+        return $this->fk_customer;
     }
     /**
      * Method set_user

@@ -5,7 +5,7 @@ class TipoCadastroForm extends TPage
     protected $form;
     private $formFields = [];
     private static $database = 'pos_product';
-    private static $activeRecord = 'TipoCadastro';
+    private static $activeRecord = 'ProductType';
     private static $primaryKey = 'id';
     private static $formName = 'form_TipoCadastroForm';
 
@@ -29,17 +29,17 @@ class TipoCadastroForm extends TPage
 
 
         $id = new TEntry('id');
-        $descricao = new TEntry('descricao');
+        $description = new TEntry('description');
 
-        $descricao->addValidation("Descricao", new TRequiredValidator()); 
+        $description->addValidation("Descricao", new TRequiredValidator()); 
 
         $id->setEditable(false);
-        $descricao->setMaxLength(200);
+        $description->setMaxLength(200);
         $id->setSize(100);
-        $descricao->setSize('100%');
+        $description->setSize('100%');
 
 
-        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Descrição:", null, '14px', null, '100%'),$descricao]);
+        $row1 = $this->form->addFields([new TLabel("Id:", null, '14px', null, '100%'),$id],[new TLabel("Descrição:", null, '14px', null, '100%'),$description]);
         $row1->layout = [' col-sm-6 col-lg-2',' col-sm-6 col-lg-10'];
 
         // create the form actions
@@ -78,7 +78,7 @@ class TipoCadastroForm extends TPage
 
             $this->form->validate(); // validate form data
 
-            $object = new TipoCadastro(); // create an empty object 
+            $object = new ProductType(); // create an empty object 
 
             $data = $this->form->getData(); // get form data as array
             $object->fromArray( (array) $data); // load the object with data
@@ -122,7 +122,7 @@ class TipoCadastroForm extends TPage
                 $key = $param['key'];  // get the parameter $key
                 TTransaction::open(self::$database); // open a transaction
 
-                $object = new TipoCadastro($key); // instantiates the Active Record 
+                $object = new ProductType($key); // instantiates the Active Record 
 
                 $this->form->setData($object); // fill the form 
 

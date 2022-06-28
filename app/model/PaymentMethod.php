@@ -8,9 +8,13 @@ class PaymentMethod extends TRecord
 
     const pix = '1';
     const credit_card = '2';
-    const debit_card = '3';
-    const store_credit = '4';
-    const money = '5';
+    const debit_card = '4';
+    const store_credit = '5';
+    const money = '6';
+    const mix = '7';
+    const date_credit_card = '3';
+    const wallet_digital = '8';
+    const cashback = '9';
 
     
 
@@ -93,7 +97,7 @@ class PaymentMethod extends TRecord
     {
         if(is_array($payment_method_store_fk_store_to_string))
         {
-            $values = Store::where('id', 'in', $payment_method_store_fk_store_to_string)->getIndexedArray('social_name', 'social_name');
+            $values = Store::where('id', 'in', $payment_method_store_fk_store_to_string)->getIndexedArray('fantasy_name', 'fantasy_name');
             $this->payment_method_store_fk_store_to_string = implode(', ', $values);
         }
         else
@@ -111,7 +115,7 @@ class PaymentMethod extends TRecord
             return $this->payment_method_store_fk_store_to_string;
         }
     
-        $values = PaymentMethodStore::where('method', '=', $this->id)->getIndexedArray('store','{fk_store->social_name}');
+        $values = PaymentMethodStore::where('method', '=', $this->id)->getIndexedArray('store','{fk_store->fantasy_name}');
         return implode(', ', $values);
     }
 

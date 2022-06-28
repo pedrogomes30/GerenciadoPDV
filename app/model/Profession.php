@@ -39,7 +39,7 @@ class Profession extends TRecord
     {
         if(is_array($user_fk_origin_store_to_string))
         {
-            $values = Store::where('id', 'in', $user_fk_origin_store_to_string)->getIndexedArray('social_name', 'social_name');
+            $values = Store::where('id', 'in', $user_fk_origin_store_to_string)->getIndexedArray('fantasy_name', 'fantasy_name');
             $this->user_fk_origin_store_to_string = implode(', ', $values);
         }
         else
@@ -57,7 +57,7 @@ class Profession extends TRecord
             return $this->user_fk_origin_store_to_string;
         }
     
-        $values = User::where('profession', '=', $this->id)->getIndexedArray('origin_store','{fk_origin_store->social_name}');
+        $values = User::where('profession', '=', $this->id)->getIndexedArray('origin_store','{fk_origin_store->fantasy_name}');
         return implode(', ', $values);
     }
 
@@ -65,7 +65,7 @@ class Profession extends TRecord
     {
         if(is_array($user_fk_current_store_to_string))
         {
-            $values = Store::where('id', 'in', $user_fk_current_store_to_string)->getIndexedArray('social_name', 'social_name');
+            $values = Store::where('id', 'in', $user_fk_current_store_to_string)->getIndexedArray('fantasy_name', 'fantasy_name');
             $this->user_fk_current_store_to_string = implode(', ', $values);
         }
         else
@@ -83,7 +83,7 @@ class Profession extends TRecord
             return $this->user_fk_current_store_to_string;
         }
     
-        $values = User::where('profession', '=', $this->id)->getIndexedArray('current_store','{fk_current_store->social_name}');
+        $values = User::where('profession', '=', $this->id)->getIndexedArray('current_store','{fk_current_store->fantasy_name}');
         return implode(', ', $values);
     }
 

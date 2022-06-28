@@ -1,18 +1,20 @@
-INSERT INTO cashier (id,name,cashier_type,user_authenticated,store) VALUES (1,'EXEM CAIXA1',1,null,1); 
+INSERT INTO payment_method (id,method,alias,issue) VALUES (1,'pix','Pix',true); 
 
-INSERT INTO cashier (id,name,cashier_type,user_authenticated,store) VALUES (2,'EXEM CAIXA2',1,null,1); 
+INSERT INTO payment_method (id,method,alias,issue) VALUES (2,'credit card ','Cartão De Credito a Vista',true); 
 
-INSERT INTO cashier (id,name,cashier_type,user_authenticated,store) VALUES (3,'EXEM CAIXA3',1,null,1); 
+INSERT INTO payment_method (id,method,alias,issue) VALUES (4,'debit card','Cartão De Débito',true); 
 
-INSERT INTO payment_method (id,method,alias,issue) VALUES (1,'pix','PagamentoInstantaneoPix',true); 
+INSERT INTO payment_method (id,method,alias,issue) VALUES (5,'store credit','Crédito Loja',true); 
 
-INSERT INTO payment_method (id,method,alias,issue) VALUES (2,'credit card ','CartaoDeCredito',true); 
+INSERT INTO payment_method (id,method,alias,issue) VALUES (6,'money','Dinheiro',false); 
 
-INSERT INTO payment_method (id,method,alias,issue) VALUES (3,'debit card','CartaoDeDebito',true); 
+INSERT INTO payment_method (id,method,alias,issue) VALUES (7,'mix','Pagamento Misto',true); 
 
-INSERT INTO payment_method (id,method,alias,issue) VALUES (4,'store credit','CreditoLoja',true); 
+INSERT INTO payment_method (id,method,alias,issue) VALUES (3,'date credit card ','Cartão De Crédito Prazo',true); 
 
-INSERT INTO payment_method (id,method,alias,issue) VALUES (5,'money','Dinheiro',false); 
+INSERT INTO payment_method (id,method,alias,issue) VALUES (8,'wallet digital','Carteira Digital',true); 
+
+INSERT INTO payment_method (id,method,alias,issue) VALUES (9,'cashback','cashback',true); 
 
 INSERT INTO payment_method_store (id,method,store) VALUES (1,1,1); 
 
@@ -33,8 +35,6 @@ INSERT INTO profession (id,description,is_manager) VALUES (3,'Estoquista',false)
 INSERT INTO profession (id,description,is_manager) VALUES (4,'Aux. Administrativo',false); 
 
 INSERT INTO profession (id,description,is_manager) VALUES (5,'Administrador',true); 
-
-INSERT INTO store (id,social_name,abbreviation,cnpj,icon_url,fantasy_name,obs,state_inscription,municipal_inscription,icms,tax_regime,invoice_type,invoice_provider_id,production_csc_number,production_csc_id,production_invoice_serie,production_invoice_sequence,homologation_csc_number,homologation_csc_id,homologation_invoice_serie,homologation_invoice_sequence,certificate_password,store_group) VALUES (1,'social Example','EXEM','0000000000','','fantasy example','','','','','',1,'','','',null,null,'','',null,null,'',1); 
 
 INSERT INTO store_group (id,name,default_theme) VALUES (1,'Fashion Biju',null); 
 

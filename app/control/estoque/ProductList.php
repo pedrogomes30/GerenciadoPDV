@@ -66,6 +66,9 @@ class ProductList extends TPage
         $this->btn_onsearch = $btn_onsearch;
         $btn_onsearch->addStyleClass('btn-primary'); 
 
+        $btn_oncadastrar = $this->form->addAction("Cadastrar", new TAction([$this, 'onCadastrar'],['static' => 1]), 'fas:plus #4CAF50');
+        $this->btn_oncadastrar = $btn_oncadastrar;
+
         // creates a Datagrid
         $this->datagrid = new TDataGrid;
         $this->datagrid->disableHtmlConversion();
@@ -215,7 +218,6 @@ class ProductList extends TPage
             new TQuestion(AdiantiCoreTranslator::translate('Do you really want to delete ?'), $action);   
         }
     }
-
     public function onExportCsv($param = null) 
     {
         try
@@ -273,7 +275,6 @@ class ProductList extends TPage
             new TMessage('error', $e->getMessage()); // shows the exception error message
         }
     }
-
     public function onExportXls($param = null) 
     {
         try
@@ -365,7 +366,6 @@ class ProductList extends TPage
             new TMessage('error', $e->getMessage()); // shows the exception error message
         }
     }
-
     public function onExportPdf($param = null) 
     {
         try
@@ -407,7 +407,6 @@ class ProductList extends TPage
             new TMessage('error', $e->getMessage()); // shows the exception error message
         }
     }
-
     public function onExportXml($param = null) 
     {
         try
@@ -470,6 +469,19 @@ class ProductList extends TPage
         {
             new TMessage('error', $e->getMessage()); // shows the exception error message
             TTransaction::rollback(); // undo all pending operations
+        }
+    }
+    public function onCadastrar($param = null) 
+    {
+        try 
+        {
+            $pageParam = ['key'=>$param['key']]; // ex.: = ['key' => 10]
+            TApplication::loadPage('StatusProdutoFormList', 'onEdit', $pageParam);
+
+        }
+        catch (Exception $e) 
+        {
+            new TMessage('error', $e->getMessage());    
         }
     }
 

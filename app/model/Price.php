@@ -6,7 +6,7 @@ class Price extends TRecord
     const PRIMARYKEY = 'id';
     const IDPOLICY   =  'serial'; // {max, serial}
 
-    private $fk_list_price;
+    private $fk_price_list;
     private $fk_product;
 
     
@@ -18,9 +18,9 @@ class Price extends TRecord
     {
         parent::__construct($id, $callObjectLoad);
         parent::addAttribute('sell_price');
-        parent::addAttribute('cust_price');
+        parent::addAttribute('cost_price');
         parent::addAttribute('product');
-        parent::addAttribute('list_price');
+        parent::addAttribute('price_list');
             
     }
 
@@ -29,26 +29,26 @@ class Price extends TRecord
      * Sample of usage: $var->price_list = $object;
      * @param $object Instance of PriceList
      */
-    public function set_fk_list_price(PriceList $object)
+    public function set_fk_price_list(PriceList $object)
     {
-        $this->fk_list_price = $object;
-        $this->list_price = $object->id;
+        $this->fk_price_list = $object;
+        $this->price_list = $object->id;
     }
 
     /**
-     * Method get_fk_list_price
-     * Sample of usage: $var->fk_list_price->attribute;
+     * Method get_fk_price_list
+     * Sample of usage: $var->fk_price_list->attribute;
      * @returns PriceList instance
      */
-    public function get_fk_list_price()
+    public function get_fk_price_list()
     {
     
         // loads the associated object
-        if (empty($this->fk_list_price))
-            $this->fk_list_price = new PriceList($this->list_price);
+        if (empty($this->fk_price_list))
+            $this->fk_price_list = new PriceList($this->price_list);
     
         // returns the associated object
-        return $this->fk_list_price;
+        return $this->fk_price_list;
     }
     /**
      * Method set_product

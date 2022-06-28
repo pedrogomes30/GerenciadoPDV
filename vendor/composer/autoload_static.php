@@ -7,6 +7,10 @@ namespace Composer\Autoload;
 class ComposerStaticInit9ca02ded2ffb55c884817c3c88c86343
 {
     public static $prefixLengthsPsr4 = array (
+        'e' => 
+        array (
+            'eNotasGW\\Api\\' => 13,
+        ),
         'S' => 
         array (
             'Svg\\' => 4,
@@ -36,6 +40,10 @@ class ComposerStaticInit9ca02ded2ffb55c884817c3c88c86343
     );
 
     public static $prefixDirsPsr4 = array (
+        'eNotasGW\\Api\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/enotas/php-client-v2/src',
+        ),
         'Svg\\' => 
         array (
             0 => __DIR__ . '/..' . '/phenx/php-svg-lib/src/Svg',

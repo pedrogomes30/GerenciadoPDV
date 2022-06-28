@@ -6,8 +6,6 @@ class Store extends TRecord
     const PRIMARYKEY = 'id';
     const IDPOLICY   =  'serial'; // {max, serial}
 
-    const example = '1';
-
     private $fk_store_group;
 
     
@@ -21,14 +19,23 @@ class Store extends TRecord
         parent::addAttribute('social_name');
         parent::addAttribute('abbreviation');
         parent::addAttribute('cnpj');
-        parent::addAttribute('icon_url');
+        parent::addAttribute('dt_create');
         parent::addAttribute('fantasy_name');
+        parent::addAttribute('icon_url');
+        parent::addAttribute('email');
+        parent::addAttribute('fone');
+        parent::addAttribute('cep');
+        parent::addAttribute('city');
+        parent::addAttribute('address_complement');
+        parent::addAttribute('address_number');
+        parent::addAttribute('neighborhood');
+        parent::addAttribute('street');
         parent::addAttribute('obs');
+        parent::addAttribute('invoice_type');
         parent::addAttribute('state_inscription');
         parent::addAttribute('municipal_inscription');
         parent::addAttribute('icms');
         parent::addAttribute('tax_regime');
-        parent::addAttribute('invoice_type');
         parent::addAttribute('invoice_provider_id');
         parent::addAttribute('production_csc_number');
         parent::addAttribute('production_csc_id');
@@ -39,6 +46,7 @@ class Store extends TRecord
         parent::addAttribute('homologation_invoice_serie');
         parent::addAttribute('homologation_invoice_sequence');
         parent::addAttribute('certificate_password');
+        parent::addAttribute('certificate_validate');
         parent::addAttribute('store_group');
             
     }
@@ -152,15 +160,6 @@ class Store extends TRecord
         return SaleItem::getObjects( $criteria );
     }
     /**
-     * Method getPriceLists
-     */
-    public function getPriceLists()
-    {
-        $criteria = new TCriteria;
-        $criteria->add(new TFilter('store', '=', $this->id));
-        return PriceList::getObjects( $criteria );
-    }
-    /**
      * Method getUsers
      */
     public function getUsersByFkOriginStores()
@@ -177,6 +176,24 @@ class Store extends TRecord
         $criteria = new TCriteria;
         $criteria->add(new TFilter('current_store', '=', $this->id));
         return User::getObjects( $criteria );
+    }
+    /**
+     * Method getProductStorages
+     */
+    public function getProductStorages()
+    {
+        $criteria = new TCriteria;
+        $criteria->add(new TFilter('store', '=', $this->id));
+        return ProductStorage::getObjects( $criteria );
+    }
+    /**
+     * Method getPriceLists
+     */
+    public function getPriceLists()
+    {
+        $criteria = new TCriteria;
+        $criteria->add(new TFilter('store', '=', $this->id));
+        return PriceList::getObjects( $criteria );
     }
 
     public function set_cashier_fk_user_authenticated_to_string($cashier_fk_user_authenticated_to_string)
@@ -209,7 +226,7 @@ class Store extends TRecord
     {
         if(is_array($cashier_fk_store_to_string))
         {
-            $values = Store::where('id', 'in', $cashier_fk_store_to_string)->getIndexedArray('social_name', 'social_name');
+            $values = Store::where('id', 'in', $cashier_fk_store_to_string)->getIndexedArray('fantasy_name', 'fantasy_name');
             $this->cashier_fk_store_to_string = implode(', ', $values);
         }
         else
@@ -227,7 +244,7 @@ class Store extends TRecord
             return $this->cashier_fk_store_to_string;
         }
     
-        $values = Cashier::where('store', '=', $this->id)->getIndexedArray('store','{fk_store->social_name}');
+        $values = Cashier::where('store', '=', $this->id)->getIndexedArray('store','{fk_store->fantasy_name}');
         return implode(', ', $values);
     }
 
@@ -287,7 +304,7 @@ class Store extends TRecord
     {
         if(is_array($payment_method_store_fk_store_to_string))
         {
-            $values = Store::where('id', 'in', $payment_method_store_fk_store_to_string)->getIndexedArray('social_name', 'social_name');
+            $values = Store::where('id', 'in', $payment_method_store_fk_store_to_string)->getIndexedArray('fantasy_name', 'fantasy_name');
             $this->payment_method_store_fk_store_to_string = implode(', ', $values);
         }
         else
@@ -305,7 +322,7 @@ class Store extends TRecord
             return $this->payment_method_store_fk_store_to_string;
         }
     
-        $values = PaymentMethodStore::where('store', '=', $this->id)->getIndexedArray('store','{fk_store->social_name}');
+        $values = PaymentMethodStore::where('store', '=', $this->id)->getIndexedArray('store','{fk_store->fantasy_name}');
         return implode(', ', $values);
     }
 
@@ -391,7 +408,7 @@ class Store extends TRecord
     {
         if(is_array($user_store_transfer_fk_store_origin_to_string))
         {
-            $values = Store::where('id', 'in', $user_store_transfer_fk_store_origin_to_string)->getIndexedArray('social_name', 'social_name');
+            $values = Store::where('id', 'in', $user_store_transfer_fk_store_origin_to_string)->getIndexedArray('fantasy_name', 'fantasy_name');
             $this->user_store_transfer_fk_store_origin_to_string = implode(', ', $values);
         }
         else
@@ -409,7 +426,7 @@ class Store extends TRecord
             return $this->user_store_transfer_fk_store_origin_to_string;
         }
     
-        $values = UserStoreTransfer::where('store_origin', '=', $this->id)->getIndexedArray('store_origin','{fk_store_origin->social_name}');
+        $values = UserStoreTransfer::where('store_origin', '=', $this->id)->getIndexedArray('store_origin','{fk_store_origin->fantasy_name}');
         return implode(', ', $values);
     }
 
@@ -417,7 +434,7 @@ class Store extends TRecord
     {
         if(is_array($user_store_transfer_fk_store_destiny_to_string))
         {
-            $values = Store::where('id', 'in', $user_store_transfer_fk_store_destiny_to_string)->getIndexedArray('social_name', 'social_name');
+            $values = Store::where('id', 'in', $user_store_transfer_fk_store_destiny_to_string)->getIndexedArray('fantasy_name', 'fantasy_name');
             $this->user_store_transfer_fk_store_destiny_to_string = implode(', ', $values);
         }
         else
@@ -435,7 +452,7 @@ class Store extends TRecord
             return $this->user_store_transfer_fk_store_destiny_to_string;
         }
     
-        $values = UserStoreTransfer::where('store_origin', '=', $this->id)->getIndexedArray('store_destiny','{fk_store_destiny->social_name}');
+        $values = UserStoreTransfer::where('store_origin', '=', $this->id)->getIndexedArray('store_destiny','{fk_store_destiny->fantasy_name}');
         return implode(', ', $values);
     }
 
@@ -469,7 +486,7 @@ class Store extends TRecord
     {
         if(is_array($user_fk_origin_store_to_string))
         {
-            $values = Store::where('id', 'in', $user_fk_origin_store_to_string)->getIndexedArray('social_name', 'social_name');
+            $values = Store::where('id', 'in', $user_fk_origin_store_to_string)->getIndexedArray('fantasy_name', 'fantasy_name');
             $this->user_fk_origin_store_to_string = implode(', ', $values);
         }
         else
@@ -487,7 +504,7 @@ class Store extends TRecord
             return $this->user_fk_origin_store_to_string;
         }
     
-        $values = User::where('current_store', '=', $this->id)->getIndexedArray('origin_store','{fk_origin_store->social_name}');
+        $values = User::where('current_store', '=', $this->id)->getIndexedArray('origin_store','{fk_origin_store->fantasy_name}');
         return implode(', ', $values);
     }
 
@@ -495,7 +512,7 @@ class Store extends TRecord
     {
         if(is_array($user_fk_current_store_to_string))
         {
-            $values = Store::where('id', 'in', $user_fk_current_store_to_string)->getIndexedArray('social_name', 'social_name');
+            $values = Store::where('id', 'in', $user_fk_current_store_to_string)->getIndexedArray('fantasy_name', 'fantasy_name');
             $this->user_fk_current_store_to_string = implode(', ', $values);
         }
         else
@@ -513,7 +530,7 @@ class Store extends TRecord
             return $this->user_fk_current_store_to_string;
         }
     
-        $values = User::where('current_store', '=', $this->id)->getIndexedArray('current_store','{fk_current_store->social_name}');
+        $values = User::where('current_store', '=', $this->id)->getIndexedArray('current_store','{fk_current_store->fantasy_name}');
         return implode(', ', $values);
     }
 
@@ -540,6 +557,58 @@ class Store extends TRecord
         }
     
         $values = User::where('current_store', '=', $this->id)->getIndexedArray('profession','{fk_profession->id}');
+        return implode(', ', $values);
+    }
+
+    public function set_product_storage_fk_deposit_to_string($product_storage_fk_deposit_to_string)
+    {
+        if(is_array($product_storage_fk_deposit_to_string))
+        {
+            $values = Deposit::where('id', 'in', $product_storage_fk_deposit_to_string)->getIndexedArray('name', 'name');
+            $this->product_storage_fk_deposit_to_string = implode(', ', $values);
+        }
+        else
+        {
+            $this->product_storage_fk_deposit_to_string = $product_storage_fk_deposit_to_string;
+        }
+
+        $this->vdata['product_storage_fk_deposit_to_string'] = $this->product_storage_fk_deposit_to_string;
+    }
+
+    public function get_product_storage_fk_deposit_to_string()
+    {
+        if(!empty($this->product_storage_fk_deposit_to_string))
+        {
+            return $this->product_storage_fk_deposit_to_string;
+        }
+    
+        $values = ProductStorage::where('store', '=', $this->id)->getIndexedArray('deposit','{fk_deposit->name}');
+        return implode(', ', $values);
+    }
+
+    public function set_product_storage_fk_product_to_string($product_storage_fk_product_to_string)
+    {
+        if(is_array($product_storage_fk_product_to_string))
+        {
+            $values = Product::where('id', 'in', $product_storage_fk_product_to_string)->getIndexedArray('description', 'description');
+            $this->product_storage_fk_product_to_string = implode(', ', $values);
+        }
+        else
+        {
+            $this->product_storage_fk_product_to_string = $product_storage_fk_product_to_string;
+        }
+
+        $this->vdata['product_storage_fk_product_to_string'] = $this->product_storage_fk_product_to_string;
+    }
+
+    public function get_product_storage_fk_product_to_string()
+    {
+        if(!empty($this->product_storage_fk_product_to_string))
+        {
+            return $this->product_storage_fk_product_to_string;
+        }
+    
+        $values = ProductStorage::where('store', '=', $this->id)->getIndexedArray('product','{fk_product->description}');
         return implode(', ', $values);
     }
 

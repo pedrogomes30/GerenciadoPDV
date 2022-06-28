@@ -2,9 +2,13 @@
 
 use Adianti\Core\AdiantiApplicationConfig;
 use Adianti\Core\AdiantiCoreApplication;
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Headers: *");
-header('Content-Type: application/json; charset=utf-8');
+
+header('Access-Control-Allow-Origin: https://testeonline.adiantibuilder.com.br'); 
+header('Access-Control-Allow-Headers: *');
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {    
+   return 0;    
+}
 
 // initialization script
 require_once 'init.php';
