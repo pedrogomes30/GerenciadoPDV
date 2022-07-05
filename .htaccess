@@ -168,4 +168,3 @@ RewriteRule ^closure/([A-Za-z0-9]*)$ rest.php?class=closure&method=handle&id=$1&
 RewriteRule ^closure/([A-Za-z-_0-9]*)/([A-Za-z-_0-9]*)$ rest.php?class=closure&method=$2&id=$1&%{QUERY_STRING} [NC]
 RewriteRule ^closure$ rest.php?class=closure&method=handle&%{QUERY_STRING} [NC]
 
-Options -Indexes

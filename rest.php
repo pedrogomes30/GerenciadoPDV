@@ -1,6 +1,12 @@
 <?php
-header('Content-Type: application/json; charset=utf-8');
-header('Access-Control-Allow-Origin: *');
+header ("Access-Control-Allow-Origin: *");
+header ("Access-Control-Expose-Headers: Content-Length, json");
+header ("Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS");
+header ("Access-Control-Allow-Headers: *");
+
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {    
+    return http_response_code(200);  
+ }
 
 // initialization script
 require_once 'init.php';
@@ -23,7 +29,7 @@ class AdiantiRestServer
         {
             if (empty($headers['Authorization']))
             {
-                throw new Exception( _t('Authorization error') );
+                throw new Exception( _t('Authorization error : empty'.json_encode($headers)) );
             }
             else
             {
@@ -37,7 +43,7 @@ class AdiantiRestServer
                     if ($ini['general']['rest_key'] !== substr($headers['Authorization'], 6))
                     {
                         http_response_code(401);
-                        return json_encode( array('status' => 'error', 'data' => _t('Authorization error')));
+                        return json_encode( array('status' => 'error', 'data' => _t('Authorization error : no rest key')));
                     }
                 }
                 else if (substr($headers['Authorization'], 0, 6) == 'Bearer')
@@ -47,7 +53,7 @@ class AdiantiRestServer
                 else
                 {
                     http_response_code(403);
-                    throw new Exception( _t('Authorization error') );
+                    throw new Exception( _t('Authorization error : key invalid') );
                 }
             }
             

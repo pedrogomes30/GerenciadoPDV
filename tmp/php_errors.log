@@ -1,0 +1,3 @@
+[01-Jul-2022 09:55:41 America/Sao_Paulo] PHP Warning:  Array to string conversion in /var/www/html/gerenciador-PDV-Adianti/rest.php on line 83
+[01-Jul-2022 09:55:54 America/Sao_Paulo] PHP Warning:  Array to string conversion in /var/www/html/gerenciador-PDV-Adianti/rest.php on line 83
+[04-Jul-2022 17:48:19 America/Sao_Paulo] PHP Warning:  Attempt to read property "fileName" on null in /var/www/html/gerenciador-PDV-Adianti/app/control/sistema/importControl.php on line 337

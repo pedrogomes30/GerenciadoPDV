@@ -3,12 +3,14 @@
 use Adianti\Core\AdiantiApplicationConfig;
 use Adianti\Core\AdiantiCoreApplication;
 
-header('Access-Control-Allow-Origin: https://testeonline.adiantibuilder.com.br'); 
-header('Access-Control-Allow-Headers: *');
+header ("Access-Control-Allow-Origin: *");
+header ("Access-Control-Expose-Headers: Content-Length, json");
+header ("Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS");
+header ("Access-Control-Allow-Headers: *");
 
-if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {    
-   return 0;    
-}
+// if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {    
+//    return http_response_code(200);  
+// }
 
 // initialization script
 require_once 'init.php';

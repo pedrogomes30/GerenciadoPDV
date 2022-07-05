@@ -22,7 +22,9 @@ class ApplicationAuthenticationRestService
             "usermail" => $user->email,
             "expires" => strtotime("+ 3 hours")
         );
-        
-        return JWT::encode($token, $key);
+        $return                 = array();
+        $return['access_token']      = JWT::encode($token, $key);
+        $return['expires']      = $token['expires'];
+        return $return;
     }
 }
