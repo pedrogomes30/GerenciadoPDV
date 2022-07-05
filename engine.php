@@ -31,13 +31,14 @@ class TApplication extends AdiantiCoreApplication
             
             $class  = isset($_REQUEST['class']) ? $_REQUEST['class'] : '';
             $public = in_array($class, $ini['permission']['public_classes']);
+            $public_mobile = in_array($class, array_keys($ini['user_public_pages']??[]));
             $debug  = is_null($debug)? $ini['general']['debug'] : $debug;
             if (TSession::getValue('logged')) // logged
             {
                 $programs = (array) TSession::getValue('programs'); // programs with permission
                 $programs = array_merge($programs, self::getDefaultPermissions());
                 
-                if( isset($programs[$class]) OR $public )
+                if( isset($programs[$class]) OR $public OR $public_mobile)
                 {
                     parent::run($debug);
                 }

@@ -19,7 +19,7 @@ FOREIGN KEY(cest_ncm_default) REFERENCES cest_ncm(id)) ;
 
 CREATE TABLE cest( 
       id  INTEGER    NOT NULL  , 
-      description varchar  (255)   NOT NULL  , 
+      description varchar  (800)   NOT NULL  , 
       number varchar  (10)   NOT NULL  , 
  PRIMARY KEY (id)) ; 
 
@@ -31,6 +31,27 @@ CREATE TABLE cest_ncm(
 FOREIGN KEY(cest) REFERENCES cest(id),
 FOREIGN KEY(ncm) REFERENCES ncm(id)) ; 
 
+CREATE TABLE cupom( 
+      id  INTEGER    NOT NULL  , 
+      with_client varchar  (30)   , 
+      code varchar  (8)   NOT NULL  , 
+      description varchar  (100)   NOT NULL  , 
+      value double   NOT NULL  , 
+      all_products text   NOT NULL    DEFAULT '0', 
+      acumulate text   NOT NULL    DEFAULT '0', 
+      percent text   NOT NULL    DEFAULT '0', 
+      quantity int   NOT NULL    DEFAULT 0, 
+ PRIMARY KEY (id)) ; 
+
+CREATE TABLE cupom_products( 
+      id  INTEGER    NOT NULL  , 
+      product int   NOT NULL  , 
+      cupom int   NOT NULL  , 
+      active text   NOT NULL    DEFAULT '1', 
+ PRIMARY KEY (id),
+FOREIGN KEY(product) REFERENCES product(id),
+FOREIGN KEY(cupom) REFERENCES cupom(id)) ; 
+
 CREATE TABLE deposit( 
       id  INTEGER    NOT NULL  , 
       name varchar  (50)   NOT NULL  , 
@@ -39,7 +60,7 @@ CREATE TABLE deposit(
 
 CREATE TABLE ncm( 
       id  INTEGER    NOT NULL  , 
-      description varchar  (255)   NOT NULL  , 
+      description varchar  (800)   NOT NULL  , 
       number varchar  (10)   NOT NULL  , 
  PRIMARY KEY (id)) ; 
 
@@ -55,7 +76,7 @@ FOREIGN KEY(product) REFERENCES product(id)) ;
 
 CREATE TABLE price_list( 
       id  INTEGER    NOT NULL  , 
-      name varchar  (30)   NOT NULL  , 
+      name varchar  (50)   NOT NULL  , 
       store int   , 
  PRIMARY KEY (id)) ; 
 

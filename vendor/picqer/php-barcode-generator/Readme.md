@@ -1,5 +1,5 @@
 # PHP Barcode Generator 
-[![Build Status](https://travis-ci.org/picqer/php-barcode-generator.svg?branch=main)](https://travis-ci.org/picqer/php-barcode-generator) [![Github Actions](https://github.com/picqer/php-barcode-generator/workflows/phpunit/badge.svg)](https://travis-ci.org/picqer/php-barcode-generator) [![Total Downloads](https://poser.pugx.org/picqer/php-barcode-generator/downloads)](https://packagist.org/packages/picqer/php-barcode-generator)
+[![Build Status](https://travis-ci.org/picqer/php-barcode-generator.svg?branch=master)](https://travis-ci.org/picqer/php-barcode-generator) [![Github Actions](https://github.com/picqer/php-barcode-generator/workflows/phpunit/badge.svg)](https://travis-ci.org/picqer/php-barcode-generator) [![Total Downloads](https://poser.pugx.org/picqer/php-barcode-generator/downloads)](https://packagist.org/packages/picqer/php-barcode-generator)
 
 This is an easy to use, non-bloated, framework independent, barcode generator in PHP.
 
@@ -53,11 +53,10 @@ file_put_contents('barcode.png', $generator->getBarcode('081231723897', $generat
 
 ## Image types
 ```php
-$generatorSVG = new Picqer\Barcode\BarcodeGeneratorSVG(); // Vector based SVG
-$generatorPNG = new Picqer\Barcode\BarcodeGeneratorPNG(); // Pixel based PNG
-$generatorJPG = new Picqer\Barcode\BarcodeGeneratorJPG(); // Pixel based JPG
-$generatorHTML = new Picqer\Barcode\BarcodeGeneratorHTML(); // Pixel based HTML
-$generatorHTML = new Picqer\Barcode\BarcodeGeneratorDynamicHTML(); // Vector based HTML
+$generatorSVG = new Picqer\Barcode\BarcodeGeneratorSVG();
+$generatorPNG = new Picqer\Barcode\BarcodeGeneratorPNG();
+$generatorJPG = new Picqer\Barcode\BarcodeGeneratorJPG();
+$generatorHTML = new Picqer\Barcode\BarcodeGeneratorHTML();
 ```
 
 ## Accepted barcode types
@@ -65,7 +64,6 @@ These barcode types are supported. All types support different character sets or
 
 Most used types are TYPE_CODE_128 and TYPE_CODE_39. Because of the best scanner support, variable length and most chars supported.
 
-- TYPE_CODE_32 (italian pharmaceutical code 'MINSAN')
 - TYPE_CODE_39
 - TYPE_CODE_39_CHECKSUM
 - TYPE_CODE_39E

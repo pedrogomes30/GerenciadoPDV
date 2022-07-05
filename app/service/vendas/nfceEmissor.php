@@ -48,7 +48,6 @@ class nfceEmissor
         
     }
     
-    
     public static function newNfce($sale,$settings)
     {
         $itemsArray                         = array();
@@ -148,9 +147,13 @@ class nfceEmissor
                  'itens' => $itemsArray,
             	 'informacoesAdicionais' => $nfceSettings['informacoes_adicionais']." numero da venda: ".$sale->number,
             ];
+        /* -- SENDBOX DOES'T WORK, TEST IN SERVER
         $result = eNotasApi::sendNfce($store->invoice_provider_id,$nfceArray);
         var_dump($result);
         return $result;
+        */
+        var_dump($nfceArray);
+        return $sale;
         if(isset($settings['customer'])){
             $customer                       = $settings['customer'];
             $customerArray['tipoPessoa']    = $customer->document_type;

@@ -936,6 +936,11 @@ class BootstrapFormBuilder implements AdiantiFormInterface
         $field_wrapper = new TElement('div');
         $field_wrapper->{'class'} = 'fb-inline-field-container ' . ((($field instanceof TField) and ($has_underline)) ? 'form-line' : '');
         $field_wrapper->{'style'} = "display: {$display};vertical-align:top;" . ($display=='inline-block'?'float:left':'');
+
+        if ($field instanceof TField)
+        {
+            $field_wrapper->{'wrapped-widget'} = $field->{'widget'};
+        }
         
         if (!empty($default_field_size))
         {

@@ -24,7 +24,7 @@ CREATE TABLE system_sql_log (
     logdate timestamp,
     login TEXT,
     database_name TEXT,
-    sql_command TEXT,
+    sql_command LONGTEXT,
     statement_type TEXT,
     access_ip varchar(45),
     transaction_id TEXT,
@@ -67,7 +67,7 @@ CREATE TABLE system_request_log (
     request_method TEXT,
     query_string TEXT,
     request_headers TEXT,
-    request_body TEXT,
+    request_body LONGTEXT,
     request_duration INT
 );
 

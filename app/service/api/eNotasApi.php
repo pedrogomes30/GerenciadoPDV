@@ -5,7 +5,7 @@ use eNotasGW\Api\fileParameter as fileParameter;
 
 class eNotasApi
 {
-    const ENOTAS_KEY            = 'TOKEN AQUI';
+    const ENOTAS_KEY            = 'NWZiZGM0YWUtMDdmYi00NTEzLThjYjMtNTMwMjAxYmYwNjAw';
     const INVOICE_AMBIENT       = false;//true = production // false = homologation
     
     

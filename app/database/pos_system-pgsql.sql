@@ -1,6 +1,6 @@
 CREATE TABLE cashier( 
       id  SERIAL    NOT NULL  , 
-      name varchar  (20)   NOT NULL  , 
+      name varchar  (50)   NOT NULL  , 
       cashier_type boolean   NOT NULL    DEFAULT '0', 
       user_authenticated integer   , 
       store integer   NOT NULL  , 

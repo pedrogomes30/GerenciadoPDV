@@ -140,7 +140,7 @@ class Frame
     /**
      * This frame's containing line box
      *
-     * @var LineBox|null
+     * @var LineBox
      */
     protected $_containing_line;
 
@@ -664,7 +664,7 @@ class Frame
     }
 
     /**
-     * @return LineBox|null
+     * @return LineBox
      */
     public function &get_containing_line()
     {
@@ -865,7 +865,9 @@ class Frame
             return $this->_is_cache["absolute"];
         }
 
-        return $this->_is_cache["absolute"] = $this->get_style()->is_absolute();
+        $position = $this->get_style()->position;
+
+        return $this->_is_cache["absolute"] = ($position === "absolute" || $position === "fixed");
     }
 
     /**
@@ -915,7 +917,6 @@ class Frame
     }
 
     /**
-     * @deprecated
      * @return bool
      */
     public function is_inline_block()
@@ -936,7 +937,7 @@ class Frame
             return $this->_is_cache["in_flow"];
         }
 
-        return $this->_is_cache["in_flow"] = $this->get_style()->is_in_flow();
+        return $this->_is_cache["in_flow"] = !($this->get_style()->float !== "none" || $this->is_absolute());
     }
 
     /**

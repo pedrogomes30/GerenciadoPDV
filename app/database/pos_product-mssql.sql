@@ -15,7 +15,7 @@ CREATE TABLE category(
 
 CREATE TABLE cest( 
       id  INT IDENTITY    NOT NULL  , 
-      description varchar  (255)   NOT NULL  , 
+      description varchar  (800)   NOT NULL  , 
       number varchar  (10)   NOT NULL  , 
  PRIMARY KEY (id)) ; 
 
@@ -23,6 +23,25 @@ CREATE TABLE cest_ncm(
       id  INT IDENTITY    NOT NULL  , 
       cest int   NOT NULL  , 
       ncm int   NOT NULL  , 
+ PRIMARY KEY (id)) ; 
+
+CREATE TABLE cupom( 
+      id  INT IDENTITY    NOT NULL  , 
+      with_client varchar  (30)   , 
+      code varchar  (8)   NOT NULL  , 
+      description varchar  (100)   NOT NULL  , 
+      value float   NOT NULL  , 
+      all_products bit   NOT NULL    DEFAULT '0', 
+      acumulate bit   NOT NULL    DEFAULT '0', 
+      percent bit   NOT NULL    DEFAULT '0', 
+      quantity int   NOT NULL    DEFAULT 0, 
+ PRIMARY KEY (id)) ; 
+
+CREATE TABLE cupom_products( 
+      id  INT IDENTITY    NOT NULL  , 
+      product int   NOT NULL  , 
+      cupom int   NOT NULL  , 
+      active bit   NOT NULL    DEFAULT '1', 
  PRIMARY KEY (id)) ; 
 
 CREATE TABLE deposit( 
@@ -33,7 +52,7 @@ CREATE TABLE deposit(
 
 CREATE TABLE ncm( 
       id  INT IDENTITY    NOT NULL  , 
-      description varchar  (255)   NOT NULL  , 
+      description varchar  (800)   NOT NULL  , 
       number varchar  (10)   NOT NULL  , 
  PRIMARY KEY (id)) ; 
 
@@ -47,7 +66,7 @@ CREATE TABLE price(
 
 CREATE TABLE price_list( 
       id  INT IDENTITY    NOT NULL  , 
-      name varchar  (30)   NOT NULL  , 
+      name varchar  (50)   NOT NULL  , 
       store int   , 
  PRIMARY KEY (id)) ; 
 
@@ -132,6 +151,8 @@ CREATE TABLE provider(
 ALTER TABLE category ADD CONSTRAINT fk_category_cest_ncm FOREIGN KEY (cest_ncm_default) references cest_ncm(id); 
 ALTER TABLE cest_ncm ADD CONSTRAINT fk_cest_ncm_cest FOREIGN KEY (cest) references cest(id); 
 ALTER TABLE cest_ncm ADD CONSTRAINT fk_cest_ncm_ncm FOREIGN KEY (ncm) references ncm(id); 
+ALTER TABLE cupom_products ADD CONSTRAINT fk_cupom_products FOREIGN KEY (product) references product(id); 
+ALTER TABLE cupom_products ADD CONSTRAINT fk_cupom_products_cupom FOREIGN KEY (cupom) references cupom(id); 
 ALTER TABLE price ADD CONSTRAINT fk_price_list_price FOREIGN KEY (price_list) references price_list(id); 
 ALTER TABLE price ADD CONSTRAINT fk_price_product FOREIGN KEY (product) references product(id); 
 ALTER TABLE product ADD CONSTRAINT fk_product_category FOREIGN KEY (category) references category(id); 

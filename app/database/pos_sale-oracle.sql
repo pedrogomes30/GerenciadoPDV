@@ -1,3 +1,10 @@
+CREATE TABLE item_cupom( 
+      id number(10)    NOT NULL , 
+      value binary_double    NOT NULL , 
+      sale_item number(10)    NOT NULL , 
+      cupom number(10)    NOT NULL , 
+ PRIMARY KEY (id)) ; 
+
 CREATE TABLE sale( 
       id number(10)    NOT NULL , 
       number varchar  (30)    NOT NULL , 
@@ -52,12 +59,29 @@ CREATE TABLE status(
  PRIMARY KEY (id)) ; 
 
  
+ ALTER TABLE sale ADD UNIQUE (number);
  ALTER TABLE status ADD UNIQUE (description);
   
- ALTER TABLE sale ADD CONSTRAINT fk_sale_status FOREIGN KEY (status) references status(id); 
+ ALTER TABLE item_cupom ADD CONSTRAINT fk_item_cupom_Item FOREIGN KEY (sale_item) references sale_item(id); 
+ALTER TABLE sale ADD CONSTRAINT fk_sale_status FOREIGN KEY (status) references status(id); 
 ALTER TABLE sale_item ADD CONSTRAINT fk_sale_item_sale FOREIGN KEY (sale) references sale(id); 
 ALTER TABLE sale_payment ADD CONSTRAINT fk_payment_sale FOREIGN KEY (sale) references sale(id); 
- CREATE SEQUENCE sale_id_seq START WITH 1 INCREMENT BY 1; 
+ CREATE SEQUENCE item_cupom_id_seq START WITH 1 INCREMENT BY 1; 
+
+CREATE OR REPLACE TRIGGER item_cupom_id_seq_tr 
+
+BEFORE INSERT ON item_cupom FOR EACH ROW 
+
+WHEN 
+
+(NEW.id IS NULL) 
+
+BEGIN 
+
+SELECT item_cupom_id_seq.NEXTVAL INTO :NEW.id FROM DUAL; 
+
+END;
+CREATE SEQUENCE sale_id_seq START WITH 1 INCREMENT BY 1; 
 
 CREATE OR REPLACE TRIGGER sale_id_seq_tr 
 

@@ -40,6 +40,12 @@ INSERT INTO category (id,name,color,multiply,icon_category,cest_ncm_default) VAL
 
 INSERT INTO category (id,name,color,multiply,icon_category,cest_ncm_default) VALUES (21,'INVERNO','#FD03BE',1,'',1); 
 
+INSERT INTO cupom (id,with_client,code,description,value,all_products,acumulate,percent,quantity) VALUES (1,'','#AVAR','aplica 10% em um produto avariado',10,false,true,true,0); 
+
+INSERT INTO cupom (id,with_client,code,description,value,all_products,acumulate,percent,quantity) VALUES (2,'funcionario','#FUNC','aplica 15% na compra de um funcionário',15,true,false,true,0); 
+
+INSERT INTO cupom (id,with_client,code,description,value,all_products,acumulate,percent,quantity) VALUES (3,'funcionarioParceiro','#PARC','aplica 5% na compra de um funcionário de loja parceira.',5,true,true,true,0); 
+
 INSERT INTO price_list (id,name,store) VALUES (1,'TABELA PADRAO',null); 
 
 INSERT INTO product_status (id,status) VALUES (1,'ATIVO'); 

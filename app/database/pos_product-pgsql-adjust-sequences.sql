@@ -2,6 +2,8 @@ SELECT setval('brand_id_seq', coalesce(max(id),0) + 1, false) FROM brand;
 SELECT setval('category_id_seq', coalesce(max(id),0) + 1, false) FROM category;
 SELECT setval('cest_id_seq', coalesce(max(id),0) + 1, false) FROM cest;
 SELECT setval('cest_ncm_id_seq', coalesce(max(id),0) + 1, false) FROM cest_ncm;
+SELECT setval('cupom_id_seq', coalesce(max(id),0) + 1, false) FROM cupom;
+SELECT setval('cupom_products_id_seq', coalesce(max(id),0) + 1, false) FROM cupom_products;
 SELECT setval('deposit_id_seq', coalesce(max(id),0) + 1, false) FROM deposit;
 SELECT setval('ncm_id_seq', coalesce(max(id),0) + 1, false) FROM ncm;
 SELECT setval('price_id_seq', coalesce(max(id),0) + 1, false) FROM price;

@@ -162,5 +162,41 @@ class SaleItem extends TRecord
         return $this->fk_product_storage;
     }
 
+    /**
+     * Method getItemCupoms
+     */
+    public function getItemCupoms()
+    {
+        $criteria = new TCriteria;
+        $criteria->add(new TFilter('sale_item', '=', $this->id));
+        return ItemCupom::getObjects( $criteria );
+    }
+
+    public function set_item_cupom_fk_sale_item_to_string($item_cupom_fk_sale_item_to_string)
+    {
+        if(is_array($item_cupom_fk_sale_item_to_string))
+        {
+            $values = SaleItem::where('id', 'in', $item_cupom_fk_sale_item_to_string)->getIndexedArray('id', 'id');
+            $this->item_cupom_fk_sale_item_to_string = implode(', ', $values);
+        }
+        else
+        {
+            $this->item_cupom_fk_sale_item_to_string = $item_cupom_fk_sale_item_to_string;
+        }
+
+        $this->vdata['item_cupom_fk_sale_item_to_string'] = $this->item_cupom_fk_sale_item_to_string;
+    }
+
+    public function get_item_cupom_fk_sale_item_to_string()
+    {
+        if(!empty($this->item_cupom_fk_sale_item_to_string))
+        {
+            return $this->item_cupom_fk_sale_item_to_string;
+        }
+    
+        $values = ItemCupom::where('sale_item', '=', $this->id)->getIndexedArray('sale_item','{fk_sale_item->id}');
+        return implode(', ', $values);
+    }
+
 }
 

@@ -1,3 +1,10 @@
+CREATE TABLE item_cupom( 
+      id  INT IDENTITY    NOT NULL  , 
+      value float   NOT NULL  , 
+      sale_item int   NOT NULL  , 
+      cupom int   NOT NULL  , 
+ PRIMARY KEY (id)) ; 
+
 CREATE TABLE sale( 
       id  INT IDENTITY    NOT NULL  , 
       number varchar  (30)   NOT NULL  , 
@@ -52,9 +59,11 @@ CREATE TABLE status(
  PRIMARY KEY (id)) ; 
 
  
+ ALTER TABLE sale ADD UNIQUE (number);
  ALTER TABLE status ADD UNIQUE (description);
   
- ALTER TABLE sale ADD CONSTRAINT fk_sale_status FOREIGN KEY (status) references status(id); 
+ ALTER TABLE item_cupom ADD CONSTRAINT fk_item_cupom_Item FOREIGN KEY (sale_item) references sale_item(id); 
+ALTER TABLE sale ADD CONSTRAINT fk_sale_status FOREIGN KEY (status) references status(id); 
 ALTER TABLE sale_item ADD CONSTRAINT fk_sale_item_sale FOREIGN KEY (sale) references sale(id); 
 ALTER TABLE sale_payment ADD CONSTRAINT fk_payment_sale FOREIGN KEY (sale) references sale(id); 
 

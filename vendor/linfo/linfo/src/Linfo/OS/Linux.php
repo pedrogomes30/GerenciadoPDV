@@ -377,7 +377,7 @@ class Linux extends Unixcommon
         // Get partitions
         $partitions = [];
         $partitions_contents = Common::getContents('/proc/partitions');
-        if (@preg_match_all('/(\d+)\s+([a-z]{3}|nvme\d+n\d+|[a-z]+\d+)(p?\d+)$/m', $partitions_contents, $partitions_match, PREG_SET_ORDER) > 0) {
+        if (@preg_match_all('/(\d+)\s+([a-z]{3}|nvme\d+n\d+)(p?\d+)$/m', $partitions_contents, $partitions_match, PREG_SET_ORDER) > 0) {
             // Go through each match
             foreach ($partitions_match as $partition) {
                 $partitions[$partition[2]][] = array(
@@ -391,7 +391,7 @@ class Linux extends Unixcommon
         $drives = [];
 
         // Get actual drives
-        foreach ((array) @glob('/sys/block/*/device/uevent', GLOB_NOSORT) as $path) {
+        foreach ((array) @glob('/sys/block/*/device/model', GLOB_NOSORT) as $path) {
 
             // Parts of the path
             $parts = explode('/', $path);
@@ -406,19 +406,9 @@ class Linux extends Unixcommon
                 list(, $reads, $writes) = $statMatches;
             }
 
-            $type = '';
-
-            if (Common::getContents(dirname(dirname($path)).'/queue/rotational') == 0) {
-                if (Common::getContents(dirname($path).'/type') == 'SD') {
-                    $type = ' (SD)';
-                } else {
-                    $type = ' (SSD)';
-                }
-            }
-
             // Append this drive on
             $drives[] = array(
-                'name' => Common::getContents(dirname($path).'/model', 'Unknown').$type,
+                'name' => Common::getContents($path, 'Unknown').(Common::getContents(dirname(dirname($path)).'/queue/rotational') == 0 ? ' (SSD)' : ''),
                 'vendor' => Common::getContents(dirname($path).'/vendor', 'Unknown'),
                 'device' => '/dev/'.$parts[3],
                 'reads' => $reads,
@@ -689,13 +679,9 @@ class Linux extends Unixcommon
             $mount[2] = stripcslashes($mount[2]);
 
             // Get these
-            if (is_readable($mount[2])) {
-                $size = disk_total_space($mount[2]);
-                $free = disk_free_space($mount[2]);
-                $used = $size != false && $free != false ? $size - $free : false;
-            }else{
-                $size = $free = $used = false;
-            }
+            $size = @disk_total_space($mount[2]);
+            $free = @disk_free_space($mount[2]);
+            $used = $size != false && $free != false ? $size - $free : false;
 
             // If it's a symlink, find out where it really goes.
             // (using realpath instead of readlink because the former gives absolute paths)
@@ -706,7 +692,7 @@ class Linux extends Unixcommon
             }
 
             // Optionally get mount options
-            if (isset($this->settings['show']['mounts_options']) && $this->settings['show']['mounts_options'] && !in_array($mount[3], (array) $this->settings['hide']['fs_mount_options'])) {
+            if ($this->settings['show']['mounts_options'] && !in_array($mount[3], (array) $this->settings['hide']['fs_mount_options'])) {
                 $mount_options = explode(',', $mount[4]);
             } else {
                 $mount_options = [];
@@ -955,23 +941,13 @@ class Linux extends Unixcommon
             if (!$type) {
                 $type_contents = strtoupper(Common::getContents($path.'/device/modalias'));
                 list($type_match) = explode(':', $type_contents, 2);
-                $uevent_contents = @parse_ini_file($path.'/uevent');
-                $device_uevent_contents = @parse_ini_file($path.'/device/uevent');
 
-                if ($uevent_contents != false && isset($uevent_contents['DEVTYPE'])) {
-                  $type = ucfirst($uevent_contents['DEVTYPE']);
-                    if (in_array($type_match, array('PCI', 'USB'))){
-                        $type .= ' ('.$type_match.')';
-                    }
-                    if ($device_uevent_contents != false && isset($device_uevent_contents['DRIVER'])) {
-                        $type .= ' ('.$device_uevent_contents['DRIVER'].')';
-                    }
-                } elseif (in_array($type_match, array('PCI', 'USB'))) {
+                if (in_array($type_match, array('PCI', 'USB'))) {
                     $type = 'Ethernet ('.$type_match.')';
 
                     // Driver maybe?
-                    if ($device_uevent_contents != false && isset($device_uevent_contents['DRIVER'])) {
-                        $type .= ' ('.$device_uevent_contents['DRIVER'].')';
+                    if (($uevent_contents = @parse_ini_file($path.'/device/uevent')) && isset($uevent_contents['DRIVER'])) {
+                        $type .= ' ('.$uevent_contents['DRIVER'].')';
                     }
                 } elseif ($type_match == 'VIRTIO') {
                     $type = 'VirtIO';
@@ -1616,19 +1592,12 @@ class Linux extends Unixcommon
             return array('type' => 'guest', 'method' => 'OpenVZ');
         }
 
-        $bios_vendor = Common::getContents('/sys/devices/virtual/dmi/id/bios_vendor');
-
         // Veertu guest?
-        if ($bios_vendor == 'Veertu') {
+        if (Common::getContents('/sys/devices/virtual/dmi/id/bios_vendor') == 'Veertu') {
             return array('type' => 'guest', 'method' => 'Veertu');
         }
 
-        // Parallels guest?
-        if (strpos($bios_vendor, 'Parallels') === 0) {
-            return array('type' => 'guest', 'method' => 'Parallels');
-        }
-
-        // LXC guest?
+	// LXC guest?
         if (strpos(Common::getContents('/proc/mounts'), 'lxcfs /proc/') !== false) {
             return array('type' => 'guest', 'method' => 'LXC');
         }

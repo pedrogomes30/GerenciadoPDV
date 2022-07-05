@@ -1,5 +1,13 @@
 PRAGMA foreign_keys=OFF; 
 
+CREATE TABLE item_cupom( 
+      id  INTEGER    NOT NULL  , 
+      value double   NOT NULL  , 
+      sale_item int   NOT NULL  , 
+      cupom int   NOT NULL  , 
+ PRIMARY KEY (id),
+FOREIGN KEY(sale_item) REFERENCES sale_item(id)) ; 
+
 CREATE TABLE sale( 
       id  INTEGER    NOT NULL  , 
       number varchar  (30)   NOT NULL  , 
@@ -57,6 +65,7 @@ CREATE TABLE status(
  PRIMARY KEY (id)) ; 
 
  
+ CREATE UNIQUE INDEX unique_idx_sale_number ON sale(number);
  CREATE UNIQUE INDEX unique_idx_status_description ON status(description);
  
   

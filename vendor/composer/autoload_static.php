@@ -14,7 +14,6 @@ class ComposerStaticInit9ca02ded2ffb55c884817c3c88c86343
         'S' => 
         array (
             'Svg\\' => 4,
-            'Sabberworm\\CSS\\' => 15,
         ),
         'P' => 
         array (
@@ -48,10 +47,6 @@ class ComposerStaticInit9ca02ded2ffb55c884817c3c88c86343
         'Svg\\' => 
         array (
             0 => __DIR__ . '/..' . '/phenx/php-svg-lib/src/Svg',
-        ),
-        'Sabberworm\\CSS\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/sabberworm/php-css-parser/src',
         ),
         'Picqer\\Barcode\\' => 
         array (
@@ -96,6 +91,10 @@ class ComposerStaticInit9ca02ded2ffb55c884817c3c88c86343
             'Spreadsheet' => 
             array (
                 0 => __DIR__ . '/..' . '/pablodalloglio/spreadsheet_excel_writer',
+            ),
+            'Sabberworm\\CSS' => 
+            array (
+                0 => __DIR__ . '/..' . '/sabberworm/php-css-parser/lib',
             ),
         ),
         'P' => 

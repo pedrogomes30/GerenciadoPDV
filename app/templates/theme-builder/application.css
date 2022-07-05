@@ -118,6 +118,7 @@ input
 {
     padding-top: 15px;
     padding-bottom: 15px;
+    overflow: auto;
     background: var(--menu-background-color);
     width: var(--header-box-width);
     flex-shrink: 0;
@@ -760,22 +761,51 @@ ol.tbreadcrumb li.home a:after
 .btn
 {
     min-height: var(--button-height);
-    background: var(--button-background);
-    border: 1px solid var(--button-border);
     border-radius: var(--button-border-radius);
-    color: var(--button-text-color);
     padding: 0;
     padding-left: var(--button-padding);
     padding-right: var(--button-padding);
     box-shadow: var(--button-box-shadow) !important;
     font-size: var(--font-size) !important;
     display: inline-flex;
-    width: fit-content;
+    justify-content: center;
     align-items: center;
-    flex-shrink: 0;
     cursor: pointer;
     white-space: nowrap;
     line-height: 1;
+}
+.input-group.spinner input {
+    min-width: 50px;
+}
+.btn-right {
+    justify-content: flex-end;
+}
+.btn-left {
+    justify-content: flex-start;
+}
+.btn-xs {
+    padding: 0.125rem 0.25rem;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    border-radius: 0.15rem;
+}
+.btn-lg, .btn-group-lg > .btn {
+    padding: 0.5rem 1rem;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    border-radius: 0.3rem;
+}
+.btn-sm, .btn-group-sm > .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    border-radius: 0.2rem;
+}
+.btn.btn-default
+{
+    background: var(--button-background);
+    border: 1px solid var(--button-border);
+    color: var(--button-text-color);
 }
 .btn i 
 {
@@ -786,7 +816,7 @@ ol.tbreadcrumb li.home a:after
 .tfieldlist div.btn>i {
     margin-right: 0px;
 }
-.btn:hover
+.btn.btn-default:hover
 {
     color: var(--button-text-color-hover);
 }
@@ -822,15 +852,28 @@ span.tdate-group-addon
 .tdate-group input:focus + span {
     border-color: var(--field-focus-border-color)
 }
+[wrapped-widget="ttime"][style*="padding-right"] {
+    padding-right: unset !important;
+    margin-right: 10px;
+}
+.tdate-group input[widget="ttime"] {
+    min-width: unset;
+}
 .tdate-group input:focus,
 .tdate-group input 
 {
-    min-width: 100px;
+    min-width: 95px;
     border-right: unset;
     border-top-right-radius: unset;
     border-bottom-right-radius: unset;
 }
-
+[wrapped-widget="tdate"] {
+    min-width: calc( 95px + var(--field-height) );
+}
+[wrapped-widget="tdate"][style*="padding-right"] {
+    padding-right: unset !important;
+    margin-right: 10px;
+}
 .tdate-group
 {
     display: flex;
@@ -3835,15 +3878,14 @@ table.dataTable tbody tr{
 
 .label {
     display: inline-block;
-    padding: 0.25em 0.4em;
-    font-size: 75%;
     font-weight: 700;
     line-height: 1;
     text-align: center;
     white-space: nowrap;
     vertical-align: baseline;
     border-radius: 0.25rem;
-    transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    color: white;
+    padding: 0.2em 0.6em 0.3em;
 }
 
 .label-danger,
@@ -3854,6 +3896,9 @@ table.dataTable tbody tr{
     color: #fff
 }
 
+.label.label-default {
+    background-color: #33373d;
+}
 .label-danger {
     background-color: #dd4b39 !important;
 }

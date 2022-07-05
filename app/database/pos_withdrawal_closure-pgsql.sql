@@ -8,13 +8,14 @@ CREATE TABLE adjust_closure(
 
 CREATE TABLE closure( 
       id  SERIAL    NOT NULL  , 
-      user integer   NOT NULL  , 
-      store integer   NOT NULL  , 
-      cashier integer   NOT NULL  , 
+      dt_close timestamp   , 
+      number varchar  (30)   NOT NULL  , 
       closure_type boolean   NOT NULL    DEFAULT false, 
       dt_open timestamp   NOT NULL  , 
-      dt_close timestamp   , 
       value_total float   NOT NULL  , 
+      user integer   NOT NULL  , 
+      cashier integer   NOT NULL  , 
+      store integer   NOT NULL  , 
  PRIMARY KEY (id)) ; 
 
 CREATE TABLE closure_payment_methods( 
@@ -31,7 +32,7 @@ CREATE TABLE withdrawal(
       cashier integer   NOT NULL  , 
       closure integer   NOT NULL  , 
       withdrawal_account integer   NOT NULL  , 
-      dt_withdrawal date   , 
+      dt_withdrawal date   NOT NULL  , 
       value float   NOT NULL  , 
       obs varchar  (200)   , 
  PRIMARY KEY (id)) ; 
@@ -42,6 +43,7 @@ CREATE TABLE withdrawal_account(
  PRIMARY KEY (id)) ; 
 
  
+ ALTER TABLE closure ADD UNIQUE (number);
   
  ALTER TABLE adjust_closure ADD CONSTRAINT fk_Adjust_cashier_finish_1 FOREIGN KEY (closure) references closure(id); 
 ALTER TABLE adjust_closure ADD CONSTRAINT fk_Adjust_cashier_finish_2 FOREIGN KEY (cashier_method) references closure_payment_methods(id); 

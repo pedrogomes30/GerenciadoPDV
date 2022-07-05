@@ -18,13 +18,14 @@ class Closure extends TRecord
     public function __construct($id = NULL, $callObjectLoad = TRUE)
     {
         parent::__construct($id, $callObjectLoad);
-        parent::addAttribute('user');
-        parent::addAttribute('store');
-        parent::addAttribute('cashier');
+        parent::addAttribute('dt_close');
+        parent::addAttribute('number');
         parent::addAttribute('closure_type');
         parent::addAttribute('dt_open');
-        parent::addAttribute('dt_close');
         parent::addAttribute('value_total');
+        parent::addAttribute('user');
+        parent::addAttribute('cashier');
+        parent::addAttribute('store');
             
     }
 

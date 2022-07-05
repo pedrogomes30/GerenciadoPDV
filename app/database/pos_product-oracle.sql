@@ -15,7 +15,7 @@ CREATE TABLE category(
 
 CREATE TABLE cest( 
       id number(10)    NOT NULL , 
-      description varchar  (255)    NOT NULL , 
+      description varchar  (800)    NOT NULL , 
       number varchar  (10)    NOT NULL , 
  PRIMARY KEY (id)) ; 
 
@@ -23,6 +23,25 @@ CREATE TABLE cest_ncm(
       id number(10)    NOT NULL , 
       cest number(10)    NOT NULL , 
       ncm number(10)    NOT NULL , 
+ PRIMARY KEY (id)) ; 
+
+CREATE TABLE cupom( 
+      id number(10)    NOT NULL , 
+      with_client varchar  (30)   , 
+      code varchar  (8)    NOT NULL , 
+      description varchar  (100)    NOT NULL , 
+      value binary_double    NOT NULL , 
+      all_products char(1)    DEFAULT '0'  NOT NULL , 
+      acumulate char(1)    DEFAULT '0'  NOT NULL , 
+      percent char(1)    DEFAULT '0'  NOT NULL , 
+      quantity number(10)    DEFAULT 0  NOT NULL , 
+ PRIMARY KEY (id)) ; 
+
+CREATE TABLE cupom_products( 
+      id number(10)    NOT NULL , 
+      product number(10)    NOT NULL , 
+      cupom number(10)    NOT NULL , 
+      active char(1)    DEFAULT '1'  NOT NULL , 
  PRIMARY KEY (id)) ; 
 
 CREATE TABLE deposit( 
@@ -33,7 +52,7 @@ CREATE TABLE deposit(
 
 CREATE TABLE ncm( 
       id number(10)    NOT NULL , 
-      description varchar  (255)    NOT NULL , 
+      description varchar  (800)    NOT NULL , 
       number varchar  (10)    NOT NULL , 
  PRIMARY KEY (id)) ; 
 
@@ -47,7 +66,7 @@ CREATE TABLE price(
 
 CREATE TABLE price_list( 
       id number(10)    NOT NULL , 
-      name varchar  (30)    NOT NULL , 
+      name varchar  (50)    NOT NULL , 
       store number(10)   , 
  PRIMARY KEY (id)) ; 
 
@@ -132,6 +151,8 @@ CREATE TABLE provider(
 ALTER TABLE category ADD CONSTRAINT fk_category_cest_ncm FOREIGN KEY (cest_ncm_default) references cest_ncm(id); 
 ALTER TABLE cest_ncm ADD CONSTRAINT fk_cest_ncm_cest FOREIGN KEY (cest) references cest(id); 
 ALTER TABLE cest_ncm ADD CONSTRAINT fk_cest_ncm_ncm FOREIGN KEY (ncm) references ncm(id); 
+ALTER TABLE cupom_products ADD CONSTRAINT fk_cupom_products FOREIGN KEY (product) references product(id); 
+ALTER TABLE cupom_products ADD CONSTRAINT fk_cupom_products_cupom FOREIGN KEY (cupom) references cupom(id); 
 ALTER TABLE price ADD CONSTRAINT fk_price_list_price FOREIGN KEY (price_list) references price_list(id); 
 ALTER TABLE price ADD CONSTRAINT fk_price_product FOREIGN KEY (product) references product(id); 
 ALTER TABLE product ADD CONSTRAINT fk_product_category FOREIGN KEY (category) references category(id); 
@@ -206,6 +227,36 @@ WHEN
 BEGIN 
 
 SELECT cest_ncm_id_seq.NEXTVAL INTO :NEW.id FROM DUAL; 
+
+END;
+CREATE SEQUENCE cupom_id_seq START WITH 1 INCREMENT BY 1; 
+
+CREATE OR REPLACE TRIGGER cupom_id_seq_tr 
+
+BEFORE INSERT ON cupom FOR EACH ROW 
+
+WHEN 
+
+(NEW.id IS NULL) 
+
+BEGIN 
+
+SELECT cupom_id_seq.NEXTVAL INTO :NEW.id FROM DUAL; 
+
+END;
+CREATE SEQUENCE cupom_products_id_seq START WITH 1 INCREMENT BY 1; 
+
+CREATE OR REPLACE TRIGGER cupom_products_id_seq_tr 
+
+BEFORE INSERT ON cupom_products FOR EACH ROW 
+
+WHEN 
+
+(NEW.id IS NULL) 
+
+BEGIN 
+
+SELECT cupom_products_id_seq.NEXTVAL INTO :NEW.id FROM DUAL; 
 
 END;
 CREATE SEQUENCE deposit_id_seq START WITH 1 INCREMENT BY 1; 

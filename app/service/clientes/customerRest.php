@@ -14,10 +14,10 @@ class customerRest extends AdiantiRecordService
             switch($method)
         {
             case 'POST':
-                return "Indisponivel";
+                return self::saveCustomer($param);//permite salvar/emitir uma venda a partir do numero da venda.
                 break;
             case 'PUT':
-                return self::saveCustomer($param);//permite salvar/emitir uma venda a partir do numero da venda.
+                return "Indisponivel";
                 break;
             case 'GET':
                 return self::getCustomer($param);//permite obter o array de venda do respectivo PDV.
@@ -87,11 +87,12 @@ class customerRest extends AdiantiRecordService
                 throw new exception('customer has been registred!');
             }
             TTransaction::close();
+            $param['id']    =   $customer->id;
+            return $param;
         }catch(Exception $e){
             $error = array();
-            $error['class']             = 'customerRest';
-            $error['method']            = 'saveCustomer';
-            $error['error']             = $e->getmessage();
+            $error['error']             = true;
+            $error['data']              = $e->getmessage();
             TTransaction::rollback();
             return $error;
         }
@@ -125,12 +126,14 @@ class customerRest extends AdiantiRecordService
             $return->phone3           = $customer->phone3;
             $return->store_partiner   = $storePartiner;
             TTransaction::close();
-            return $return;
+            $result = array();
+            $result['error']          = false;
+            $result['data']           = $return;
+            return $result;
         }catch(Exception $e){
             $error = array();
-            $error['class']             = 'customerRest';
-            $error['method']            = 'getCustomer';
-            $error['error']             = $e->getmessage();
+            $error['error']             = true;
+            $error['data']              = $e->getmessage();
             TTransaction::rollback();
             return $error;
         }

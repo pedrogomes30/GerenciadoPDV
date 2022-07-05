@@ -82,12 +82,38 @@ class firstConfigRest extends AdiantiRecordService
                 $methodArray['method_issue']        = $method->issue;
                 $methodsArray[]                     = $methodArray;
             }
+            // cupom default
+            TTransaction::open('pos_product');
+            $cupoms           = Cupom::where('all_products','=', "T")->load();
+            $cupomsArray      = array();
+            foreach($cupoms as $cupom){
+                $cupomArray                 = array();
+                $cupomArray['id']           = $cupom->id;
+                $cupomArray['with_client']  = $cupom->with_client;
+                $cupomArray['code']         = $cupom->code;
+                $cupomArray['description']  = $cupom->description;
+                $cupomArray['value']        = $cupom->value;
+                $cupomArray['all_products'] = $cupom->all_products;
+                $cupomArray['acumulate']    = $cupom->acumulate;
+                $cupomArray['percent']      = $cupom->percent;
+                $cupomArray['quantity']     = $cupom->quantity;
+                $cupomsArray[]              = $cupomArray;
+            }
+            TTransaction::close();
             $return['payment_methods'] = $methodsArray;
+            $return['cupoms']          = $cupomsArray;
             
             TTransaction::close();
-            return $return;
+            $result = array();
+            $result['error']          = false;
+            $result['data']           = $return;
+            return $result;
         }catch(Exception $e){
-            return $e->getMessage();
+            $error = array();
+            $error['error']             = true;
+            $error['data']              = $e->getmessage();
+            TTransaction::rollback();
+            return $error;
         }
     }
    

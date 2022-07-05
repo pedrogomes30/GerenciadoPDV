@@ -12,13 +12,14 @@ FOREIGN KEY(cashier_method) REFERENCES closure_payment_methods(id)) ;
 
 CREATE TABLE closure( 
       id  INTEGER    NOT NULL  , 
-      user int   NOT NULL  , 
-      store int   NOT NULL  , 
-      cashier int   NOT NULL  , 
+      dt_close datetime   , 
+      number varchar  (30)   NOT NULL  , 
       closure_type text   NOT NULL    DEFAULT 'F', 
       dt_open datetime   NOT NULL  , 
-      dt_close datetime   , 
       value_total double   NOT NULL  , 
+      user int   NOT NULL  , 
+      cashier int   NOT NULL  , 
+      store int   NOT NULL  , 
  PRIMARY KEY (id)) ; 
 
 CREATE TABLE closure_payment_methods( 
@@ -36,7 +37,7 @@ CREATE TABLE withdrawal(
       cashier int   NOT NULL  , 
       closure int   NOT NULL  , 
       withdrawal_account int   NOT NULL  , 
-      dt_withdrawal date   , 
+      dt_withdrawal date   NOT NULL  , 
       value double   NOT NULL  , 
       obs varchar  (200)   , 
  PRIMARY KEY (id),
@@ -49,5 +50,6 @@ CREATE TABLE withdrawal_account(
  PRIMARY KEY (id)) ; 
 
  
+ CREATE UNIQUE INDEX unique_idx_closure_number ON closure(number);
  
   

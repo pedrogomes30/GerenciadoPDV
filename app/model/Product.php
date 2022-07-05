@@ -249,6 +249,15 @@ class Product extends TRecord
         $criteria->add(new TFilter('product', '=', $this->id));
         return ProductValidateDate::getObjects( $criteria );
     }
+    /**
+     * Method getCupomProductss
+     */
+    public function getCupomProductss()
+    {
+        $criteria = new TCriteria;
+        $criteria->add(new TFilter('product', '=', $this->id));
+        return CupomProducts::getObjects( $criteria );
+    }
 
     public function set_product_storage_fk_deposit_to_string($product_storage_fk_deposit_to_string)
     {
@@ -533,6 +542,58 @@ class Product extends TRecord
         }
     
         $values = ProductValidateDate::where('product', '=', $this->id)->getIndexedArray('product','{fk_product->description}');
+        return implode(', ', $values);
+    }
+
+    public function set_cupom_products_fk_product_to_string($cupom_products_fk_product_to_string)
+    {
+        if(is_array($cupom_products_fk_product_to_string))
+        {
+            $values = Product::where('id', 'in', $cupom_products_fk_product_to_string)->getIndexedArray('description', 'description');
+            $this->cupom_products_fk_product_to_string = implode(', ', $values);
+        }
+        else
+        {
+            $this->cupom_products_fk_product_to_string = $cupom_products_fk_product_to_string;
+        }
+
+        $this->vdata['cupom_products_fk_product_to_string'] = $this->cupom_products_fk_product_to_string;
+    }
+
+    public function get_cupom_products_fk_product_to_string()
+    {
+        if(!empty($this->cupom_products_fk_product_to_string))
+        {
+            return $this->cupom_products_fk_product_to_string;
+        }
+    
+        $values = CupomProducts::where('product', '=', $this->id)->getIndexedArray('product','{fk_product->description}');
+        return implode(', ', $values);
+    }
+
+    public function set_cupom_products_fk_cupom_to_string($cupom_products_fk_cupom_to_string)
+    {
+        if(is_array($cupom_products_fk_cupom_to_string))
+        {
+            $values = Cupom::where('id', 'in', $cupom_products_fk_cupom_to_string)->getIndexedArray('id', 'id');
+            $this->cupom_products_fk_cupom_to_string = implode(', ', $values);
+        }
+        else
+        {
+            $this->cupom_products_fk_cupom_to_string = $cupom_products_fk_cupom_to_string;
+        }
+
+        $this->vdata['cupom_products_fk_cupom_to_string'] = $this->cupom_products_fk_cupom_to_string;
+    }
+
+    public function get_cupom_products_fk_cupom_to_string()
+    {
+        if(!empty($this->cupom_products_fk_cupom_to_string))
+        {
+            return $this->cupom_products_fk_cupom_to_string;
+        }
+    
+        $values = CupomProducts::where('product', '=', $this->id)->getIndexedArray('cupom','{fk_cupom->id}');
         return implode(', ', $values);
     }
 

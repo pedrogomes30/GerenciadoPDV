@@ -14,10 +14,10 @@ class SaleRest extends AdiantiRecordService
             switch($method)
         {
             case 'POST':
-                return "Indisponivel";
+                return self::saveSale($param);//permite salvar/emitir uma venda a partir do numero da venda.
                 break;
             case 'PUT':
-                return self::saveSale($param);//permite salvar/emitir uma venda a partir do numero da venda.
+                return "Indisponivel";
                 break;
             case 'GET':
                 return self::getSale($param);//permite obter o array de venda do respectivo PDV.
@@ -105,6 +105,17 @@ class SaleRest extends AdiantiRecordService
                     $item_->product_storage     = $productStorage->id;
                     $item_->store();
                     $sale->products_value       += $item_->total_value;
+                    //cupom
+                    if(isset($item['cupom']) && $item['cupom'] != ""){
+                        $cupoms                 = $item['cupom'];
+                        foreach($cupoms as $cupom){
+                            $itemCupom              = new ItemCupom();
+                            $itemCupom->value       = $cupom['value'];
+                            $itemCupom->cupom       = $cupom['cupom'];
+                            $itemCupom->sale_item   = $cupom['sale_item'];
+                            $itemCupom->store();
+                        }
+                    }
                     $itemsArray[]               = $item_;
                 }
                 $settings['payments']           = $paymentsArray;
@@ -114,18 +125,16 @@ class SaleRest extends AdiantiRecordService
             TTransaction::close();
             $sale                               = nfceEmissor::isInvoice($sale,$settings); 
             $return                             = array();
-            $return['sale_id']                  = isset($sale->id) ? $sale->id : 'ERROR';
-            $return['sale_invoice_cupon']       = isset($sale->sale_invoice_cupon) ? $sale->sale_invoice_cupon : null;
-            return $return;
-            
+            $param['id']                        = isset($sale->id) ? $sale->id : 'ERROR';
+            $param['sale_invoice_cupon']        = isset($sale->sale_invoice_cupon) ? $sale->sale_invoice_cupon : null;
+            $result                   = array();
+            $result['error']          = false;
+            $result['data']           = $param;
+            return $result;
         }catch(Exception $e){
             $error = array();
-            $error['store']             = isset($param['store']) ? $param['store'] : null;
-            $error['employee_cashier']  = isset($param['employee_cashier']) ? $param['employee_cashier'] : null ;
-            $error['cashier']           = isset($param['cashier']) ? $param['cashier'] : null;
-            $error['class']             = 'saleRest';
-            $error['method']            = 'saveSale';
-            $error['error']             = $e->getmessage();
+            $error['error']                     = true;
+            $error['data']                      = $e->getmessage();
             TTransaction::rollback();
             return $error;
         } 
@@ -137,29 +146,85 @@ class SaleRest extends AdiantiRecordService
     {
         /* -- expect this Json and always will return sales form token user,
             {
-               id:
-                [
-                    0000,
-                ],
-               number:
-                [
-                    00000ABC,
-                ],
-               date_start: 2022-06-28 09:05,
-               date_end: 2022-06-28 09:05,
+               "sale_id":"",
+               "sale_number":"",
+               "date_start": "2022-06-28 00:00",
+               "date_end": "2022-06-29 23:59",
+               "user_id":"",
+               "store_id":"",
             }
         */ 
-        
         try{
-            
+            //set search type, by id, by number, by period with user and store, by period.
+            //type 1 - by sale_id
+            $sale                       = null;
+            TTransaction::open(static::DATABASE);
+            if(isset($param['sale_id']) && $param['sale_id'] !== ""){
+                $sale                   = Sale::where('id','=',$param['sale_id'])->first();
+                if(!$sale) throw new exception("Sale id not found!");
+                $return =  self::getSalesArrayWithItemsPayments($sale);
+                $result                   = array();
+                $result['error']          = false;
+                $result['data']           = $return;
+                return $result;
+                }
+            //type 2 - by sale_number
+            if(isset($param['sale_number']) && $param['sale_number'] !== ""){
+                $sale                   = Sale::where('number','=',$param['sale_number'])->first();
+                if(!$sale) throw new exception("Sale number not found!");
+                $return =  self::getSalesArrayWithItemsPayments($sale);
+                $result                   = array();
+                $result['error']          = false;
+                $result['data']           = $return;
+                return $result;
+            }
+            //type 3 - by period with user and store
+            if(isset($param['user_id']) && $param['user_id'] !== ""){
+                if(isset($param['store_id']) || $param['store_id'] !== ""){
+                       $start           = !isset($param['date_start']) || $param['date_start'] == "" || $param['date_start'] == null ? date("Y-m-d 00:00",strtotime('-7 days')) : $param['date_start'];
+                       $end             = !isset($param['date_end']) || $param['date_end'] == "" || $param['date_end'] == null ? date("Y-m-d 23:59") : $param['date_end'];
+                       $sales           = Sale::where('employee_cashier','=',$param['user_id'])
+                                              ->where('store','=',$param['store_id'])
+                                              ->where('sale_date','>=',$start)
+                                              ->where('sale_date','<=',$end)
+                                              ->load();
+                       if(!$sales) throw new exception("Sale not found");
+                       $salesArray = array();
+                       foreach($sales as $sale){
+                         $saleArray = self::getSalesArrayWithItemsPayments($sale);
+                         $salesArray[] = $saleArray;
+                       }
+                    $result                   = array();
+                    $result['error']          = false;
+                    $result['data']           = $salesArray;
+                    return $result;
+                    }
+                throw new exception("no Store id");
+            }else{
+                //type 4 - by period used for admin only
+                $tokenUser      = TSession::getValue('userid');
+                if($tokenUser != 1) throw new exception ("You are not a admin!");
+                if(!isset($param['date_start']) || $param['date_start'] == "" || $param['date_start'] == null) throw new exception("no date start set");
+                if(!isset($param['date_end']) || $param['date_end'] == "" || $param['date_end'] == null) throw new exception("no date end set");
+                $sales          = Sale::where('sale_date','>=',$param['date_start'])
+                                      ->where('sale_date','<=',$param['date_end'])
+                                      ->load();
+                if(!$sales) throw new exception("Sale not found");
+                $salesArray = array();
+                foreach($sales as $sale){
+                    $saleArray = self::getSalesArrayWithItemsPayments($sale);
+                    $salesArray[] = $saleArray;
+                }
+                $result                   = array();
+                $result['error']          = false;
+                $result['data']           = $salesArray;
+                return $result; 
+            }
+            TTransaction::close();
         }catch(Exception $e){
             $error = array();
-            $error['store']             = isset($param['store']) ? $param['store'] : null;
-            $error['employee_cashier']  = isset($param['employee_cashier']) ? $param['employee_cashier'] : null ;
-            $error['cashier']           = isset($param['cashier']) ? $param['cashier'] : null;
-            $error['class']             = 'saleRest';
-            $error['method']            = 'getSale';
-            $error['error']             = $e->getmessage();
+            $error['error']             = true;
+            $error['data']              = $e->getmessage();
             TTransaction::rollback();
             return $error;
         } 
@@ -173,18 +238,64 @@ class SaleRest extends AdiantiRecordService
             //do not exist delete a sale, but you can cancel, a sale cancel can be in 25mim after sale create.
         }catch(Exception $e){
             $error = array();
-            $error['store']             = isset($param['store']) ? $param['store'] : null;
-            $error['employee_cashier']  = isset($param['employee_cashier']) ? $param['employee_cashier'] : null ;
-            $error['cashier']           = isset($param['cashier']) ? $param['cashier'] : null;
-            $error['class']             = 'saleRest';
-            $error['method']            = 'deleteSale';
-            $error['error']             = $e->getmessage();
+            $error['error']             = true;
+            $error['data']              = $e->getmessage();
             TTransaction::rollback();
             return $error;
         } 
     }
     
     //HELPER FUNCTIONS
+    
+    /*
+    this functtion convert a sale object into sale array with yout payment and sale items
+    call it with on ttransaction open
+    */
+    public function getSalesArrayWithItemsPayments($sale){
+        $saleArray                      = array();
+        $items                          = SaleItem::where('sale','=',$sale->id)->load();
+        $payments                       = SalePayment::where('sale','=',$sale->id)->load();
+        $saleArray['id']                = $sale->id;
+        $saleArray['number']            = $sale->number;
+        $saleArray['products_value']    = $sale->products_value;
+        $saleArray['payments_value']    = $sale->payments_value;
+        $saleArray['discont_value']     = $sale->discont_value;
+        $saleArray['total_value']       = $sale->total_value;
+        $saleArray['employee_sale']     = $sale->employee_sale; 
+        $saleArray['sale_date']         = $sale->sale_date;
+        $saleArray['obs']               = $sale->obs;
+        $saleArray['invoice_coupon']    = $sale->invoice_coupon;
+        $saleArray['payment_method']    = $sale->fk_payment_method->alias;
+        $saleArray['store']             = $sale->fk_store->fantasy_name;
+        $saleArray['employee_cashier']  = $sale->fk_employee_cashier->fk_system_user->name;
+        $saleArray['cashier']           = $sale->fk_cashier->name;
+        $saleArray['customer']          = $sale->fk_customer->name;
+        $saleArray['salesman']          = $sale->fk_salesman->name;
+        $saleArray['status']            = $sale->fk_status->description;
+        //$items
+        $itemsArray                     = array();
+        foreach($items as $item){
+            $itemArray = array();
+            $itemArray['sku']           = $item->fk_product->sku;
+            $itemArray['discont_value'] = $item->discont_value;
+            $itemArray['quantity']      = $item->quantity;
+            $itemArray['unitary_value'] = $item->unitary_value;
+            $itemArray['total_value']   = $item->total_value;
+            $itemsArray[]               = $itemArray;
+        }
+        $saleArray['items']             = $itemsArray;
+        //payments
+        $paymentsArray                  = array();
+        foreach($payments as $payment){
+            $paymentArray               = array();
+            $paymentArray['value']      = $payment->value;
+            $paymentArray['payment_method']= $payment->fk_payment_method->alias;
+            $paymentsArray[]            = $paymentArray;
+        }
+        $saleArray['payments']          = $paymentsArray;
+        return $saleArray;
+    }
+    
     public function storageContable($deposit,$item){
         TTransaction::open('pos_product');
         $storage        = ProductStorage::where('deposit','=',$deposit->id)

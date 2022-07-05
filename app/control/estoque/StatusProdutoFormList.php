@@ -527,7 +527,7 @@ class StatusProdutoFormList extends TPage
             // creates a repository for ProductStatus
             $repository = new TRepository(self::$activeRecord);
             // creates a criteria
-            $criteria = new TCriteria;
+            $criteria = clone $this->filter_criteria;
 
             if (empty($param['order']))
             {

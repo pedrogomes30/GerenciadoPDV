@@ -675,13 +675,13 @@ class importControl extends TPage
                     $object                     = new Product();//---------------
                     $object->id                 = $value[0]; 
                     $object->description        = $value[4]; 
-                    $object->sku                = $value[7]; 
+                    $object->sku                = isset($value[8]) && $value[8]!= "" ? $value[8] : $value[7]; 
                     $object->unity              = 'UN'; 
                     $object->dt_created         = $value[6]; 
                     $object->dt_modify          = date('Y-m-d H:i:00'); 
                     $object->description_variation = $value[5]; 
                     $object->reference          = $value[16]; 
-                    $object->barcode            = $value[8]; 
+                    //$object->barcode            = $value[8]; 
                     $object->family_id          = $value[18]; 
                     $object->obs                = $value[9]; 
                     $object->website            = $value[31]; 

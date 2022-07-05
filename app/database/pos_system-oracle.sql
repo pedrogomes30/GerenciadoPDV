@@ -1,6 +1,6 @@
 CREATE TABLE cashier( 
       id number(10)    NOT NULL , 
-      name varchar  (20)    NOT NULL , 
+      name varchar  (50)    NOT NULL , 
       cashier_type char(1)    DEFAULT '0'  NOT NULL , 
       user_authenticated number(10)   , 
       store number(10)    NOT NULL , 
