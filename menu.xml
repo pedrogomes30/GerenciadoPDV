@@ -16,13 +16,13 @@
   <menuitem label="Estoque">
     <icon>fas:boxes fa-fw </icon>
     <menu>
-      <menuitem label="Fornecedores">
-        <icon>fas:truck fa-fw </icon>
-        <action>ProviderList#method=onShow</action>
-      </menuitem>
       <menuitem label="Datas de validade">
         <icon>far:calendar-alt fa-fw </icon>
         <action>ProductValidateDateList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Fornecedores">
+        <icon>fas:truck fa-fw </icon>
+        <action>ProviderList#method=onShow</action>
       </menuitem>
       <menuitem label="Status Produto">
         <icon>fas:filter fa-fw </icon>
@@ -40,13 +40,13 @@
         <icon>fas:exchange-alt fa-fw </icon>
         <action>ProductTransferList#method=onShow</action>
       </menuitem>
-      <menuitem label="Produtos">
-        <icon>fas:boxes fa-fw </icon>
-        <action>ProductList#method=onShow</action>
-      </menuitem>
       <menuitem label="Categorias Produto">
         <icon>far:list-alt fa-fw </icon>
         <action>CategoryList#method=onShow</action>
+      </menuitem>
+      <menuitem label="Produtos">
+        <icon>fas:boxes fa-fw </icon>
+        <action>ProductList#method=onShow</action>
       </menuitem>
       <menuitem label="Depositos">
         <icon>fas:warehouse fa-fw </icon>

@@ -53,7 +53,7 @@ CREATE TABLE deposit(
 CREATE TABLE ncm( 
       id number(10)    NOT NULL , 
       description varchar  (800)    NOT NULL , 
-      number varchar  (10)    NOT NULL , 
+      number varchar  (25)    NOT NULL , 
  PRIMARY KEY (id)) ; 
 
 CREATE TABLE price( 

@@ -349,7 +349,7 @@ class TImageCropper extends TField implements AdiantiWidgetInterface
                 $fileExtension = pathinfo($dados_file->fileName)['extension'];
                 
                 // Set src img
-                $src = $dados_file->fileName . '?v=' . uniqid();
+                $src = 'download.php?file=' . $dados_file->fileName . '&v=' . uniqid();
             }
         }
         else if ($this->base64 && $this->value)

@@ -28,10 +28,10 @@ class productsRest extends AdiantiRecordService
     }
     public function getProducts($param){
         try{
-            ttransaction::open('pos_system');
+            TTransaction::open('pos_system');
             $user                   = User::where('system_user','=',TSession::getValue('userid'))->first();
             $store_id               = $user->current_store;
-            ttransaction::open(static::DATABASE);
+            TTransaction::open(static::DATABASE);
             $products               = Product::getObjects();
             $categorys              = Category::getObjects();
             $priceList              = PriceList::where('store','=',$store_id)->first();

@@ -53,7 +53,7 @@ CREATE TABLE deposit(
 CREATE TABLE ncm( 
       `id`  INT  AUTO_INCREMENT    NOT NULL  , 
       `description` varchar  (800)   NOT NULL  , 
-      `number` varchar  (10)   NOT NULL  , 
+      `number` varchar  (25)   NOT NULL  , 
  PRIMARY KEY (id)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci; 
 
 CREATE TABLE price( 
