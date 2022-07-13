@@ -71,7 +71,7 @@ class ProfessionList extends TPage
         $this->filter_criteria = new TCriteria;
 
         $this->datagrid->style = 'width: 100%';
-        $this->datagrid->setHeight(320);
+        $this->datagrid->setHeight(250);
 
         $column_id = new TDataGridColumn('id', "Id", 'center' , '70px');
         $column_description = new TDataGridColumn('description', "Descrição", 'left');

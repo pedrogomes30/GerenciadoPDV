@@ -52,7 +52,7 @@ class TDBUniqueSearch extends TDBMultiSearch implements AdiantiWidgetInterface
      */
     public function setValue($value)
     {
-        if (is_scalar($value))
+        if (! empty($value) && is_scalar($value))
         {
             TTransaction::open($this->database);
             $model = $this->model;

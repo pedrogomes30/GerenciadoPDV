@@ -88,7 +88,7 @@ class CashierLogList extends TPage
         $this->filter_criteria = new TCriteria;
 
         $this->datagrid->style = 'width: 100%';
-        $this->datagrid->setHeight(320);
+        $this->datagrid->setHeight(250);
 
         $column_id = new TDataGridColumn('id', "Id", 'center' , '70px');
         $column_dt_login_transformed = new TDataGridColumn('dt_login', "data login", 'left');

@@ -47,7 +47,7 @@ CREATE TABLE withdrawal_account(
   
  ALTER TABLE adjust_closure ADD CONSTRAINT fk_Adjust_cashier_finish_1 FOREIGN KEY (closure) references closure(id); 
 ALTER TABLE adjust_closure ADD CONSTRAINT fk_Adjust_cashier_finish_2 FOREIGN KEY (cashier_method) references closure_payment_methods(id); 
-ALTER TABLE closure_payment_methods ADD CONSTRAINT closure_payment_methods_62cc0abde467c FOREIGN KEY (closure) references closure(id); 
+ALTER TABLE closure_payment_methods ADD CONSTRAINT closure_payment_methods_62cf24f07b16f FOREIGN KEY (closure) references closure(id); 
 ALTER TABLE withdrawal ADD CONSTRAINT fk_withdrawal_closure FOREIGN KEY (closure) references closure(id); 
 ALTER TABLE withdrawal ADD CONSTRAINT fk_withdrawal_account FOREIGN KEY (withdrawal_account) references withdrawal_account(id); 
 

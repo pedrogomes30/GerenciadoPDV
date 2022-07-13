@@ -29,9 +29,17 @@ class BuilderService
         try
         {
             TTransaction::open('permission');
+            
             $preference = SystemPreference::find('builder_user_themes')??new SystemPreference;
-            $builder_user_themes = json_decode($preference->preference, true)??[];
+            $builder_user_themes = [];
+            
+            if(!empty($preference->preference))
+            {
+                $builder_user_themes = json_decode($preference->preference, true)??[];
+            }
+
             TTransaction::close();
+
             return $builder_user_themes[$userid] ?? 'default';
         }
         catch(Exception $e)
@@ -96,7 +104,7 @@ class BuilderService
 
             if (! file_exists("tmp/update_lib/"))
             {
-                throw new Exception(_t('Permission denied, could not copy the update folder files'));
+                throw new Exception(_bt('Permission denied, could not copy the update folder files'));
             }
 
             return "tmp/update_lib/";

@@ -84,7 +84,7 @@ class StoreList extends TPage
         $this->filter_criteria = new TCriteria;
 
         $this->datagrid->style = 'width: 100%';
-        $this->datagrid->setHeight(320);
+        $this->datagrid->setHeight(250);
 
         $column_id = new TDataGridColumn('id', "Id", 'center' , '70px');
         $column_social_name = new TDataGridColumn('social_name', "Razão Social", 'left');

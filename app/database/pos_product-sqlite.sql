@@ -35,12 +35,13 @@ CREATE TABLE cupom(
       id  INTEGER    NOT NULL  , 
       with_client varchar  (30)   , 
       code varchar  (8)   NOT NULL  , 
-      description varchar  (100)   NOT NULL  , 
       value double   NOT NULL  , 
+      description varchar  (100)   NOT NULL  , 
       all_products text   NOT NULL    DEFAULT '0', 
       acumulate text   NOT NULL    DEFAULT '0', 
       percent text   NOT NULL    DEFAULT '0', 
       quantity int   NOT NULL    DEFAULT 0, 
+      default text   NOT NULL    DEFAULT '0', 
  PRIMARY KEY (id)) ; 
 
 CREATE TABLE cupom_products( 

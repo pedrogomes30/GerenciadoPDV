@@ -29,12 +29,13 @@ CREATE TABLE cupom(
       `id`  INT  AUTO_INCREMENT    NOT NULL  , 
       `with_client` varchar  (30)   , 
       `code` varchar  (8)   NOT NULL  , 
-      `description` varchar  (100)   NOT NULL  , 
       `value` double   NOT NULL  , 
+      `description` varchar  (100)   NOT NULL  , 
       `all_products` boolean   NOT NULL    DEFAULT '0', 
       `acumulate` boolean   NOT NULL    DEFAULT '0', 
       `percent` boolean   NOT NULL    DEFAULT '0', 
       `quantity` int   NOT NULL    DEFAULT 0, 
+      `default` boolean   NOT NULL    DEFAULT '0', 
  PRIMARY KEY (id)) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci; 
 
 CREATE TABLE cupom_products( 

@@ -20,12 +20,13 @@ class Cupom extends TRecord
         parent::__construct($id, $callObjectLoad);
         parent::addAttribute('with_client');
         parent::addAttribute('code');
-        parent::addAttribute('description');
         parent::addAttribute('value');
+        parent::addAttribute('description');
         parent::addAttribute('all_products');
         parent::addAttribute('acumulate');
         parent::addAttribute('percent');
         parent::addAttribute('quantity');
+        parent::addAttribute('default');
             
     }
 

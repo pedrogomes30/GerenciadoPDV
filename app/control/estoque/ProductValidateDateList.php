@@ -82,7 +82,7 @@ class ProductValidateDateList extends TPage
         $this->filter_criteria = new TCriteria;
 
         $this->datagrid->style = 'width: 100%';
-        $this->datagrid->setHeight(320);
+        $this->datagrid->setHeight(250);
 
         $column_id = new TDataGridColumn('id', "Id", 'center' , '70px');
         $column_fk_product_sku_fk_product_description_fk_product_description_variation_fk_product_reference = new TDataGridColumn('{fk_product->sku} {fk_product->description} {fk_product->description_variation} {fk_product->reference}', "Produto", 'left');

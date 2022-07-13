@@ -84,7 +84,7 @@ class firstConfigRest extends AdiantiRecordService
             }
             // cupom default
             TTransaction::open('pos_product');
-            $cupoms           = Cupom::where('all_products','=', "T")->load();
+            $cupoms           = Cupom::where('default','=', "T")->load();
             $cupomsArray      = array();
             foreach($cupoms as $cupom){
                 $cupomArray                 = array();

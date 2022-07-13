@@ -40,11 +40,11 @@ INSERT INTO category (id,name,color,multiply,icon_category,cest_ncm_default) VAL
 
 INSERT INTO category (id,name,color,multiply,icon_category,cest_ncm_default) VALUES (21,'INVERNO','#FD03BE',1,'',1); 
 
-INSERT INTO cupom (id,with_client,code,description,value,all_products,acumulate,percent,quantity) VALUES (1,'','#AVAR','aplica 10% em um produto avariado',10,false,true,true,0); 
+INSERT INTO cupom (id,with_client,code,value,description,all_products,acumulate,percent,quantity,default) VALUES (1,'','#AVAR',10,'aplica 10% em um produto avariado',false,true,true,0,true); 
 
-INSERT INTO cupom (id,with_client,code,description,value,all_products,acumulate,percent,quantity) VALUES (2,'funcionario','#FUNC','aplica 15% na compra de um funcionário',15,true,false,true,0); 
+INSERT INTO cupom (id,with_client,code,value,description,all_products,acumulate,percent,quantity,default) VALUES (2,'funcionario','#FUNC',15,'aplica 15% na compra de um funcionário',true,false,true,0,true); 
 
-INSERT INTO cupom (id,with_client,code,description,value,all_products,acumulate,percent,quantity) VALUES (3,'funcionarioParceiro','#PARC','aplica 5% na compra de um funcionário de loja parceira.',5,true,true,true,0); 
+INSERT INTO cupom (id,with_client,code,value,description,all_products,acumulate,percent,quantity,default) VALUES (3,'funcionarioParceiro','#PARC',5,'aplica 5% na compra de um funcionário de loja parceira.',true,true,true,0,true); 
 
 INSERT INTO price_list (id,name,store) VALUES (1,'TABELA PADRAO',null); 
 
